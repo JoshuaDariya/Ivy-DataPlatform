@@ -4,7 +4,7 @@ targetScope = 'resourceGroup'
 // param storageAccountType string = 'Standard_LRS'
 
 param location string = 'eastus' // TODO: Make the region config
-param storageAccountName string = 'ivy-st-lakehouse-dev'
+param storageAccountName string = 'stivylakehousedev'
 param storageAccountType string = 'Standard_LRS'
 
 // resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
