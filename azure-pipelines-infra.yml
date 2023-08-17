@@ -23,7 +23,7 @@ steps:
   displayName: 'Build Bicep File'
 
 - script: |
-    az deployment group create --resource-group rg-ivydataplatform-dev-eastus --template-file .resources/main.json
+    az deployment group create --resource-group rg-ivydataplatform-dev-eastus --template-file .resources/main.bicep
   displayName: 'Deploy Bicep Resources'
   env:
     AZURE_CLI_DISABLE_CONNECTION_VERIFICATION: 1
