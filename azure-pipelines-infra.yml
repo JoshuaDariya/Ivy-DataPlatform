@@ -4,30 +4,26 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+- none
 
 pool:
   vmImage: ubuntu-latest
 
+# TODO Move to ADO/Pipeline variable/config
 variables:
-  - group: ServicePrincipalVars
-  
+  ServiceConnectionName: 'Ivy Dev Data Platform' 
+  EnvironmentType: 'Test'
+  ResourceGroupName: 'rg-ivydataplatform-dev-eastus'
+  DeploymentDefaultLocation: 'eastus' 
+
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
-- script: |
-    bicep build resources/main.bicep
-  displayName: 'Build Bicep File'
-
-- script: |
-    az login --service-principal -u $(servicePrincipalId) -p $(servicePrincipalKey) --tenant $(tenantId)
-    az deployment sub create --location eastus --template-file resources/main.bicep
-  displayName: 'Deploy Bicep Resources'
-  env:
-    AZURE_CLI_DISABLE_CONNECTION_VERIFICATION: 1
+  - task: AzureResourceManagerTemplateDeployment@3
+    displayName: 'Deploy Infrastructure Bicep'
+    inputs:
+      deploymentScope: 'Resource Group'
+      connectedServiceName: $(ServiceConnectionName)
+      location: $(DeploymentDefaultLocation)
+      resourceGroupName: $(ResourceGroupName)
+      csmFile: resources/main.bicep
+      # overrideParameters: >
+      #   -environmentType $(EnvironmentType)
