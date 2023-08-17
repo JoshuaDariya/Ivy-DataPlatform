@@ -27,3 +27,15 @@ steps:
       csmFile: resources/main.bicep
       # overrideParameters: >
       #   -environmentType $(EnvironmentType)
+
+#Task for focusing on roles and permissions
+  - task: AzureResourceManagerTemplateDeployment@3
+    displayName: 'Deploy Infrastructure Bicep'
+    inputs:
+      deploymentScope: 'Resource Group'
+      connectedServiceName: $(ServiceConnectionName)
+      location: $(DeploymentDefaultLocation)
+      resourceGroupName: $(ResourceGroupName)
+      csmFile: resources/roles.bicep
+      # overrideParameters: >
+      #   -environmentType $(EnvironmentType)
