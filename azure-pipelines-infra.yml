@@ -29,9 +29,9 @@ steps:
     displayName: 'Deploy Infrastructure Bicep'
     inputs:
       deploymentScope: 'Resource Group'
-      connectedServiceName: $(ServiceConnectionName)
-      location: $(DeploymentDefaultLocation)
-      resourceGroupName: $(ResourceGroupName)
+      connectedServiceName: $(variables['variables.ServiceConnectionName'])
+      location: $(variables['variables.DeploymentDefaultLocation)']
+      resourceGroupName: $(variables['variables.ResourceGroupName)']
       csmFile: resources/keyVault.bicep
       arguments: --param tenantId=$(variables['variables.tenantId'])
       # overrideParameters: >
