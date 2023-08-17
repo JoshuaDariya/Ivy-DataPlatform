@@ -12,7 +12,7 @@ resource customRole 'Microsoft.Authorization/roleDefinitions@2021-04-01-preview'
     description: 'Custom read role'
     type: 'CustomRole'
     assignableScopes: [
-      resourceGroup(rgName).id
+      resourceGroup(rgName)
     ]
     permissions: [
       {

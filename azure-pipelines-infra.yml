@@ -30,7 +30,7 @@ steps:
 
 #Task for focusing on roles and permissions
   - task: AzureResourceManagerTemplateDeployment@3
-    displayName: 'Deploy Infrastructure Bicep'
+    displayName: 'Deploy Roles to RG'
     inputs:
       deploymentScope: 'Resource Group'
       connectedServiceName: $(ServiceConnectionName)
