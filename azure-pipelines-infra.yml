@@ -18,23 +18,23 @@ steps:
     displayName: 'Deploy Infrastructure Bicep'
     inputs:
       deploymentScope: 'Resource Group'
-      connectedServiceName: $(variables['variables.ServiceConnectionName'])
-      location: $(variables['variables.DeploymentDefaultLocation)']
-      resourceGroupName: $(variables['variables.ResourceGroupName)']
+      connectedServiceName: $(InfraPipelinelVars.ServiceConnectionName)
+      location: $(InfraPipelinelVars.DeploymentDefaultLocation)
+      resourceGroupName: $(InfraPipelinelVars.ResourceGroupName)
       csmFile: resources/main.bicep
       # overrideParameters: >
-      #   -environmentType $(EnvironmentType)
+      #   -environmentType $InfraPipelinelVars.EnvironmentType
 
-    - task: AzureResourceManagerTemplateDeployment@3
+  - task: AzureResourceManagerTemplateDeployment@3
     displayName: 'Deploy Infrastructure Bicep'
     inputs:
       deploymentScope: 'Resource Group'
-      connectedServiceName: $(variables['variables.ServiceConnectionName'])
-      location: $(variables['variables.DeploymentDefaultLocation)']
-      resourceGroupName: $(variables['variables.ResourceGroupName)']
+      connectedServiceName: $(InfraPipelinelVars.ServiceConnectionName)
+      location: $(InfraPipelinelVars.DeploymentDefaultLocation)
+      resourceGroupName: $(InfraPipelinelVars.ResourceGroupName)
       csmFile: resources/keyVault.bicep
-      arguments: --param tenantId=$(variables['variables.tenantId'])
+      arguments: --param tenantId=$(InfraPipelinelVars.tenantId)
       # overrideParameters: >
-      #   -environmentType $(EnvironmentType)
+      #   -environmentType '$InfraPipelinelVars.EnvironmentType'
 
       
