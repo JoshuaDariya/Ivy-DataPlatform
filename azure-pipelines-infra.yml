@@ -25,9 +25,7 @@ variables:
   ResourceGroupName: 'rg-ivydataplatform-dev-eastus'
   DeploymentDefaultLocation: 'eastus' 
 
-jobs:
-- job:
-  steps:
+steps:
   - task: AzureResourceManagerTemplateDeployment@3
     displayName: 'Deploy Infrastructure Bicep'
     inputs:
