@@ -12,7 +12,7 @@ resource customRole 'Microsoft.Authorization/roleDefinitions@2021-04-01-preview'
     description: 'Custom read role'
     type: 'CustomRole'
     assignableScopes: [
-      'rg-ivydataplatform-dev-eastus'
+      '/subscriptions/cbecafd1-1b42-4db3-a26a-e2851ce44268'
     ]
     permissions: [
       {
