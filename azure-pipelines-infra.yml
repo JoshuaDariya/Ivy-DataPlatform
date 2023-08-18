@@ -29,7 +29,7 @@ steps:
     displayName: 'Deploy Infrastructure Bicep'
     inputs:
       deploymentScope: 'Resource Group'
-      connectedServiceName: '$(InfraPipelinelVars.ServiceConnectionName)'
+      connectedServiceName: 'Ivy Dev Data Platform' #'$(InfraPipelinelVars.ServiceConnectionName)'
       location: '$(InfraPipelinelVars.DeploymentDefaultLocation)'
       resourceGroupName: '$(InfraPipelinelVars.ResourceGroupName)'
       csmFile: resources/keyVault.bicep
