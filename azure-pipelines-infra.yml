@@ -47,6 +47,8 @@ variables:
 
 steps:
   - script: echo $(InfraPipelinelVars.ResourceGroupName)
+    displayName: Print Resource Group Name
+
   - task: AzureResourceManagerTemplateDeployment@3
     displayName: 'Deploy Infrastructure Bicep'
     inputs:
