@@ -10,31 +10,61 @@ pool:
   vmImage: ubuntu-latest
 
 # TODO Move to ADO/Pipeline variable/config
+# variables:
+# - group: 'InfraPipelinelVars'  
+
 variables:
-- group: 'InfraPipelinelVars'  
+  ServiceConnectionName: 'Ivy Dev Data Platform' 
+  EnvironmentType: 'Test'
+  ResourceGroupName: 'rg-ivydataplatform-dev-eastus'
+  DeploymentDefaultLocation: 'eastus' 
+  TenantId: '04d6e0a5-c077-4729-a90e-9790d11d2389'
 
 steps:
   - task: AzureResourceManagerTemplateDeployment@3
     displayName: 'Deploy Infrastructure Bicep'
     inputs:
       deploymentScope: 'Resource Group'
-      connectedServiceName: 'Ivy Dev Data Platform' #'$(InfraPipelinelVars.ServiceConnectionName)'
-      location: $(InfraPipelinelVars.DeploymentDefaultLocation)
-      resourceGroupName: $(InfraPipelinelVars.ResourceGroupName)
+      connectedServiceName: $(ServiceConnectionName)
+      location: $(DeploymentDefaultLocation)
+      resourceGroupName: $(ResourceGroupName)
       csmFile: resources/main.bicep
       # overrideParameters: >
-      #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'
+      #   -environmentType $(EnvironmentType)
 
   - task: AzureResourceManagerTemplateDeployment@3
     displayName: 'Deploy Infrastructure Bicep'
     inputs:
       deploymentScope: 'Resource Group'
-      connectedServiceName: 'Ivy Dev Data Platform' #'$(InfraPipelinelVars.ServiceConnectionName)'
-      location: $(InfraPipelinelVars.DeploymentDefaultLocation)
-      resourceGroupName: $(InfraPipelinelVars.ResourceGroupName)
+      connectedServiceName: $(ServiceConnectionName)
+      location: $(DeploymentDefaultLocation)
+      resourceGroupName: $(ResourceGroupName)
       csmFile: resources/keyVault.bicep
-      arguments: --param tenantId=$(InfraPipelinelVars.tenantId)
+      arguments: $(TenantId)
       # overrideParameters: >
       #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'
 
-      
+  
+# steps:
+  # - task: AzureResourceManagerTemplateDeployment@3
+  #   displayName: 'Deploy Infrastructure Bicep'
+  #   inputs:
+  #     deploymentScope: 'Resource Group'
+  #     connectedServiceName: 'Ivy Dev Data Platform' #'$(InfraPipelinelVars.ServiceConnectionName)'
+  #     location: $(InfraPipelinelVars.DeploymentDefaultLocation)
+  #     resourceGroupName: $(InfraPipelinelVars.ResourceGroupName)
+  #     csmFile: resources/main.bicep
+  #     # overrideParameters: >
+  #     #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'
+
+  # - task: AzureResourceManagerTemplateDeployment@3
+  #   displayName: 'Deploy Infrastructure Bicep'
+  #   inputs:
+  #     deploymentScope: 'Resource Group'
+  #     connectedServiceName: 'Ivy Dev Data Platform' #'$(InfraPipelinelVars.ServiceConnectionName)'
+  #     location: $(InfraPipelinelVars.DeploymentDefaultLocation)
+  #     resourceGroupName: $(InfraPipelinelVars.ResourceGroupName)
+  #     csmFile: resources/keyVault.bicep
+  #     arguments: --param tenantId=$(InfraPipelinelVars.tenantId)
+  #     # overrideParameters: >
+  #     #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'    
