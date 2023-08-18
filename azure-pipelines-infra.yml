@@ -37,7 +37,7 @@ steps:
         servicePrincipalObjectId=045366d9-b0c7-4da6-a28d-a772e3e725bd
         resourceGroup=rg-ivydataplatform-dev-eastus
         customRoleName=CustomContributor
-        az role assignment create --assignee-object-id $servicePrincipalObjectId --role Contributor --scope $resourceGroup --name $customRoleName
+        az role assignment create --assignee-object-id $servicePrincipalObjectId --role Contributor --name $customRoleName --scope $resourceGroup --assignee-principal-type ServicePrincipal
     displayName: 'Assign Custom Role'
 
 #Task for focusing on roles and permissions
