@@ -48,9 +48,6 @@ variables:
 #       #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'
 
 steps:
-  - script: echo $(ResourceGroupName) #$(InfraPipelinelVars.ResourceGroupName)
-    displayName: Print Resource Group Name
-
   - task: AzureResourceManagerTemplateDeployment@3
     displayName: 'Deploy Infrastructure Bicep'
     inputs:
