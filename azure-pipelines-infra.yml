@@ -70,6 +70,6 @@ steps:
       location: '$(DeploymentDefaultLocation)'
       resourceGroupName: '$(ResourceGroupName)'
       csmFile: resources/keyVault.bicep
-      # arguments: --param tenantId=$(InfraPipelinelVars.tenantId)
+      arguments: --param tenantId=$(tenantId)
       # overrideParameters: >
       #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'    
