@@ -16,14 +16,14 @@ resource keyVaultResourceName 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
       family: 'A'
       name: 'standard'
     }
-    tenantId: tenantId
     accessPolicies: [{
-        objectId: spObjectId 
-        permissions: {
-          keys: ['get', 'list']
-          secrets: ['get', 'list']
-        }
-      }]
+      objectId: spObjectId  
+      permissions: {
+        keys: ['get', 'list']
+        secrets: ['get', 'list']
+      }
+      tenantId: tenantId 
+    }]
     secretProperties: {
       keyPermissions: ['get', 'list']
       secretPermissions: ['get', 'list', 'set', 'delete', 'backup', 'restore'] 
