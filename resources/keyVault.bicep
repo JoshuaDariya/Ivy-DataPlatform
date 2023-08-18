@@ -28,10 +28,6 @@ resource keyVaultResourceName 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
       family: 'A'
       name: 'standard'
     }
-    // secretProperties: {
-    //   keyPermissions: ['get', 'list']
-    //   secretPermissions: ['get', 'list', 'set', 'delete', 'backup', 'restore'] 
-    // }
   }
 }
 
