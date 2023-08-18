@@ -46,8 +46,9 @@ steps:
       resourceGroupName: $(ResourceGroupName)
       csmFile: resources/budget.bicep
 
+#Task for creating key vault
   - task: AzureResourceManagerTemplateDeployment@3
-    displayName: 'Deploy Infrastructure Bicep'
+    displayName: 'Deploy Key Vault Bicep'
     inputs:
       deploymentScope: 'Resource Group'
       connectedServiceName: $(ServiceConnectionName) #'$(InfraPipelinelVars.ServiceConnectionName)'
@@ -55,5 +56,4 @@ steps:
       resourceGroupName: '$(ResourceGroupName)'
       csmFile: resources/keyVault.bicep
       overrideParameters: '-tenantId $(tenantId)'
-      # overrideParameters: >
-      #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'    
+ 
