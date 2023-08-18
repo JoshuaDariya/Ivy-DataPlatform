@@ -15,7 +15,7 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo $(EnvironmentType)
+- script: echo '$(EnvironmentType)'
   displayName: 'Run a one-line script'
 
 - script: |
