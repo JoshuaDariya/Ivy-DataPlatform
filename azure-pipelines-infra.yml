@@ -48,7 +48,7 @@ variables:
 #       #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'
 
 steps:
-  - script: echo $(ServiceConnectionName) #$(InfraPipelinelVars.ResourceGroupName)
+  - script: echo $(ResourceGroupName) #$(InfraPipelinelVars.ResourceGroupName)
     displayName: Print Resource Group Name
 
   # - task: AzureResourceManagerTemplateDeployment@3
