@@ -26,4 +26,4 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
 
 // TODO: Key Vault Goes Here as Module
 
-// TODO: Cost Controls
+
