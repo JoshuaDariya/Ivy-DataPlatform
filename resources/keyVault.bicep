@@ -1,13 +1,13 @@
 targetScope = 'resourceGroup'
 
 param location string
-param KeyVaultName string
+param keyVaultName string
 param spObjectId string
 param tenantId string
 
 // Key Vault 
 resource keyVaultResourceName 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
-  name: KeyVaultName
+  name: keyVaultName
   location: location
   properties: {
     tenantId: tenantId
