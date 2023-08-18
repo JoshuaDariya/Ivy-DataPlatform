@@ -4,7 +4,7 @@ targetScope = 'resourceGroup'
 param rgName string = 'rg-ivydataplatform-dev-eastus'
 param roleName string = 'ReadRole'
 
-resource customRole 'Microsoft.Authorization/roleDefinitions@2021-04-01-preview' = {
+resource customRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
   name: guid(subscription().id, 'read', rgName)
   location: 'Global'
   properties: {
