@@ -12,8 +12,8 @@ pool:
 variables:
 - group: InfraPipelinelVars
 - name: ServiceConnectionName
-  value: $[variables.ServiceConnectionName] #'Ivy Dev Data Platform'
-
+  # value: $[variables.ServiceConnectionName] #'Ivy Dev Data Platform'
+  value: $(azuredevops.variableGroups['InfraPipelinelVars'].ServiceConnectionName)
 # variables:
 #   ServiceConnectionName: 'Ivy Dev Data Platform' 
 #   EnvironmentType: 'Test'
