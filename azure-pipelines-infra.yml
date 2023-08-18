@@ -36,8 +36,7 @@ steps:
       inlineScript: |
         servicePrincipalObjectId=045366d9-b0c7-4da6-a28d-a772e3e725bd
         resourceGroup=rg-ivydataplatform-dev-eastus
-        customRoleName=IvyDPContributor
-        az role assignment create --assignee-object-id $servicePrincipalObjectId --role Contributor --name $customRoleName --scope /subscriptions/cbecafd1-1b42-4db3-a26a-e2851ce44268/resourceGroups/rg-ivydataplatform-dev-eastus --assignee-principal-type ServicePrincipal
+        az role assignment create --assignee-object-id $servicePrincipalObjectId --role Contributor --scope /subscriptions/cbecafd1-1b42-4db3-a26a-e2851ce44268/resourceGroups/rg-ivydataplatform-dev-eastus --assignee-principal-type ServicePrincipal
     displayName: 'Assign Custom Role'
 
 # #Task for focusing on roles and permissions
