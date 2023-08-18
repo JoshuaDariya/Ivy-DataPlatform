@@ -12,7 +12,7 @@ pool:
 variables:
 - group: InfraPipelinelVars
 - name: ServiceConnectionName
-  value: 'Ivy Dev Data Platform'
+  value: $[variables.ServiceConnectionName] #'Ivy Dev Data Platform'
 
 # variables:
 #   ServiceConnectionName: 'Ivy Dev Data Platform' 
@@ -46,7 +46,7 @@ variables:
 #       #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'
 
 steps:
-  - script: echo $(InfraPipelinelVars.ResourceGroupName)
+  - script: echo $(ServiceConnectionName) #$(InfraPipelinelVars.ResourceGroupName)
     displayName: Print Resource Group Name
 
   - task: AzureResourceManagerTemplateDeployment@3
