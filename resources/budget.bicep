@@ -1,4 +1,4 @@
-targetScope = 'subscription'
+targetScope = 'resourceGroup'
 
 @description('Name of the Budget. It should be unique within a resource group.')
 param budgetName string = 'Ivy Data Platform Test Budget'
