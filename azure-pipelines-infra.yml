@@ -32,6 +32,6 @@ steps:
       location: '$(DeploymentDefaultLocation)'
       resourceGroupName: '$(ResourceGroupName)'
       csmFile: resources/keyVault.bicep
-      overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId)-location $(Location) -storageAccountName $(StorageAccountName) -storageAccountType $(StorageAccountType)'
+      overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -location $(Location) -storageAccountName $(StorageAccountName) -storageAccountType $(StorageAccountType)'
       # overrideParameters: >
       #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'    
