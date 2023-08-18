@@ -9,12 +9,8 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-# TODO Move to ADO/Pipeline variable/config
 variables:
-  ServiceConnectionName: 'Ivy Dev Data Platform' 
-  EnvironmentType: 'Test'
-  ResourceGroupName: 'rg-ivydataplatform-dev-eastus'
-  DeploymentDefaultLocation: 'eastus' 
+- group: InfraPipelinelVars
 
 steps:
   - task: AzureResourceManagerTemplateDeployment@3
@@ -22,8 +18,20 @@ steps:
     inputs:
       deploymentScope: 'Resource Group'
       connectedServiceName: $(ServiceConnectionName)
-      location: $(DeploymentDefaultLocation)
-      resourceGroupName: $(ResourceGroupName)
+      location: '$(DeploymentDefaultLocation)'
+      resourceGroupName: '$(ResourceGroupName)'
       csmFile: resources/main.bicep
       # overrideParameters: >
-      #   -environmentType $(EnvironmentType)
+      #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'
+
+  - task: AzureResourceManagerTemplateDeployment@3
+    displayName: 'Deploy Infrastructure Bicep'
+    inputs:
+      deploymentScope: 'Resource Group'
+      connectedServiceName: $(ServiceConnectionName) #'$(InfraPipelinelVars.ServiceConnectionName)'
+      location: '$(DeploymentDefaultLocation)'
+      resourceGroupName: '$(ResourceGroupName)'
+      csmFile: resources/keyVault.bicep
+      overrideParameters: '-tenantId $(tenantId)'
+      # overrideParameters: >
+      #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'    
