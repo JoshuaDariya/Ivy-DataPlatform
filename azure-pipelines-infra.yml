@@ -11,41 +11,6 @@ pool:
 
 variables:
 - group: InfraPipelinelVars
-# - name: ServiceConnectionName
-#   value: 'Ivy Dev Data Platform'
-# - name: ResourceGroupName
-#   value: $[variables['InfraPipelinelVars.ResourceGroupName']]
-  # value: $(azuredevops.variableGroups['InfraPipelinelVars'].ServiceConnectionName)
-# variables:
-#   ServiceConnectionName: 'Ivy Dev Data Platform' 
-#   EnvironmentType: 'Test'
-#   ResourceGroupName: 'rg-ivydataplatform-dev-eastus'
-#   DeploymentDefaultLocation: 'eastus' 
-#   TenantId: '04d6e0a5-c077-4729-a90e-9790d11d2389'
-
-# steps:
-#   - task: AzureResourceManagerTemplateDeployment@3
-#     displayName: 'Deploy Infrastructure Bicep'
-#     inputs:
-#       deploymentScope: 'Resource Group'
-#       connectedServiceName: $(ServiceConnectionName)
-#       location: $(DeploymentDefaultLocation)
-#       resourceGroupName: $(ResourceGroupName)
-#       csmFile: resources/main.bicep
-#       # overrideParameters: >
-#       #   -environmentType $(EnvironmentType)
-
-#   - task: AzureResourceManagerTemplateDeployment@3
-#     displayName: 'Deploy Infrastructure Bicep'
-#     inputs:
-#       deploymentScope: 'Resource Group'
-#       connectedServiceName: $(ServiceConnectionName)
-#       location: $(DeploymentDefaultLocation)
-#       resourceGroupName: $(ResourceGroupName)
-#       csmFile: resources/keyVault.bicep
-#       # arguments: --param tenantId=$(TenantId)
-#       # overrideParameters: >
-#       #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'
 
 steps:
   - task: AzureResourceManagerTemplateDeployment@3
