@@ -14,7 +14,7 @@ variables:
 - name: ServiceConnectionName
   value: 'Ivy Dev Data Platform'
 - name: ResourceGroupName
-  value: $[variables.ResourceGroupName]
+  value: $[variables['InfraPipelinelVars.ResourceGroupName']]
   # value: $(azuredevops.variableGroups['InfraPipelinelVars'].ServiceConnectionName)
 # variables:
 #   ServiceConnectionName: 'Ivy Dev Data Platform' 
