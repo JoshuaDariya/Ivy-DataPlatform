@@ -54,7 +54,7 @@ steps:
 
 #Task for focusing on budget
   - task: AzureResourceManagerTemplateDeployment@3
-    displayName: 'Deploy Roles to RG'
+    displayName: 'Deploy Basic Budget'
     inputs:
       deploymentScope: 'Resource Group'
       connectedServiceName: $(ServiceConnectionName)
