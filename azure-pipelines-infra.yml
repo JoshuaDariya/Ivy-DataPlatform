@@ -45,11 +45,6 @@ steps:
       location: $(DeploymentDefaultLocation)
       resourceGroupName: $(ResourceGroupName)
       csmFile: resources/budget.bicep
-      location: '$(DeploymentDefaultLocation)'
-      resourceGroupName: '$(ResourceGroupName)'
-      csmFile: resources/main.bicep
-      # overrideParameters: >
-      #   -environmentType '$(InfraPipelinelVars.EnvironmentType)'
 
   - task: AzureResourceManagerTemplateDeployment@3
     displayName: 'Deploy Infrastructure Bicep'
