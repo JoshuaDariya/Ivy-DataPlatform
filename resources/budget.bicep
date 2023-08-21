@@ -20,7 +20,7 @@ param timeGrain string = 'Monthly'
 param startDate string = '2023-08-01'
 
 @description('The end date for the budget in YYYY-MM-DD format. If not provided, we default this to 10 years from the start date.')
-param endDate string = '2023-08-31'
+param endDate string = '2024-08-01'
 
 @description('Threshold value associated with a notification. Notification is sent when the cost exceeded the threshold. It is always percent and has to be between 0.01 and 1000.')
 param firstThreshold int = 90
