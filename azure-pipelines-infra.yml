@@ -55,5 +55,4 @@ steps:
       location: '$(DeploymentDefaultLocation)'
       resourceGroupName: '$(ResourceGroupName)'
       csmFile: resources/keyVault.bicep
-      overrideParameters: '-tenantId $(tenantId)'
- 
+      overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -location $(Location) -keyVaultName $(KeyVaultName)'
