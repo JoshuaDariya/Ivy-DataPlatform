@@ -13,50 +13,62 @@ variables:
 - group: InfraPipelinelVars
 - group: SubscriptionVars
 
-steps:
-  - task: AzureResourceManagerTemplateDeployment@3
-    displayName: 'Deploy Infrastructure Bicep'
-    inputs:
-      deploymentScope: 'Resource Group'
-      connectedServiceName: $(ServiceConnectionName)
-      location: $(DeploymentDefaultLocation)
-      resourceGroupName: $(ResourceGroupName)
-      csmFile: resources/main.bicep
-      # overrideParameters: >
-      #   -environmentType $(EnvironmentType)
+stages:
+  - stage: Dev Deployment
+    displayName: Deploy Dev Infrastructure
+    jobs:
+      - job: DeployInfrastructure
+      displayName: Deploy Infrastructure Bicep
+      steps:
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Deploy Infrastructure Bicep'
+          inputs:
+            deploymentScope: 'Resource Group'
+            connectedServiceName: $(ServiceConnectionName)
+            location: $(DeploymentDefaultLocation)
+            resourceGroupName: $(ResourceGroupName)
+            csmFile: resources/main.bicep
+            # overrideParameters: >
+            #   -environmentType $(EnvironmentType)
 
+      #Task for focusing on roles and permissions
+      - job: DeployDevRoles
+        displayName: Deploy Dev Role Bicep
+        steps:
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Deploy Roles to RG'
+          inputs:
+            deploymentScope: 'Resource Group'
+            connectedServiceName: $(ServiceConnectionName)
+            location: $(DeploymentDefaultLocation)
+            resourceGroupName: $(ResourceGroupName)
+            csmFile: resources/roles.bicep
+            overrideParameters: '-devScope $(devScope)'
 
-#Task for focusing on roles and permissions
-  - task: AzureResourceManagerTemplateDeployment@3
-    displayName: 'Deploy Roles to RG'
-    inputs:
-      deploymentScope: 'Resource Group'
-      connectedServiceName: $(ServiceConnectionName)
-      location: $(DeploymentDefaultLocation)
-      resourceGroupName: $(ResourceGroupName)
-      csmFile: resources/roles.bicep
-      overrideParameters: '-devScope $(devScope)'
+      #Task for focusing on budget
+      - job: DeployDevBudget
+        displayName: Deploy Dev Budget Bicep
+        steps:
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Deploy Basic Budget'
+          inputs:
+            deploymentScope: 'Resource Group'
+            connectedServiceName: $(ServiceConnectionName)
+            location: $(DeploymentDefaultLocation)
+            resourceGroupName: $(ResourceGroupName)
+            csmFile: resources/budget.bicep
 
-
-
-#Task for focusing on budget
-  - task: AzureResourceManagerTemplateDeployment@3
-    displayName: 'Deploy Basic Budget'
-    inputs:
-      deploymentScope: 'Resource Group'
-      connectedServiceName: $(ServiceConnectionName)
-      location: $(DeploymentDefaultLocation)
-      resourceGroupName: $(ResourceGroupName)
-      csmFile: resources/budget.bicep
-
-#Task for creating key vault
-  - task: AzureResourceManagerTemplateDeployment@3
-    displayName: 'Deploy Key Vault Bicep'
-    inputs:
-      deploymentScope: 'Resource Group'
-      connectedServiceName: $(ServiceConnectionName) #'$(InfraPipelinelVars.ServiceConnectionName)'
-      location: '$(DeploymentDefaultLocation)'
-      resourceGroupName: '$(ResourceGroupName)'
-      csmFile: resources/keyVault.bicep
-      overrideParameters: '-tenantId $(tenantId)'
- 
+      #Task for creating key vault
+      - job: DeployDevKeyVault
+        displayName: Deploy Dev Key Vault Bicep
+        steps:
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Deploy Key Vault Bicep'
+          inputs:
+            deploymentScope: 'Resource Group'
+            connectedServiceName: $(ServiceConnectionName) #'$(InfraPipelinelVars.ServiceConnectionName)'
+            location: '$(DeploymentDefaultLocation)'
+            resourceGroupName: '$(ResourceGroupName)'
+            csmFile: resources/keyVault.bicep
+            overrideParameters: '-tenantId $(tenantId)'
+      
