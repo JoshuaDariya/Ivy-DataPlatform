@@ -25,8 +25,9 @@ stages:
               deploymentScope: 'Resource Group'
               connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
-              resourceGroupName: $(ResourceGroupName)
+              resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/main.bicep
+              overrideParameters: '-storageAccountName $(storageAccountName)dev -location $(Location)'
 
       - job: DeployDevRoles
         displayName: Deploy Roles to RG
@@ -36,9 +37,9 @@ stages:
               deploymentScope: 'Resource Group'
               connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
-              resourceGroupName: $(ResourceGroupName)
+              resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/roles.bicep
-              overrideParameters: '-devScope $(devScope)'
+              overrideParameters: '-scope $(devScope) -rgName $(ResourceGroupName)dev-$(DeploymentDefaultLocation)'
 
       - job: DeployDevBudget
         displayName: Deploy Basic Budget
@@ -48,7 +49,7 @@ stages:
               deploymentScope: 'Resource Group'
               connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
-              resourceGroupName: $(ResourceGroupName)
+              resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/budget.bicep
 
       - job: DeployDevKeyVault
@@ -59,17 +60,59 @@ stages:
               deploymentScope: 'Resource Group'
               connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
-              resourceGroupName: $(ResourceGroupName)
+              resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
-              overrideParameters: '-tenantId $(tenantId)'
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -location $(Location) -KeyVaultName $(KeyVaultName)dev'
 
   - stage: StageDeployment
     displayName: Deploy Stage Infrastructure
     jobs:
-      - job: Stage
-        displayName: 'Run a Stage Deployment'
+       - job: DeployInfrastructure
+        displayName: Deploy Stage Infrastructure Bicep
         steps:
-          - script: echo Stage
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName: $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
+              csmFile: resources/main.bicep
+              overrideParameters: '-storageAccountName $(storageAccountName)stage -location $(Location)'
+
+      - job: DeployStageRoles
+        displayName: Deploy Stage Roles to RG
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName:  $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
+              csmFile: resources/roles.bicep
+              overrideParameters: '-scope $(stageScope) -rgName $(ResourceGroupName)stage-$(DeploymentDefaultLocation)'
+
+      - job: DeployStageBudget
+        displayName: Deploy Stage Basic Budget
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName:  $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
+              csmFile: resources/budget.bicep
+
+      - job: DeployStageKeyVault
+        displayName: Deploy Stage Key Vault Bicep
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName:  $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
+              csmFile: resources/keyVault.bicep
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -location $(Location) -KeyVaultName $(KeyVaultName)stage'
 
   - stage: ProdDeployment
     displayName: Deploy Prod Infrastructure
