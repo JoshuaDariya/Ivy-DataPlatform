@@ -27,7 +27,6 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)
               csmFile: resources/main.bicep
-              overrideParameters: 'environmentType=$(EnvironmentType)'
 
       - job: DeployDevRoles
         displayName: Deploy Roles to RG
@@ -39,7 +38,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)
               csmFile: resources/roles.bicep
-              overrideParameters: 'devScope=$(devScope)'
+              overrideParameters: '-devScope $(devScope)'
 
       - job: DeployDevBudget
         displayName: Deploy Basic Budget
@@ -62,4 +61,4 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)
               csmFile: resources/keyVault.bicep
-              overrideParameters: 'tenantId=$(tenantId)'
+              overrideParameters: '-tenantId $(tenantId)'
