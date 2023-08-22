@@ -12,6 +12,7 @@ resource customRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
     roleName: roleName
     description: 'Custom read role'
     type: 'CustomRole'
+    ignoreExisting: true
     assignableScopes: [
       scope
     ]
