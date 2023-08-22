@@ -11,6 +11,7 @@ pool:
 
 variables:
 - group: InfraPipelinelVars
+- group: SubscriptionVars
 
 steps:
   - task: AzureResourceManagerTemplateDeployment@3
@@ -34,6 +35,8 @@ steps:
       location: $(DeploymentDefaultLocation)
       resourceGroupName: $(ResourceGroupName)
       csmFile: resources/roles.bicep
+      overrideParameters: '-devScope $(devScope)'
+
 
 
 #Task for focusing on budget
