@@ -23,7 +23,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             inputs:
               deploymentScope: 'Resource Group'
-              connectedServiceName: $(devServiceConnectionName)
+              connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/main.bicep
@@ -35,7 +35,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             inputs:
               deploymentScope: 'Resource Group'
-              connectedServiceName: $(devServiceConnectionName)
+              connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/roles.bicep
@@ -47,7 +47,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             inputs:
               deploymentScope: 'Resource Group'
-              connectedServiceName: $(devServiceConnectionName)
+              connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/budget.bicep
@@ -58,7 +58,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             inputs:
               deploymentScope: 'Resource Group'
-              connectedServiceName: $(devServiceConnectionName)
+              connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
@@ -73,7 +73,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             inputs:
               deploymentScope: 'Resource Group'
-              connectedServiceName: $(stageServiceConnectionName)
+              connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
               csmFile: resources/main.bicep
@@ -85,7 +85,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             inputs:
               deploymentScope: 'Resource Group'
-              connectedServiceName: $(stageServiceConnectionName)
+              connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
               resourceGroupName:  $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
               csmFile: resources/roles.bicep
@@ -97,7 +97,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             inputs:
               deploymentScope: 'Resource Group'
-              connectedServiceName: $(stageServiceConnectionName)
+              connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
               resourceGroupName:  $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
               csmFile: resources/budget.bicep
@@ -108,7 +108,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             inputs:
               deploymentScope: 'Resource Group'
-              connectedServiceName: $(stageServiceConnectionName)
+              connectedServiceName: $(ServiceConnectionName)
               location: $(DeploymentDefaultLocation)
               resourceGroupName:  $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
