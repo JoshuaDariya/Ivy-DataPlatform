@@ -62,3 +62,19 @@ stages:
               resourceGroupName: $(ResourceGroupName)
               csmFile: resources/keyVault.bicep
               overrideParameters: '-tenantId $(tenantId)'
+
+  - stage: StageDeployment
+    displayName: Deploy Stage Infrastructure
+    jobs:
+      - job: Stage
+        displayName: 'Run a Stage Deployment'
+        steps:
+          - script: echo Stage
+
+  - stage: ProdDeployment
+    displayName: Deploy Prod Infrastructure
+    jobs:
+      - job: Prod
+        displayName: 'Run a Prod Deployment'
+        steps:
+          - script: echo Prod
