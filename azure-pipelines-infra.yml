@@ -18,7 +18,7 @@ stages:
     displayName: Deploy Dev Infrastructure
     jobs:
       - job: DeployInfrastructure
-      displayName: Deploy Infrastructure Bicep
+      - displayName: Deploy Infrastructure Bicep
       steps:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Infrastructure Bicep'
@@ -33,7 +33,7 @@ stages:
 
       #Task for focusing on roles and permissions
       - job: DeployDevRoles
-        displayName: Deploy Dev Role Bicep
+      - displayName: Deploy Dev Role Bicep
         steps:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Roles to RG'
@@ -47,7 +47,7 @@ stages:
 
       #Task for focusing on budget
       - job: DeployDevBudget
-        displayName: Deploy Dev Budget Bicep
+      - displayName: Deploy Dev Budget Bicep
         steps:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Basic Budget'
@@ -60,7 +60,7 @@ stages:
 
       #Task for creating key vault
       - job: DeployDevKeyVault
-        displayName: Deploy Dev Key Vault Bicep
+      - displayName: Deploy Dev Key Vault Bicep
         steps:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Key Vault Bicep'
