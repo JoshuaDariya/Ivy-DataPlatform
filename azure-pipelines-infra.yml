@@ -67,7 +67,7 @@ stages:
   - stage: StageDeployment
     displayName: Deploy Stage Infrastructure
     jobs:
-       - job: DeployInfrastructure
+      - job: DeployInfrastructure
         displayName: Deploy Stage Infrastructure Bicep
         steps:
           - task: AzureResourceManagerTemplateDeployment@3
