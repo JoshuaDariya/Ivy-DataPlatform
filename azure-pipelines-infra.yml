@@ -89,7 +89,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName:  $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
               csmFile: resources/roles.bicep
-              overrideParameters: '-scope $(stageScope) -rgName $(ResourceGroupName)stage-$(DeploymentDefaultLocation)'
+              overrideParameters: '-scope $(stageScope) -rgName $(ResourceGroupName)stage-$(DeploymentDefaultLocation) -roleName stageReadRole'
 
       - job: DeployStageBudget
         displayName: Deploy Stage Basic Budget
