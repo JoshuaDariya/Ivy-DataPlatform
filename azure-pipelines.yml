@@ -3,6 +3,10 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+variables:
+  - group: InfraPipelinelVars
+
+
 trigger:
 - main
 
@@ -10,7 +14,7 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
+- script: echo $(EnvironmentType)
   displayName: 'Run a one-line script'
 
 - script: |
