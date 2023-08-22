@@ -1,8 +1,8 @@
 targetScope = 'resourceGroup'
 
-param location string = 'eastus' // TODO: Make the region config
-param KeyVaultName string = 'ivy-kv-lakehouse-dev'
-param spObjectId string = 'e037cecc-a3a8-4f5e-9a9d-c0fbd9af41f9'
+param location string // TODO: Make the region config
+param KeyVaultName string
+param spObjectId string
 param tenantId string
 
 // Key Vault 

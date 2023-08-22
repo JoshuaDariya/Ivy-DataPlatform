@@ -1,9 +1,9 @@
 targetScope = 'resourceGroup'
 
 // TODO: Roles and permissions
-param rgName string = 'rg-ivydataplatform-dev-eastus'
+param rgName string
 param roleName string = 'ReadRole'
-param devScope string
+param scope string
 
 resource customRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
   name: guid(subscription().id, 'read', rgName)
@@ -13,7 +13,7 @@ resource customRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
     description: 'Custom read role'
     type: 'CustomRole'
     assignableScopes: [
-      devScope
+      scope
     ]
     permissions: [
       {
