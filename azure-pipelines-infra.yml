@@ -128,4 +128,40 @@ stages:
               resourceGroupName: $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
               csmFile: resources/main.bicep
               overrideParameters: '-storageAccountName $(storageAccountName)prod -location $(Location)'
+
+      - job: DeployProdRoles
+        displayName: Deploy Prod Roles to RG
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName:  $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
+              csmFile: resources/roles.bicep
+              overrideParameters: '-scope $(prodScope) -rgName $(ResourceGroupName)stage-$(DeploymentDefaultLocation) -roleName prodReadRole'
+
+      - job: DeployProdBudget
+        displayName: Deploy Prod Basic Budget
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName:  $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
+              csmFile: resources/budget.bicep
+
+      - job: DeployProdKeyVault
+        displayName: Deploy Prod Key Vault Bicep
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName:  $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
+              csmFile: resources/keyVault.bicep
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -location $(Location) -KeyVaultName $(KeyVaultName)prod'
+
               
