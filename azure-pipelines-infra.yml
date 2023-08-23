@@ -117,7 +117,14 @@ stages:
   - stage: ProdDeployment
     displayName: Deploy Prod Infrastructure
     jobs:
-      - job: Prod
-        displayName: 'Run a Prod Deployment'
+      - job: DeployInfrastructure
+        displayName: Deploy Prod Infrastructure Bicep
         steps:
-          - script: echo Prod
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName: $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
+              csmFile: resources/main.bicep
+              overrideParameters: '-storageAccountName $(storageAccountName)prod -location $(Location)'
