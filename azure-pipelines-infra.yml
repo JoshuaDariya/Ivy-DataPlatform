@@ -128,3 +128,4 @@ stages:
               resourceGroupName: $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
               csmFile: resources/main.bicep
               overrideParameters: '-storageAccountName $(storageAccountName)prod -location $(Location)'
+              
