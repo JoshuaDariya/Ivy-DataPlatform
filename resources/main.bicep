@@ -3,8 +3,8 @@ targetScope = 'resourceGroup'
 // @description('Storage account type.')
 // param storageAccountType string = 'Standard_LRS'
 
-param location string = 'eastus' // TODO: Make the region config
-param storageAccountName string = 'stivylakehousedev'
+param location string // TODO: Make the region config
+param storageAccountName string
 param storageAccountType string = 'Standard_LRS'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
