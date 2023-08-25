@@ -9,11 +9,46 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+jobs:
+  - job: install
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: PowerShell@2
+        displayName: Install Terraform
+        inputs:
+          script: |
+            Install-Module -Name Terraform -Force
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - job: init
+    pool:
+      vmImage: ubuntu-latest
+    dependsOn: install
+    steps:
+      - task: TerraformInit@0
+        displayName: Initialize Terraform
+        inputs:
+          workingDirectory: ./
+          tfVersion: 1.1.7
+
+  - job: plan
+    pool:
+      vmImage: ubuntu-latest
+    dependsOn: init
+    steps:
+      - task: TerraformPlan@0
+        displayName: Plan Terraform
+        inputs:
+          workingDirectory: ./
+          tfVersion: 1.1.7
+
+  - job: apply
+    pool:
+      vmImage: ubuntu-latest
+    dependsOn: plan
+    steps:
+      - task: TerraformApply@0
+        displayName: Apply Terraform
+        inputs:
+          workingDirectory: ./
+          tfVersion: 1.1.7
