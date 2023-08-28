@@ -12,9 +12,7 @@ pool:
 
 jobs:
   - job: install
-    pool:
-      vmImage: ubuntu-latest
     steps:
-      - task: PowerShell@2
-        inputs:
-          filePath: '/resources/install-terraform.ps1'
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
