@@ -22,3 +22,4 @@ jobs:
         script: |
           echo "Initializing Terraform"
           terraform init
+        workingDirectory: '/terraform'
