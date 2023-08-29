@@ -1,8 +1,3 @@
-
-variable "role" {
-  type = string
-}
-
 variable "account" {
   type = string
 }
