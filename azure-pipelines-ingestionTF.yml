@@ -36,7 +36,7 @@ jobs:
           backendAzureRmKey: 'terraform.tfstate'
 
 
-  - job: TFinit
+  - job: TFPlan
     displayName: Terraform Plan
     steps:
       - task: TerraformTaskV4@4
@@ -48,7 +48,7 @@ jobs:
           commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
       
 
-  - job: TFinit
+  - job: TFApply
     displayName: Terraform Apply
     steps:
       - task: TerraformTaskV4@4
@@ -57,4 +57,3 @@ jobs:
           command: 'apply'
           workingDirectory: 'terraform'
           environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-  
