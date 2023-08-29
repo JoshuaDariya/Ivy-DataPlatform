@@ -24,11 +24,11 @@ stages:
             inputs:
               terraformVersion: 'latest'
 
-  - stage: TerraformInitandPlan
-    displayName: Terraform Init and Plan
+  - stage: TerraformInitPlanApply
+    displayName: Terraform Init Plan Apply
     jobs:
       - job: TFinit
-        displayName: Terraform Init and Plan
+        displayName: Terraform Init Plan Apply
         steps:
           - task: TerraformTaskV4@4
             inputs:
@@ -47,22 +47,7 @@ stages:
               workingDirectory: 'terraform'
               commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-          - task: Bash@3
-            inputs:
-              targetType: 'inline'
-              script: |
-                echo "Do you want to continue? (yes/no)"
-                      read userInput
-                
-                      if [ "$userInput" == "yes" ]; then
-                        echo "Continuing the pipeline..."
-                      elif [ "$userInput" == "no" ]; then
-                        echo "Stopping the pipeline..."
-                        exit 1  # Exit with a non-zero code to indicate pipeline failure
-                      else
-                        echo "Invalid input. Stopping the pipeline..."
-                        exit 1  # Exit with a non-zero code to indicate pipeline failure
-                      fi
+
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
