@@ -62,7 +62,8 @@ stages:
       - job: Apply
         displayName: "Manual Approval Apply"
         dependsOn: TFinit
-        pool: ubuntu-latest
+        pool:
+          vmImage: ubuntu-latest
         steps:
           - task: TerraformTaskV4@4
             inputs:
