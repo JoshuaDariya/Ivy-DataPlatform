@@ -13,6 +13,14 @@ pool:
 jobs:
   - job: install
     steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          export SNOWFLAKE_USER="tf-snow"
+          export SNOWFLAKE_PRIVATE_KEY_PATH="terraform/.snowflake_tf_snow_key.p8"
+          export SNOWFLAKE_ACCOUNT="JL89715"
+          export SNOWFLAKE_REGION="AZURE_EASTUS2"
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
@@ -23,3 +31,4 @@ jobs:
           echo "Initializing Terraform"
           terraform init
         workingDirectory: 'terraform'
+    
