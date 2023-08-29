@@ -48,25 +48,17 @@ stages:
               commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
 
-            
+          
+  - stage: TerraformApply
+    displayName: Terraform Apply
+    jobs:
+      - job: TFApply
+        displayName: Terraform Apply
+        steps:
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
               command: 'apply'
               workingDirectory: 'terraform'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-              commandOptions: '-input=false'
-          
-  # - stage: TerraformApply
-  #   displayName: Terraform Apply
-  #   jobs:
-  #     - job: TFApply
-  #       displayName: Terraform Apply
-  #       steps:
-  #         - task: TerraformTaskV4@4
-  #           inputs:
-  #             provider: 'azurerm'
-  #             command: 'apply'
-  #             workingDirectory: 'terraform'
-  #             environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-  #             commandOptions: '-input=false'
+              commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
