@@ -47,6 +47,12 @@ stages:
               workingDirectory: 'terraform'
               commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+
+      - job: manual_approval
+        displayName: "Manual Approval"
+        dependsOn: TFinit
+        pool: server
+        steps:
           - task: ManualIntervention@8
             inputs:
               instructions: 'Approve or Reject Plan'
