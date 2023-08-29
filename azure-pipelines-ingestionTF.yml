@@ -57,4 +57,4 @@ jobs:
           command: 'apply'
           workingDirectory: 'terraform'
           environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-        
+  
