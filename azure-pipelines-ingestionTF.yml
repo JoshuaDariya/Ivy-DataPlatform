@@ -47,10 +47,12 @@ stages:
               workingDirectory: 'terraform'
               commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-          - task: ManualIntervention@8
+          - task: ManualValidation@0
             inputs:
+              notifyUsers: 'alex.crosslen@ivyrehab.com'
               instructions: 'Review Terraform Plan'
-              emailRecipients: 'Alex.crosslen@ivyrehab.com'
+              onTimeout: reject
+
             
           - task: TerraformTaskV4@4
             inputs:
