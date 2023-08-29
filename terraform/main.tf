@@ -5,6 +5,12 @@ terraform {
       version = "~> 0.70"
     }
   }
+  backend "azurerm" {
+    resource_group_name  = "rg-ivydataplatform-prod-eastus"
+    storage_account_name = "stivylakehouseprod"
+    container_name       = "ivy-tf-container"
+    key                  = "tf/terraform.tfstate"
+  }
 }
 
 provider "snowflake" {
