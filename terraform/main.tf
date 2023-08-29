@@ -11,6 +11,9 @@ terraform {
     container_name       = "ivy-tf-container"
     key                  = "tf/terraform.tfstate"
   }
+  plan {
+    output_file = "tfplan.binary"
+  }
 }
 
 provider "snowflake" {
