@@ -58,6 +58,12 @@ stages:
               instructions: 'Approve or Reject Plan'
               emailRecipients: 'Alex.crosslen@ivyrehab.com'
 
+
+      - job: manual_approval
+        displayName: "Manual Approval"
+        dependsOn: TFinit
+        pool: ubuntu-latest
+        steps:
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
