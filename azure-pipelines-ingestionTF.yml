@@ -28,7 +28,7 @@ stages:
     displayName: Terraform Init and Plan
     jobs:
       - job: TFinit
-        displayName: Terraform Init
+        displayName: Terraform Init and Plan
         steps:
           - task: TerraformTaskV4@4
             inputs:
@@ -40,11 +40,6 @@ stages:
               backendAzureRmStorageAccountName: 'stivylakehouseprod'
               backendAzureRmContainerName: 'ivy-tf-container'
               backendAzureRmKey: 'tf/terraform.tfstate'
-
-      - job: TFPlan
-        dependsOn: TFinit
-        displayName: Terraform Plan
-        steps:
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
