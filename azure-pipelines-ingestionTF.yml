@@ -24,11 +24,11 @@ stages:
             inputs:
               terraformVersion: 'latest'
 
-  - stage: TerraformInit
-    displayName: Terraform Init
+  - stage: TerraformInitandPlan
+    displayName: Terraform Init and Plan
     jobs:
-      - job: TFinit
-        displayName: Terraform Init
+      - job: TFinitandPlan
+        displayName: Terraform Init and Plan
         steps:
           - task: TerraformTaskV4@4
             inputs:
@@ -41,9 +41,6 @@ stages:
               backendAzureRmContainerName: 'ivy-tf-container'
               backendAzureRmKey: 'terraform.tfstate'
 
-  - stage: TerraformPlan
-    displayName: Terraform Plan
-    jobs:
       - job: TFPlan
         displayName: Terraform Plan
         steps:
