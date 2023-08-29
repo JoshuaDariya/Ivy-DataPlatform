@@ -25,9 +25,11 @@ jobs:
     #       export SNOWFLAKE_ACCOUNT=$(account)
     #       export SNOWFLAKE_REGION="AZURE_EASTUS2"
     - task: TerraformInstaller@1
+      displayName: Install Terrafrom
       inputs:
         terraformVersion: 'latest'
     - task: TerraformTaskV4@4
+    displayName: Terraform Init
       inputs:
         provider: 'azurerm'
         command: 'init'
@@ -47,6 +49,7 @@ jobs:
     #     workingDirectory: 'terraform'
     
     - task: TerraformTaskV4@4
+    displayName: Terraform Plan
       inputs:
         provider: 'azurerm'
         command: 'plan'
@@ -54,19 +57,21 @@ jobs:
         environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
         commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
     
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'show'
-        workingDirectory: 'terraform'
-        outputTo: 'console'
-        outputFormat: 'default'
-        environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+    # - task: TerraformTaskV4@4
+    # displayName: Terraform Show
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'show'
+    #     workingDirectory: 'terraform'
+    #     outputTo: 'console'
+    #     outputFormat: 'default'
+    #     environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
     
     - task: TerraformTaskV4@4
+    displayName: Terraform Apply
       inputs:
         provider: 'azurerm'
         command: 'apply'
         workingDirectory: 'terraform'
         environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-        manualApproval: true
+        
