@@ -9,7 +9,7 @@ terraform {
 
 provider "snowflake" {
   role = "SYSADMIN"
-  region = "eastus2"
+  region = "eastus2.azure"
 }
 
 resource "snowflake_database" "db" {
