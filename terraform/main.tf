@@ -12,7 +12,7 @@ provider "snowflake" {
   account = "JL89715"
   username = "ivy-tf-snow"
   password = "1Ivyuser"
-  region = "eastus2.azure"
+  region = "east-us-2.azure"
 }
 
 resource "snowflake_database" "db" {
