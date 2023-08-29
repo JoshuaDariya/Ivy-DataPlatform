@@ -47,24 +47,22 @@ stages:
               workingDirectory: 'terraform'
               commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-
-      - job: manual_approval
-        displayName: "Manual Approval"
-        dependsOn: TFinit
-        pool: server
-        steps:
-          - task: ManualIntervention@8
+          - task: Bash@3
             inputs:
-              instructions: 'Approve or Reject Plan'
-              emailRecipients: 'Alex.crosslen@ivyrehab.com'
-
-
-      - job: Apply
-        displayName: "Manual Approval Apply"
-        dependsOn: TFinit
-        pool:
-          vmImage: ubuntu-latest
-        steps:
+              targetType: 'inline'
+              script: |
+                echo "Do you want to continue? (yes/no)"
+                      read userInput
+                
+                      if [ "$userInput" == "yes" ]; then
+                        echo "Continuing the pipeline..."
+                      elif [ "$userInput" == "no" ]; then
+                        echo "Stopping the pipeline..."
+                        exit 1  # Exit with a non-zero code to indicate pipeline failure
+                      else
+                        echo "Invalid input. Stopping the pipeline..."
+                        exit 1  # Exit with a non-zero code to indicate pipeline failure
+                      fi
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
