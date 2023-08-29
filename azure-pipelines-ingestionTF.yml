@@ -43,3 +43,26 @@ jobs:
     #       terraform init
     #     workingDirectory: 'terraform'
     
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: 'terraform'
+        environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+    
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'show'
+        workingDirectory: 'terraform'
+        outputTo: 'console'
+        outputFormat: 'default'
+        environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+    
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: 'terraform'
+        environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+        manualApproval: true
