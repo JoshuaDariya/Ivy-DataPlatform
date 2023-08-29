@@ -27,8 +27,8 @@ stages:
   - stage: TerraformInitandPlan
     displayName: Terraform Init and Plan
     jobs:
-      - job: TFinitandPlan
-        displayName: Terraform Init and Plan
+      - job: TFinit
+        displayName: Terraform Init
         steps:
           - task: TerraformTaskV4@4
             inputs:
@@ -42,6 +42,7 @@ stages:
               backendAzureRmKey: 'terraform.tfstate'
 
       - job: TFPlan
+        dependsOn: TFinit
         displayName: Terraform Plan
         steps:
           - task: TerraformTaskV4@4
