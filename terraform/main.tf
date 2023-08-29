@@ -9,6 +9,9 @@ terraform {
 
 provider "snowflake" {
   role = "SYSADMIN"
+  account = "JL89715"
+  user = "ivy-tf-snow"
+  password = "1Ivyuser"
   region = "eastus2.azure"
 }
 
