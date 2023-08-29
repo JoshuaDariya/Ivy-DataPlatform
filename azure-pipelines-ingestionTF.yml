@@ -14,64 +14,47 @@ variables:
   - group: TFvars
 
 jobs:
-  - job: install
+  - job: TFinstall
+    displayName: Install Terraform
     steps:
-    # - task: Bash@3
-    #   inputs:
-    #     targetType: 'inline'
-    #     script: |
-    #       export SNOWFLAKE_USER="tf-snow"
-    #       export SNOWFLAKE_PRIVATE_KEY_PATH="terraform/.snowflake_tf_snow_key.p8"
-    #       export SNOWFLAKE_ACCOUNT=$(account)
-    #       export SNOWFLAKE_REGION="AZURE_EASTUS2"
-    - task: TerraformInstaller@1
-      displayName: Install Terrafrom
-      inputs:
-        terraformVersion: 'latest'
-    - task: TerraformTaskV4@4
-    displayName: Terraform Init
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: 'terraform'
-        backendServiceArm: 'Ivy Dev Data Platform'
-        backendAzureRmResourceGroupName: 'rg-ivydataplatform-prod-eastus'
-        backendAzureRmStorageAccountName: 'stivylakehouseprod'
-        backendAzureRmContainerName: 'ivy-tf-container'
-        backendAzureRmKey: 'terraform.tfstate'
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: 'latest'
 
-    # - task: Bash@3
-    #   inputs:
-    #     targetType: 'inline'
-    #     script: |
-    #       echo "Initializing Terraform"
-    #       terraform init
-    #     workingDirectory: 'terraform'
-    
-    - task: TerraformTaskV4@4
+  - job: TFinit
+    displayName: Terraform Init
+    steps:
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: 'terraform'
+          backendServiceArm: 'Ivy Dev Data Platform'
+          backendAzureRmResourceGroupName: 'rg-ivydataplatform-prod-eastus'
+          backendAzureRmStorageAccountName: 'stivylakehouseprod'
+          backendAzureRmContainerName: 'ivy-tf-container'
+          backendAzureRmKey: 'terraform.tfstate'
+
+
+  - job: TFinit
     displayName: Terraform Plan
-      inputs:
-        provider: 'azurerm'
-        command: 'plan'
-        workingDirectory: 'terraform'
-        environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-        commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
-    
-    # - task: TerraformTaskV4@4
-    # displayName: Terraform Show
-    #   inputs:
-    #     provider: 'azurerm'
-    #     command: 'show'
-    #     workingDirectory: 'terraform'
-    #     outputTo: 'console'
-    #     outputFormat: 'default'
-    #     environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-    
-    - task: TerraformTaskV4@4
+    steps:
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: 'terraform'
+          environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+          commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+      
+
+  - job: TFinit
     displayName: Terraform Apply
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        workingDirectory: 'terraform'
-        environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+    steps:
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: 'terraform'
+          environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
         
