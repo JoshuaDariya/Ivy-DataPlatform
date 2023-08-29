@@ -13,49 +13,58 @@ pool:
 variables:
   - group: TFvars
 
-
-jobs:
-  - job: TFinstall
+stages:
+  - stage: TerraformInstall
     displayName: Install Terraform
-    steps:
-      - task: TerraformInstaller@1
-        inputs:
-          terraformVersion: 'latest'
+    jobs:
+      - job: TFinstall
+        displayName: Install Terraform
+        steps:
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
 
-  - job: TFinit
+  - stage: TerraformInit
     displayName: Terraform Init
-    steps:
-      - task: TerraformTaskV4@4
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          workingDirectory: 'terraform'
-          backendServiceArm: 'Ivy Dev Data Platform'
-          backendAzureRmResourceGroupName: 'rg-ivydataplatform-prod-eastus'
-          backendAzureRmStorageAccountName: 'stivylakehouseprod'
-          backendAzureRmContainerName: 'ivy-tf-container'
-          backendAzureRmKey: 'terraform.tfstate'
+    jobs:
+      - job: TFinit
+        displayName: Terraform Init
+        steps:
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: 'terraform'
+              backendServiceArm: 'Ivy Dev Data Platform'
+              backendAzureRmResourceGroupName: 'rg-ivydataplatform-prod-eastus'
+              backendAzureRmStorageAccountName: 'stivylakehouseprod'
+              backendAzureRmContainerName: 'ivy-tf-container'
+              backendAzureRmKey: 'terraform.tfstate'
 
-
-  - job: TFPlan
+  - stage: TerraformPlan
     displayName: Terraform Plan
-    steps:
-      - task: TerraformTaskV4@4
-        inputs:
-          provider: 'azurerm'
-          command: 'plan'
-          workingDirectory: 'terraform'
-          environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-          commandOptions: '-input=true -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
-      
-
-  - job: TFApply
+    jobs:
+      - job: TFPlan
+        displayName: Terraform Plan
+        steps:
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: 'terraform'
+              environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+              commandOptions: '-input=true -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+          
+  - stage: TerraformApply
     displayName: Terraform Apply
-    steps:
-      - task: TerraformTaskV4@4
-        inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          workingDirectory: 'terraform'
-          environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-          commandOptions: '-input=true'
+    jobs:
+      - job: TFApply
+        displayName: Terraform Apply
+        steps:
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: 'terraform'
+              environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+              commandOptions: '-input=true'
