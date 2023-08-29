@@ -8,11 +8,11 @@ terraform {
 }
 
 provider "snowflake" {
-  role = "SYSADMIN"
-  account = "JL89715"
-  username = "ivy-tf-snow"
-  password = "1Ivyuser"
-  region = "east-us-2.azure"
+  role = var.role
+  account = var.account
+  username = var.username
+  password = var.password
+  region = var.region
 }
 
 resource "snowflake_database" "db" {
