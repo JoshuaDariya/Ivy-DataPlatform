@@ -59,8 +59,8 @@ stages:
               emailRecipients: 'Alex.crosslen@ivyrehab.com'
 
 
-      - job: manual_approval
-        displayName: "Manual Approval"
+      - job: Apply
+        displayName: "Manual Approval Apply"
         dependsOn: TFinit
         pool: ubuntu-latest
         steps:
