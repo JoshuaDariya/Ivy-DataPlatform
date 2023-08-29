@@ -39,7 +39,7 @@ stages:
               backendAzureRmResourceGroupName: 'rg-ivydataplatform-prod-eastus'
               backendAzureRmStorageAccountName: 'stivylakehouseprod'
               backendAzureRmContainerName: 'ivy-tf-container'
-              backendAzureRmKey: 'terraform.tfstate'
+              backendAzureRmKey: 'tf/terraform.tfstate'
 
       - job: TFPlan
         dependsOn: TFinit
@@ -50,8 +50,8 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'terraform'
-              environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
               commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
           
   - stage: TerraformApply
     displayName: Terraform Apply
