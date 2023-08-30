@@ -55,7 +55,7 @@ stages:
             inputs:
               SourceFolder: '$(Agent.TempDirectory)'
               Contents: '**'
-              TargetFolder: '$(Build.SourcesDirectory)/terraform'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/terraform'
           
           - task: PublishBuildArtifacts@1
             inputs:
