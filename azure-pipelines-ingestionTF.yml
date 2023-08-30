@@ -50,6 +50,14 @@ stages:
               outputTo: file
               outputFormat: json
               fileName: terraform/tfplan.json
+          - task: AzureFileCopy@5
+            inputs:
+              SourcePath: '/home/vsts/work/_temp/tfplan.json'
+              azureSubscription: 'Ivy Dev Data Platform'
+              Destination: 'AzureBlob'
+              storage: 'stivylakehouseprod'
+              ContainerName: 'ivy-tf-container'
+              BlobPrefix: 'tf/'
 
 
           # - task: TerraformTaskV4@4
