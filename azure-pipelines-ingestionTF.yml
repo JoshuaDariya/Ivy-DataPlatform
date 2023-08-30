@@ -56,6 +56,12 @@ stages:
               SourceFolder: '$(Agent.TempDirectory)'
               Contents: '**'
               TargetFolder: '$(Build.SourcesDirectory)/terraform'
+          
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'tplan'
+              publishLocation: 'Container'
 
 
           # - task: TerraformTaskV4@4
