@@ -45,7 +45,7 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'terraform'
-              commandOptions: 'tfplan -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              commandOptions: '-out=tfplan -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
               outputTo: file
               outputFormat: json
