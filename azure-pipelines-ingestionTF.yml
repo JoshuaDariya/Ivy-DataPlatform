@@ -8,7 +8,7 @@ trigger:
 - main
 
 pool:
-  vmImage: windows-latest
+  vmImage: ubuntu-latest
 
 variables:
   - group: TFvars
@@ -50,14 +50,12 @@ stages:
               outputTo: file
               outputFormat: json
               fileName: tfplan
-          - task: AzureFileCopy@5
+
+          - task: CopyFiles@2
             inputs:
-              SourcePath: $(Agent.TempDirectory)/tfplan.json
-              azureSubscription: 'Ivy Dev Data Platform'
-              Destination: 'AzureBlob'
-              storage: 'stivylakehouseprod'
-              ContainerName: 'ivy-tf-container'
-              BlobPrefix: 'tf/'
+              SourceFolder: '$(Agent.TempDirectory)'
+              Contents: '**'
+              TargetFolder: 'terraform'
 
 
           # - task: TerraformTaskV4@4
