@@ -22,7 +22,9 @@ provider "snowflake" {
 }
 
 resource "snowflake_database" "db" {
-  name = "LANDING" #Creating Landing Zone db
+    for_each = var.databases
+
+  name = each.key
 }
 
 resource "snowflake_warehouse" "warehouse" {
