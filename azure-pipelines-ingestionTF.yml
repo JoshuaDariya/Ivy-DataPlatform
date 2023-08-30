@@ -45,7 +45,7 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'terraform'
-              commandOptions: '-out=$(Agent.TempDirectory)/tfplan.json -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              commandOptions: '-out=$(Agent.TempDirectory)/tfplan -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
               outputTo: file
               outputFormat: json
@@ -55,13 +55,13 @@ stages:
             inputs:
               SourceFolder: '$(Agent.TempDirectory)'
               Contents: '**'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)/terraform'
+              TargetFolder: '$(Pipeline.Workspace)/terraform'
           
-          - task: PublishBuildArtifacts@1
+          - task: PublishPipelineArtifact@1
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'tplan'
-              publishLocation: 'Container'
+              targetPath: '$(Pipeline.Workspace)'
+              artifact: 'tfplan'
+              publishLocation: 'pipeline'
 
 
           # - task: TerraformTaskV4@4
