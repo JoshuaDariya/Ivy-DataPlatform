@@ -13,3 +13,9 @@ variable "password" {
 variable "region" {
   type = string
 }
+
+variable "databases" {
+  type = list(string)
+
+  default = ["LANDING", "STAGE"]
+}
