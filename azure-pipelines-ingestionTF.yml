@@ -45,7 +45,7 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'terraform'
-              commandOptions: '-out=tfplan.json -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              commandOptions: '-out=$(Agent.TempDirectory)/tfplan.json -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
               outputTo: file
               outputFormat: json
@@ -53,7 +53,7 @@ stages:
 
           - task: CopyFiles@2
             inputs:
-              SourceFolder: '$(Agent.TempDirectory)'
+              SourceFolder: '$(Agent.TempDirectory)/tfplan.json'
               Contents: '**'
               TargetFolder: 'terraform'
 
