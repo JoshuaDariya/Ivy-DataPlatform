@@ -23,6 +23,7 @@ stages:
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: 'latest'
+              
 
   - stage: TerraformInitPlanApply
     displayName: Terraform Init Plan Apply
@@ -40,28 +41,15 @@ stages:
               backendAzureRmStorageAccountName: 'stivylakehouseprod'
               backendAzureRmContainerName: 'ivy-tf-container'
               backendAzureRmKey: 'tf/terraform.tfstate'
+
+
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'terraform'
-              commandOptions: '-out=$(Agent.TempDirectory)/tfplan -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              commandOptions: '-var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-              outputTo: file
-              outputFormat: json
-              fileName: tfplan
-
-          - task: CopyFiles@2
-            inputs:
-              SourceFolder: '$(Agent.TempDirectory)'
-              Contents: '**'
-              TargetFolder: '$(Pipeline.Workspace)/terraform'
-          
-          - task: PublishPipelineArtifact@1
-            inputs:
-              targetPath: '$(Pipeline.Workspace)'
-              artifact: 'tfplan'
-              publishLocation: 'pipeline'
 
 
           # - task: TerraformTaskV4@4
@@ -74,16 +62,4 @@ stages:
 
 
           
-  # - stage: TerraformApply
-  #   displayName: Terraform Apply
-  #   jobs:
-  #     - job: TFApply
-  #       displayName: Terraform Apply
-  #       steps:
-  #         - task: TerraformTaskV4@4
-  #           inputs:
-  #             provider: 'azurerm'
-  #             command: 'apply'
-  #             workingDirectory: 'terraform'
-  #             environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-  #             commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+
