@@ -29,6 +29,6 @@ resource "snowflake_database" "db" {
 
 resource "snowflake_warehouse" "warehouse" {
   name           = "IVY_WH_TF" #Change to desired name
-  warehouse_size = "small" #Change to desired size
+  warehouse_size = "x-small" #Change to desired size
   auto_suspend   = 60
 }
