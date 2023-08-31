@@ -56,11 +56,12 @@ resource "snowflake_role" "reporter" {
   comment = "For BI analysts and PowerBI connection"
 }
 // ------------- ROLE ACCESS -----------------
-resource "snowflake_database_grant" "reporter_grant" {
+
+resource "snowflake_database_grant" "prod_readAccess_grant" {
   database_name = "PROD"
 
-  privilege = "USAGE"
-  roles     = ["REPORTER"]
+  privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
+  roles     = ["REPORTER","TRANSFORMER_PROD"]
 
   with_grant_option = false
 }
