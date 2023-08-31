@@ -59,7 +59,7 @@ resource "snowflake_role" "reporter" {
 resource "snowflake_database_grant" "reporter_grant" {
   database_name = "PROD"
 
-  privilege = "SELECT"
+  privilege = "USAGE"
   roles     = ["REPORTER"]
 
   with_grant_option = false
