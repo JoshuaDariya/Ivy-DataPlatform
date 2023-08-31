@@ -56,7 +56,7 @@ resource "snowflake_role" "reporter" {
   comment = "For BI analysts and PowerBI connection"
 }
 // ------------- ROLE ACCESS -----------------
-resource "snowflake_role_grant" "reporter_to_prod" {
+resource "snowflake_role_grants" "reporter_grant" {
   role_name = "REPORTER"
   granted_to_role = "PROD"
   privileges = ["SELECT"]
