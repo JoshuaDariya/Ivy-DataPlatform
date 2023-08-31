@@ -57,7 +57,34 @@ resource "snowflake_role" "reporter" {
 }
 // ------------- ROLE ACCESS -----------------
 
-resource "snowflake_database_grant" "prod_readAccess_grant" {
+resource "snowflake_database_grant" "landing_access_grant" {
+  database_name = "LANDING"
+
+  privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
+  roles     = ["LOADER"]
+
+  with_grant_option = false
+}
+
+resource "snowflake_database_grant" "dev_access_grant" {
+  database_name = "DEV"
+
+  privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
+  roles     = ["TRANSFORMER_DEV"]
+
+  with_grant_option = false
+}
+
+resource "snowflake_database_grant" "stage_access_grant" {
+  database_name = "STAGE"
+
+  privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
+  roles     = ["TRANSFORMER_STAGE"]
+
+  with_grant_option = false
+}
+
+resource "snowflake_database_grant" "prod_access_grant" {
   database_name = "PROD"
 
   privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
