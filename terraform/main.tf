@@ -5,6 +5,7 @@ terraform {
       version = "~> 0.70"
     }
   }
+  // ------- LOCATION OF TERRAFORM STATE FILE -------
   backend "azurerm" {
     resource_group_name  = "rg-ivydataplatform-prod-eastus"
     storage_account_name = "stivylakehouseprod"
@@ -13,6 +14,7 @@ terraform {
   }
 }
 
+//------------- TERRAFORM ACCOUNT WITH SNOWFLAKE -----------------
 provider "snowflake" {
   role = "SYSADMIN"
   account = var.account
@@ -21,12 +23,35 @@ provider "snowflake" {
   region = var.region
 }
 
+// ------------- DATABASE CREATION -----------------
 resource "snowflake_database" "db" {
     for_each = var.databases
 
   name = each.key
 }
 
+// ------------- ROLES -----------------
+resource "snowflake_role" "loader" {
+  name = "LOADER"
+}
+
+resource "snowflake_role" "transformer_dev" {
+  name = "TRANSFORMER_DEV"
+}
+
+resource "snowflake_role" "transformer_stage" {
+  name = "TRANSFORMER_STAGE"
+}
+
+resource "snowflake_role" "transformer_prod" {
+  name = "TRANSFORMER_PROD"
+}
+
+resource "snowflake_role" "reporter" {
+  name = "REPORTER"
+}
+
+// ------------- WAREHOUSE -----------------
 resource "snowflake_warehouse" "warehouse" {
   name           = "IVY_WH_TF" #Change to desired name
   warehouse_size = "x-small" #Change to desired size
