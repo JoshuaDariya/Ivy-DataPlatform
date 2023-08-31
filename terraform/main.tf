@@ -55,6 +55,13 @@ resource "snowflake_role" "reporter" {
   name = "REPORTER"
   comment = "For BI analysts and PowerBI connection"
 }
+// ------------- ROLE ACCESS -----------------
+resource "snowflake_role_grant" "reporter_to_prod" {
+  role_name = "REPORTER"
+  granted_to_role = "PROD"
+  privileges = ["SELECT"]
+}
+
 
 // ------------- WAREHOUSE -----------------
 resource "snowflake_warehouse" "warehouse" {
