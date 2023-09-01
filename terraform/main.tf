@@ -30,6 +30,31 @@ resource "snowflake_database" "db" {
   name = each.key
 }
 
+// ------------- SCHEMA CREATION -----------------
+resource "snowflake_schema" "landing_schema" {
+  database   = "LANDING"
+  name       = "landing_schema" #Name would want to be changed to something better
+  is_managed = false
+}
+
+resource "snowflake_schema" "dev_schema" {
+  database   = "DEV"
+  name       = "dev_schema" #Name would want to be changed to something better
+  is_managed = false
+}
+
+resource "snowflake_schema" "stage_schema" {
+  database   = "STAGE"
+  name       = "stage_schema" #Name would want to be changed to something better
+  is_managed = false
+}
+
+resource "snowflake_schema" "prod_schema" {
+  database   = "PROD"
+  name       = "prod_schema" #Name would want to be changed to something better
+  is_managed = false
+}
+
 // ------------- ROLES -----------------
 resource "snowflake_role" "loader" {
   name = "LOADER"
