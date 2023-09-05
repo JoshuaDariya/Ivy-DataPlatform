@@ -1,19 +1,65 @@
 # Starter pipeline
+
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
 trigger:
-- main
+- none
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  - group: TFvars
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+  - stage: TerraformInstall
+    displayName: Install Terraform
+    jobs:
+      - job: TFinstall
+        displayName: Install Terraform
+        steps:
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
+              
+
+  - stage: TerraformInitPlanApply
+    displayName: Terraform Init Plan Apply
+    jobs:
+      - job: TFinit
+        displayName: Terraform Init Plan Apply
+        steps:
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: 'terraform'
+              backendServiceArm: 'Ivy Dev Data Platform'
+              backendAzureRmResourceGroupName: 'rg-ivydataplatform-prod-eastus'
+              backendAzureRmStorageAccountName: 'stivylakehouseprod'
+              backendAzureRmContainerName: 'ivy-tf-container'
+              backendAzureRmKey: 'tf/terraform.tfstate'
+
+
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: 'terraform'
+              commandOptions: '-var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+
+
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: 'terraform'
+              environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+              commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+
+
+          
+
