@@ -33,25 +33,25 @@ resource "snowflake_database" "db" {
 // ------------- SCHEMA CREATION -----------------
 resource "snowflake_schema" "landing_schema" {
   database   = "LANDING"
-  name       = "landing_schema" #Name would want to be changed to something better
+  name       = "LANDING_SCHEMA" #Name would want to be changed to something better
   is_managed = false
 }
 
 resource "snowflake_schema" "dev_schema" {
   database   = "DEV"
-  name       = "dev_schema" #Name would want to be changed to something better
+  name       = "DEV_SCHEMA" #Name would want to be changed to something better
   is_managed = false
 }
 
 resource "snowflake_schema" "stage_schema" {
   database   = "STAGE"
-  name       = "stage_schema" #Name would want to be changed to something better
+  name       = "STAGE_SCHEMA" #Name would want to be changed to something better
   is_managed = false
 }
 
 resource "snowflake_schema" "prod_schema" {
   database   = "PROD"
-  name       = "prod_schema" #Name would want to be changed to something better
+  name       = "PROD_SCHEMA" #Name would want to be changed to something better
   is_managed = false
 }
 
