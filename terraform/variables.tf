@@ -17,5 +17,5 @@ variable "region" {
 variable "databases" {
   type = set(string)
 
-  default = ["LANDING","DEV","STAGE","PROD"]
+  default = ["DEV","STAGE","PROD"]
 }
