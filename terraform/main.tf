@@ -109,8 +109,6 @@ resource "snowflake_resource_monitor" "monitor_1" {
   name         = "Cost Monitoring"
   credit_quota = 100
 
-  frequency       = "DAILY"
-  start_timestamp = "2023-09-01 00:00"
   end_timestamp   = "2024-09-01 00:00"
 
 }
