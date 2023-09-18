@@ -105,20 +105,20 @@ resource "snowflake_database_grant" "prod_access_grant" {
   with_grant_option = false
 }
 // ------------- COST ALERTS -----------------
-// resource "snowflake_resource_monitor" "monitor_1" {
-//   name         = "Cost Monitoring"
-//   credit_quota = 100
+resource "snowflake_resource_monitor" "monitor_1" {
+  name         = "Cost Monitoring"
+  credit_quota = 100
 
-//   frequency       = "DAILY"
-//   start_timestamp = "2023-09-01 00:00"
-//   end_timestamp   = "2024-09-01 00:00"
+  frequency       = "DAILY"
+  start_timestamp = "2023-09-01 00:00"
+  end_timestamp   = "2024-09-01 00:00"
 
-// }
+}
 
 
 // ------------- WAREHOUSE -----------------
 resource "snowflake_warehouse" "warehouse" {
-  name           = "IVY_WH_TF" #Change to desired name
+  name           = "IVY_WH" #Change to desired name
   warehouse_size = "x-small" #Change to desired size
   auto_suspend   = 60
 }
