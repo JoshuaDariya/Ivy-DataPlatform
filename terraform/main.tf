@@ -106,7 +106,7 @@ resource "snowflake_database_grant" "prod_access_grant" {
 }
 // ------------- COST ALERTS -----------------
 resource "snowflake_resource_monitor" "monitor_1" {
-  name         = "Fivetran"
+  name         = "FIVETRAN"
   credit_quota = 100
 
   end_timestamp   = "2024-09-01 00:00"
