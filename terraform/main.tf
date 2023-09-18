@@ -118,7 +118,7 @@ resource "snowflake_resource_monitor" "monitor_1" {
 
 // ------------- WAREHOUSE -----------------
 resource "snowflake_warehouse" "warehouse" {
-  name           = "IVY_WH" #Change to desired name
+  name           = "IVY_WH_TF" #Change to desired name
   warehouse_size = "x-small" #Change to desired size
   auto_suspend   = 60
 }
