@@ -132,6 +132,17 @@ resource "snowflake_grant_privileges_to_role" "fivetran_future_access_grant" {
   }
 }
 
+// ------------- POWER BI ROLE ACCESS -----------------
+resource "snowflake_schema_grant" "reporter_grant" {
+  database_name = "PC_FIVETRAN_DB"
+
+  privilege = "USAGE"
+  roles     = ["REPORTER"]
+
+  on_future         = true
+  with_grant_option = false
+}
+
 // ------------- DEVELOPER ROLE ACCESS -----------------
 
 resource "snowflake_database_grant" "dev_access_grant" {
