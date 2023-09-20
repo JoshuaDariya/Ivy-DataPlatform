@@ -78,7 +78,7 @@ resource "snowflake_role" "reporter" {
 // ------------- ROLE ACCESS -----------------
 
 
-resource "snowflake_database_grant" "dev_access_grant" {
+resource "snowflake_grant_privileges_to_role" "dev_access_grant" {
   privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW"]
   role_name  = "TRANSFORMER_DEV"
   on_schema {
