@@ -104,6 +104,22 @@ resource "snowflake_warehouse_grant" "power_bi_grant" {
 
   with_grant_option = false
 }
+// ------------- LOADER ROLE ACCESS -----------------
+resource "snowflake_database_grant" "fivetran_access_grant" {
+  database_name = "PC_FIVETRAN_DB"
+
+  privilege = "ALL PRIVILEGES" 
+  roles     = ["LOADER"]
+
+  with_grant_option = false
+}
+resource "snowflake_grant_privileges_to_role" "fivetran_future_access_grant" {
+  privileges = ["MODIFY", "CREATE TABLE","CREATE SCHEMA", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
+  role_name  = "LOADER"
+  on_schema {
+    future_schemas_in_database = "PC_FIVETRAN_DB"
+  }
+}
 
 // ------------- DEVELOPER ROLE ACCESS -----------------
 
