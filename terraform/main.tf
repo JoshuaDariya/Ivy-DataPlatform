@@ -75,16 +75,25 @@ resource "snowflake_role" "reporter" {
   name = "REPORTER"
   comment = "For BI analysts and PowerBI connection"
 }
-// ------------- ROLE ACCESS -----------------
+// ------------- DEVELOPER ROLE ACCESS -----------------
 
+resource "snowflake_database_grant" "dev_access_grant" {
+  database_name = "DEV"
 
-resource "snowflake_grant_privileges_to_role" "dev_access_grant" {
+  privilege = "USAGE" 
+  roles     = ["TRANSFORMER_DEV"]
+
+  with_grant_option = false
+}
+resource "snowflake_grant_privileges_to_role" "dev_future_access_grant" {
   privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
   role_name  = "TRANSFORMER_DEV"
   on_schema {
     future_schemas_in_database = "DEV"
   }
 }
+
+// ------------- ROLE ACCESS -----------------
 
 resource "snowflake_database_grant" "stage_access_grant" {
   database_name = "STAGE"
