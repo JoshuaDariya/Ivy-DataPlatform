@@ -53,7 +53,7 @@ resource "snowflake_schema" "prod_schema" {
 // ------------- ROLES -----------------
 resource "snowflake_role" "loader" {
   name = "LOADER"
-  comment = "For Fivetran connection, dbt job to create zero copy clones"
+  comment = "For Fivetran connection"
 }
 
 resource "snowflake_role" "transformer_dev" {
@@ -75,6 +75,36 @@ resource "snowflake_role" "reporter" {
   name = "REPORTER"
   comment = "For BI analysts and PowerBI connection"
 }
+
+
+// ------------- WAREHOUSE GRANTING -----------------
+resource "snowflake_warehouse_grant" "developer_grant" {
+  warehouse_name = "IVY_WH"
+  privilege      = "USAGE"
+
+  roles = ["TRANSFORMER_DEV"]
+
+  with_grant_option = false
+}
+
+resource "snowflake_warehouse_grant" "fivetran_grant" {
+  warehouse_name = "PC_FIVETRAN_WH"
+  privilege      = "USAGE"
+
+  roles = ["LOADER"]
+
+  with_grant_option = false
+}
+
+resource "snowflake_warehouse_grant" "power_bi_grant" {
+  warehouse_name = "POWER_BI_WH"
+  privilege      = "USAGE"
+
+  roles = ["REPORTER"]
+
+  with_grant_option = false
+}
+
 // ------------- DEVELOPER ROLE ACCESS -----------------
 
 resource "snowflake_database_grant" "dev_access_grant" {
@@ -93,7 +123,7 @@ resource "snowflake_grant_privileges_to_role" "dev_future_access_grant" {
   }
 }
 
-// ------------- ROLE ACCESS -----------------
+// ------------- STAGE ROLE ACCESS -----------------
 
 resource "snowflake_database_grant" "stage_access_grant" {
   database_name = "STAGE"
@@ -103,6 +133,15 @@ resource "snowflake_database_grant" "stage_access_grant" {
 
   with_grant_option = false
 }
+resource "snowflake_grant_privileges_to_role" "stage_future_access_grant" {
+  privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
+  role_name  = "TRANSFORMER_STAGE"
+  on_schema {
+    future_schemas_in_database = "STAGE"
+  }
+}
+
+// ------------- PROD ROLE ACCESS -----------------
 
 resource "snowflake_database_grant" "prod_access_grant" {
   database_name = "PROD"
@@ -112,6 +151,15 @@ resource "snowflake_database_grant" "prod_access_grant" {
 
   with_grant_option = false
 }
+
+resource "snowflake_grant_privileges_to_role" "prod_future_access_grant" {
+  privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
+  role_name  = "TRANSFORMER_PROD"
+  on_schema {
+    future_schemas_in_database = "PROD"
+  }
+}
+
 // ------------- COST ALERTS -----------------
 resource "snowflake_resource_monitor" "monitor_1" {
   name         = "FIVETRAN"
@@ -145,8 +193,8 @@ resource "snowflake_resource_monitor" "monitor_3" {
 
 
 // ------------- WAREHOUSE -----------------
-resource "snowflake_warehouse" "warehouse" {
-  name           = "IVY_WH_TF" #Change to desired name
-  warehouse_size = "x-small" #Change to desired size
-  auto_suspend   = 60
-}
+// resource "snowflake_warehouse" "warehouse" {
+//   name           = "IVY_WH_TF" #Change to desired name
+//   warehouse_size = "x-small" #Change to desired size
+//   auto_suspend   = 60
+// }
