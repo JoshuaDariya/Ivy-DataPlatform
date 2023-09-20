@@ -50,7 +50,7 @@ resource "snowflake_schema" "prod_schema" {
   is_managed = false
 }
 
-// ------------- ROLES -----------------
+// ------------- ROLES (This should eventually match Azure Provisions) -----------------
 resource "snowflake_role" "loader" {
   name = "LOADER"
   comment = "For Fivetran connection"
