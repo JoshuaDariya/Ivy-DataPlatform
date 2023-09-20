@@ -30,23 +30,61 @@ resource "snowflake_database" "db" {
   name = each.key
 }
 
-// ------------- SCHEMA CREATION -----------------
+// ------------- DEV SCHEMA CREATION -----------------
 
-resource "snowflake_schema" "dev_schema" {
+resource "snowflake_schema" "dev_staging_schema" {
   database   = "DEV"
-  name       = "LANDING" #Name would want to be changed to something better
+  name       = "STAGING" #Name would want to be changed to something better
   is_managed = false
 }
 
-resource "snowflake_schema" "stage_schema" {
-  database   = "STAGE"
-  name       = "LANDING" #Name would want to be changed to something better
+resource "snowflake_schema" "dev_warehouse_schema" {
+  database   = "DEV"
+  name       = "WAREHOUSE" #Name would want to be changed to something better
   is_managed = false
 }
 
-resource "snowflake_schema" "prod_schema" {
+resource "snowflake_schema" "dev_presentation_schema" {
+  database   = "DEV"
+  name       = "PRESENTATION" #Name would want to be changed to something better
+  is_managed = false
+}
+
+// ------------- STAGE SCHEMA CREATION -----------------
+
+resource "snowflake_schema" "qa_staging_schema" {
+  database   = "QA"
+  name       = "STAGING" #Name would want to be changed to something better
+  is_managed = false
+}
+resource "snowflake_schema" "qa_warehouse_schema" {
+  database   = "QA"
+  name       = "WAREHOUSE" #Name would want to be changed to something better
+  is_managed = false
+}
+
+resource "snowflake_schema" "qa_presentation_schema" {
+  database   = "QA"
+  name       = "PRESENTATION" #Name would want to be changed to something better
+  is_managed = false
+}
+// ------------- PROD SCHEMA CREATION -----------------
+
+resource "snowflake_schema" "prod_staging_schema" {
   database   = "PROD"
-  name       = "LANDING" #Name would want to be changed to something better
+  name       = "STAGING" #Name would want to be changed to something better
+  is_managed = false
+}
+
+resource "snowflake_schema" "prod_warehouse_schema" {
+  database   = "PROD"
+  name       = "WAREHOUSE" #Name would want to be changed to something better
+  is_managed = false
+}
+
+resource "snowflake_schema" "prod_presentation_schema" {
+  database   = "PROD"
+  name       = "PRESENTATION" #Name would want to be changed to something better
   is_managed = false
 }
 
@@ -82,7 +120,7 @@ resource "snowflake_warehouse_grant" "developer_grant" {
   warehouse_name = "IVY_WH"
   privilege      = "USAGE"
 
-  roles = ["TRANSFORMER_DEV"]
+  roles = ["TRANSFORMER_DEV", "TRANSFORMER_STAGE", "TRANSFORMER_PROD"]
 
   with_grant_option = false
 }
@@ -104,44 +142,61 @@ resource "snowflake_warehouse_grant" "power_bi_grant" {
 
   with_grant_option = false
 }
+
 // ------------- LOADER ROLE ACCESS -----------------
-resource "snowflake_database_grant" "fivetran_access_grant" {
-  database_name = "PC_FIVETRAN_DB"
+#
+// resource "snowflake_database_grant" "fivetran_access_grant_1" {
+//   database_name = "LANDING"
 
-  privilege = "ALL PRIVILEGES" 
-  roles     = ["LOADER"]
+//   privilege = "USAGE" 
+//   roles     = ["LOADER"]
 
-  with_grant_option = false
-}
+//   with_grant_option = false
+// }
 
-resource "snowflake_schema_grant" "loader_grant" {
-  database_name = "PC_FIVETRAN_DB"
-
-  privilege = "USAGE"
-  roles     = ["LOADER"]
-
-  on_future         = true
-  with_grant_option = false
+resource "snowflake_grant_privileges_to_role" "fivetran_access_grant_2" {
+  privileges = ["USAGE","CREATE", "MONITOR"]
+  role_name  = "LOADER"
+  on_account_object {
+    object_type = "DATABASE"
+    object_name = "LANDING"
+  }
 }
 
 resource "snowflake_grant_privileges_to_role" "fivetran_future_access_grant" {
   privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
   role_name  = "LOADER"
   on_schema {
-    future_schemas_in_database = "PC_FIVETRAN_DB"
+    future_schemas_in_database = "LANDING"
   }
 }
 
 // ------------- POWER BI ROLE ACCESS -----------------
-resource "snowflake_schema_grant" "reporter_grant" {
-  database_name = "PC_FIVETRAN_DB"
+resource "snowflake_database_grant" "dev_reporter_grant" {
+  database_name = "DEV"
 
-  privilege = "USAGE"
+  privilege = "USAGE" 
   roles     = ["REPORTER"]
 
-  on_future         = true
   with_grant_option = false
 }
+resource "snowflake_database_grant" "qa_reporter_grant" {
+  database_name = "QA"
+
+  privilege = "USAGE" 
+  roles     = ["REPORTER"]
+
+  with_grant_option = false
+}
+resource "snowflake_database_grant" "prod_reporter_grant" {
+  database_name = "PROD"
+
+  privilege = "USAGE" 
+  roles     = ["REPORTER"]
+
+  with_grant_option = false
+}
+
 
 // ------------- DEVELOPER ROLE ACCESS -----------------
 
