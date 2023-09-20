@@ -79,7 +79,7 @@ resource "snowflake_role" "reporter" {
 
 
 resource "snowflake_grant_privileges_to_role" "dev_access_grant" {
-  privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW"]
+  privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
   role_name  = "TRANSFORMER_DEV"
   on_schema {
     future_schemas_in_database = "DEV"
