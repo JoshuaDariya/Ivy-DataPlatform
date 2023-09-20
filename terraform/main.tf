@@ -33,19 +33,19 @@ resource "snowflake_database" "db" {
 // ------------- DEV SCHEMA CREATION -----------------
 
 resource "snowflake_schema" "dev_staging_schema" {
-  database   = "DEV"
+  database   = var.dev
   name       = "STAGING" #Name would want to be changed to something better
   is_managed = false
 }
 
 resource "snowflake_schema" "dev_warehouse_schema" {
-  database   = "DEV"
+  database   = var.dev
   name       = "WAREHOUSE" #Name would want to be changed to something better
   is_managed = false
 }
 
 resource "snowflake_schema" "dev_presentation_schema" {
-  database   = "DEV"
+  database   = var.dev
   name       = "PRESENTATION" #Name would want to be changed to something better
   is_managed = false
 }
@@ -53,37 +53,37 @@ resource "snowflake_schema" "dev_presentation_schema" {
 // ------------- STAGE SCHEMA CREATION -----------------
 
 resource "snowflake_schema" "qa_staging_schema" {
-  database   = "QA"
+  database   = var.qa
   name       = "STAGING" #Name would want to be changed to something better
   is_managed = false
 }
 resource "snowflake_schema" "qa_warehouse_schema" {
-  database   = "QA"
+  database   = var.qa
   name       = "WAREHOUSE" #Name would want to be changed to something better
   is_managed = false
 }
 
 resource "snowflake_schema" "qa_presentation_schema" {
-  database   = "QA"
+  database   = var.qa
   name       = "PRESENTATION" #Name would want to be changed to something better
   is_managed = false
 }
 // ------------- PROD SCHEMA CREATION -----------------
 
 resource "snowflake_schema" "prod_staging_schema" {
-  database   = "PROD"
+  database   = var.prod
   name       = "STAGING" #Name would want to be changed to something better
   is_managed = false
 }
 
 resource "snowflake_schema" "prod_warehouse_schema" {
-  database   = "PROD"
+  database   = var.prod
   name       = "WAREHOUSE" #Name would want to be changed to something better
   is_managed = false
 }
 
 resource "snowflake_schema" "prod_presentation_schema" {
-  database   = "PROD"
+  database   = var.prod
   name       = "PRESENTATION" #Name would want to be changed to something better
   is_managed = false
 }
@@ -99,8 +99,8 @@ resource "snowflake_role" "transformer_dev" {
   comment = "For developers and Dev dbt connection"
 }
 
-resource "snowflake_role" "transformer_stage" {
-  name = "TRANSFORMER_STAGE"
+resource "snowflake_role" "transformer_qa" {
+  name = "TRANSFORMER_QA"
   comment = "For Stage dbt connection"
 }
 
@@ -159,7 +159,7 @@ resource "snowflake_grant_privileges_to_role" "fivetran_access_grant_2" {
   role_name  = "LOADER"
   on_account_object {
     object_type = "DATABASE"
-    object_name = "LANDING"
+    object_name = var.landing
   }
 }
 
@@ -167,13 +167,13 @@ resource "snowflake_grant_privileges_to_role" "fivetran_future_access_grant" {
   privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
   role_name  = "LOADER"
   on_schema {
-    future_schemas_in_database = "LANDING"
+    future_schemas_in_database = var.landing
   }
 }
 
 // ------------- POWER BI ROLE ACCESS -----------------
 resource "snowflake_database_grant" "dev_reporter_grant" {
-  database_name = "DEV"
+  database_name = var.dev
 
   privilege = "USAGE" 
   roles     = ["REPORTER"]
@@ -181,7 +181,7 @@ resource "snowflake_database_grant" "dev_reporter_grant" {
   with_grant_option = false
 }
 resource "snowflake_database_grant" "qa_reporter_grant" {
-  database_name = "QA"
+  database_name = var.qa
 
   privilege = "USAGE" 
   roles     = ["REPORTER"]
@@ -189,7 +189,7 @@ resource "snowflake_database_grant" "qa_reporter_grant" {
   with_grant_option = false
 }
 resource "snowflake_database_grant" "prod_reporter_grant" {
-  database_name = "PROD"
+  database_name = var.prod
 
   privilege = "USAGE" 
   roles     = ["REPORTER"]
@@ -198,60 +198,60 @@ resource "snowflake_database_grant" "prod_reporter_grant" {
 }
 
 
-// ------------- DEVELOPER ROLE ACCESS -----------------
+// ------------- DEVELOPER ROLE ACCESS -----------------  WE NEED TRANSFORMER_DEV, ..._QA, ..._PROD
 
-resource "snowflake_database_grant" "dev_access_grant" {
-  database_name = "DEV"
+// resource "snowflake_database_grant" "dev_access_grant" {
+//   database_name = "DEV"
 
-  privilege = "USAGE" 
-  roles     = ["TRANSFORMER_DEV"]
+//   privilege = "USAGE" 
+//   roles     = ["TRANSFORMER_DEV"]
 
-  with_grant_option = false
-}
-resource "snowflake_grant_privileges_to_role" "dev_future_access_grant" {
-  privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
-  role_name  = "TRANSFORMER_DEV"
-  on_schema {
-    future_schemas_in_database = "DEV"
-  }
-}
+//   with_grant_option = false
+// }
+// resource "snowflake_grant_privileges_to_role" "dev_future_access_grant" {
+//   privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
+//   role_name  = "TRANSFORMER_DEV"
+//   on_schema {
+//     future_schemas_in_database = "DEV"
+//   }
+// }
 
 // ------------- STAGE ROLE ACCESS -----------------
 
-resource "snowflake_database_grant" "stage_access_grant" {
-  database_name = "STAGE"
+// resource "snowflake_database_grant" "stage_access_grant" {
+//   database_name = "STAGE"
 
-  privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
-  roles     = ["TRANSFORMER_STAGE"]
+//   privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
+//   roles     = ["TRANSFORMER_STAGE"]
 
-  with_grant_option = false
-}
-resource "snowflake_grant_privileges_to_role" "stage_future_access_grant" {
-  privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
-  role_name  = "TRANSFORMER_STAGE"
-  on_schema {
-    future_schemas_in_database = "STAGE"
-  }
-}
+//   with_grant_option = false
+// }
+// resource "snowflake_grant_privileges_to_role" "stage_future_access_grant" {
+//   privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
+//   role_name  = "TRANSFORMER_STAGE"
+//   on_schema {
+//     future_schemas_in_database = "STAGE"
+//   }
+// }
 
-// ------------- PROD ROLE ACCESS -----------------
+// // ------------- PROD ROLE ACCESS -----------------
 
-resource "snowflake_database_grant" "prod_access_grant" {
-  database_name = "PROD"
+// resource "snowflake_database_grant" "prod_access_grant" {
+//   database_name = "PROD"
 
-  privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
-  roles     = ["REPORTER","TRANSFORMER_PROD"]
+//   privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
+//   roles     = ["REPORTER","TRANSFORMER_PROD"]
 
-  with_grant_option = false
-}
+//   with_grant_option = false
+// }
 
-resource "snowflake_grant_privileges_to_role" "prod_future_access_grant" {
-  privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
-  role_name  = "TRANSFORMER_PROD"
-  on_schema {
-    future_schemas_in_database = "PROD"
-  }
-}
+// resource "snowflake_grant_privileges_to_role" "prod_future_access_grant" {
+//   privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
+//   role_name  = "TRANSFORMER_PROD"
+//   on_schema {
+//     future_schemas_in_database = "PROD"
+//   }
+// }
 
 // ------------- COST ALERTS -----------------
 resource "snowflake_resource_monitor" "monitor_1" {
