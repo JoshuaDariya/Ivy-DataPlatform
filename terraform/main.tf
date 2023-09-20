@@ -113,6 +113,17 @@ resource "snowflake_database_grant" "fivetran_access_grant" {
 
   with_grant_option = false
 }
+
+resource "snowflake_schema_grant" "loader_grant" {
+  database_name = "PC_FIVETRAN_DB"
+
+  privilege = "USAGE"
+  roles     = ["LOADER"]
+
+  on_future         = true
+  with_grant_option = false
+}
+
 resource "snowflake_grant_privileges_to_role" "fivetran_future_access_grant" {
   privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE"]
   role_name  = "LOADER"
