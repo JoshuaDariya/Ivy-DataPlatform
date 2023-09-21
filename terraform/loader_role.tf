@@ -61,3 +61,25 @@ resource "snowflake_grant_privileges_to_role" "fivetran_access_all_materialized_
     }
   }
 }
+
+// ------------ FUTURE TABLES AND VIEWS -----------------
+resource "snowflake_grant_privileges_to_role" "loader_access_future_tables_landing" {
+  privileges = ["SELECT"]
+  role_name  = var.loader_role
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_database        = "LANDING"
+    }
+  }
+}
+resource "snowflake_grant_privileges_to_role" "loader_access_future_views_landing" {
+  privileges = ["SELECT"]
+  role_name  = var.loader_role
+  on_schema_object {
+    future {
+      object_type_plural = "VIEWS"
+      in_database        = "LANDING"
+    }
+  }
+}
