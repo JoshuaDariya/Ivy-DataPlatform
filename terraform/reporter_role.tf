@@ -212,15 +212,60 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_p
   }
 }
 
-// -------- FUTURE TABLES AND VIEWS ----------
+// -------- FUTURE TABLES ----------
 
 resource "snowflake_grant_privileges_to_role" "reporter_access_future_tables_landing" {
   privileges = ["SELECT"]
   role_name  = var.powerbi_role
   on_schema_object {
     future {
-      object_type_plural = "TABLES,VIEWS"
+      object_type_plural = "TABLES VIEWS"
       in_database        = "LANDING"
     }
   }
 }
+resource "snowflake_grant_privileges_to_role" "reporter_access_future_tables_dev" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_database        = "DEV"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_future_tables_qa" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_database        = "QA"
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_future_tables_prod" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES"
+      in_database        = "PROD"
+    }
+  }
+}
+
+// -------- FUTURE VIEWS ----------
+
+# resource "snowflake_grant_privileges_to_role" "reporter_access_future_views_landing" {
+#   privileges = ["SELECT"]
+#   role_name  = var.powerbi_role
+#   on_schema_object {
+#     future {
+#       object_type_plural = "TABLES"
+#       in_database        = "LANDING"
+#     }
+#   }
+# }
