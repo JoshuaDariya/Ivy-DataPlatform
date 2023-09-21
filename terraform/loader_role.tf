@@ -29,27 +29,27 @@ resource "snowflake_grant_privileges_to_role" "loader_access_schema_grant" {
 
 //--------- LANDING ACCESS TO CURRENT TABLES, VIEWS --------
 
-# resource "snowflake_grant_privileges_to_role" "loader_access_all_tables_grant" {
-#   privileges = ["SELECT", "INSERT"]
-#   role_name  = var.loader_role
-#   on_schema_object {
-#     all {
-#         object_type_plural = "TABLES"
-#         in_database = var.landing
-#     }
-#   }
-# }
+resource "snowflake_grant_privileges_to_role" "loader_access_all_tables_grant" {
+  privileges = ["SELECT", "INSERT"]
+  role_name  = var.loader_role
+  on_schema_object {
+    all {
+        object_type_plural = "TABLES"
+        in_database = var.landing
+    }
+  }
+}
 
-# resource "snowflake_grant_privileges_to_role" "loader_access_all_views_grant" {
-#   privileges = ["SELECT", "INSERT"]
-#   role_name  = var.loader_role
-#   on_schema_object {
-#     all {
-#         object_type_plural = "VIEWS"
-#         in_database = var.landing
-#     }
-#   }
-# }
+resource "snowflake_grant_privileges_to_role" "loader_access_all_views_grant" {
+  privileges = ["SELECT", "INSERT"]
+  role_name  = var.loader_role
+  on_schema_object {
+    all {
+        object_type_plural = "VIEWS"
+        in_database = var.landing
+    }
+  }
+}
 
 
 // ------------ FUTURE TABLES AND VIEWS -----------------
