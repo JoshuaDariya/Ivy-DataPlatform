@@ -49,3 +49,15 @@ variable "prod"{
 
   default = "PROD"
 }
+
+variable "loader_role"{
+  type = string
+
+  default = "LOADER"
+}
+
+variable "powerbi_role"{
+  type = string
+
+  default = "REPORTER"
+}

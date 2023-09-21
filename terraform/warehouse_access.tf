@@ -12,7 +12,7 @@ resource "snowflake_warehouse_grant" "fivetran_grant" {
   warehouse_name = "FIVETRAN_WH"
   privilege      = "USAGE"
 
-  roles = ["LOADER"]
+  roles = [var.loader_role]
 
   with_grant_option = false
 }
@@ -21,7 +21,7 @@ resource "snowflake_warehouse_grant" "power_bi_grant" {
   warehouse_name = "POWER_BI_WH"
   privilege      = "USAGE"
 
-  roles = ["REPORTER"]
+  roles = [var.powerbi_role]
 
   with_grant_option = false
 }

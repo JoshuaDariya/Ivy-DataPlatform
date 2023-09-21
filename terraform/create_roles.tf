@@ -1,6 +1,6 @@
 // ------------- ROLES (This should eventually match Azure Provisions) -----------------
 resource "snowflake_role" "loader" {
-  name = "LOADER"
+  name = var.loader_role
   comment = "For Fivetran connection"
 }
 
@@ -20,6 +20,6 @@ resource "snowflake_role" "transformer_prod" {
 }
 
 resource "snowflake_role" "reporter" {
-  name = "REPORTER"
+  name = var.powerbi_role
   comment = "For BI analysts and PowerBI connection"
 }

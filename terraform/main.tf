@@ -26,33 +26,6 @@ provider "snowflake" {
 
 
 
-// ------------- POWER BI ROLE ACCESS -----------------
-resource "snowflake_database_grant" "dev_reporter_grant" {
-  database_name = var.dev
-
-  privilege = "USAGE" 
-  roles     = ["REPORTER"]
-
-  with_grant_option = false
-}
-resource "snowflake_database_grant" "qa_reporter_grant" {
-  database_name = var.qa
-
-  privilege = "USAGE" 
-  roles     = ["REPORTER"]
-
-  with_grant_option = false
-}
-resource "snowflake_database_grant" "prod_reporter_grant" {
-  database_name = var.prod
-
-  privilege = "USAGE" 
-  roles     = ["REPORTER"]
-
-  with_grant_option = false
-}
-
-
 // ------------- DEVELOPER ROLE ACCESS -----------------  WE NEED TRANSFORMER_DEV, ..._QA, ..._PROD
 
 // resource "snowflake_database_grant" "dev_access_grant" {
@@ -95,7 +68,7 @@ resource "snowflake_database_grant" "prod_reporter_grant" {
 //   database_name = "PROD"
 
 //   privilege = "USAGE" #Snowflake does not have a clear definition for our case. Investigate further if this is the same as SELECT as this is for Table, External table, View, Stream
-//   roles     = ["REPORTER","TRANSFORMER_PROD"]
+//   roles     = [var.powerbi_role,"TRANSFORMER_PROD"]
 
 //   with_grant_option = false
 // }
