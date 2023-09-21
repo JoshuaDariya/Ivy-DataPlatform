@@ -61,3 +61,9 @@ variable "powerbi_role"{
 
   default = "REPORTER"
 }
+
+variable "developer_role"{
+  type = string
+
+  default = "TRANSFORMER_DEV"
+}

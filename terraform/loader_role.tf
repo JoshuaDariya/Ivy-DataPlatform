@@ -1,6 +1,6 @@
 
 // ------------- LOADER ROLE ACCESS -----------------
-resource "snowflake_grant_privileges_to_role" "fivetran_access_db_grant" {
+resource "snowflake_grant_privileges_to_role" "loader_access_db_grant" {
   privileges = ["USAGE","MODIFY", "MONITOR"]
   role_name  = var.loader_role
   on_account_object {
@@ -10,7 +10,7 @@ resource "snowflake_grant_privileges_to_role" "fivetran_access_db_grant" {
 }
 
 
-resource "snowflake_grant_privileges_to_role" "fivetran_future_access_grant" {
+resource "snowflake_grant_privileges_to_role" "loader_future_access_grant" {
   privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE","MONITOR"]
   role_name  = var.loader_role
   on_schema {
@@ -19,7 +19,7 @@ resource "snowflake_grant_privileges_to_role" "fivetran_future_access_grant" {
 }
 
 
-resource "snowflake_grant_privileges_to_role" "fivetran_access_schema_grant" {
+resource "snowflake_grant_privileges_to_role" "loader_access_schema_grant" {
   privileges = ["USAGE","CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE","MODIFY", "MONITOR"]
   role_name  = var.loader_role
   on_schema {
@@ -27,9 +27,9 @@ resource "snowflake_grant_privileges_to_role" "fivetran_access_schema_grant" {
   }
 }
 
-//--------- TESTING ACCESS TO TABLES, VIEWS, DYNAMIC TABLES** --------
+//--------- LANDING ACCESS TO CURRENT TABLES, VIEWS --------
 
-resource "snowflake_grant_privileges_to_role" "fivetran_access_all_tables_grant" {
+resource "snowflake_grant_privileges_to_role" "loader_access_all_tables_grant" {
   privileges = ["SELECT", "INSERT"]
   role_name  = var.loader_role
   on_schema_object {
@@ -40,7 +40,7 @@ resource "snowflake_grant_privileges_to_role" "fivetran_access_all_tables_grant"
   }
 }
 
-resource "snowflake_grant_privileges_to_role" "fivetran_access_all_views_grant" {
+resource "snowflake_grant_privileges_to_role" "loader_access_all_views_grant" {
   privileges = ["SELECT", "INSERT"]
   role_name  = var.loader_role
   on_schema_object {
@@ -51,16 +51,6 @@ resource "snowflake_grant_privileges_to_role" "fivetran_access_all_views_grant" 
   }
 }
 
-resource "snowflake_grant_privileges_to_role" "fivetran_access_all_materialized_grant" {
-  privileges = ["SELECT", "INSERT"]
-  role_name  = var.loader_role
-  on_schema_object {
-    all {
-        object_type_plural = "MATERIALIZED VIEWS"
-        in_database = var.landing
-    }
-  }
-}
 
 // ------------ FUTURE TABLES AND VIEWS -----------------
 resource "snowflake_grant_privileges_to_role" "loader_access_future_tables_landing" {
