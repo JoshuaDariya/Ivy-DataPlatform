@@ -211,3 +211,16 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_p
     }
   }
 }
+
+// -------- FUTURE TABLES AND VIEWS ----------
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_future_tables_landing" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    future {
+      object_type_plural = "TABLES,VIEWS"
+      in_database        = "LANDING"
+    }
+  }
+}
