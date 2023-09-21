@@ -8,6 +8,16 @@ resource "snowflake_grant_privileges_to_role" "fivetran_access_db_grant" {
     object_name = var.landing
   }
 }
+resource "snowflake_grant_privileges_to_role" "fivetran_access_all_object_grant" {
+  privileges = ["SELECT", "INSERT"]
+  role_name  = "LOADER"
+  on_schema_object {
+    all {
+      in_database = var.landing
+    }
+  }
+}
+
 resource "snowflake_grant_privileges_to_role" "fivetran_access_schema_grant" {
   privileges = ["USAGE","CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE","MODIFY", "MONITOR"]
   role_name  = "LOADER"
