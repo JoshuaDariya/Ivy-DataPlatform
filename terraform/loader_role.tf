@@ -2,7 +2,7 @@
 // ------------- LOADER ROLE ACCESS -----------------
 
 resource "snowflake_grant_privileges_to_role" "fivetran_access_grant" {
-  privileges = ["USAGE","CREATE SCHEMA", "MODIFY", "MONITOR"]
+  privileges = ["CREATE SCHEMA", "MODIFY", "MONITOR"]
   role_name  = "LOADER"
   on_account_object {
     object_type = "DATABASE"
