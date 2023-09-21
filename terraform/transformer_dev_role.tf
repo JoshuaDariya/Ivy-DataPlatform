@@ -11,7 +11,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_db_grant_landing
 }
 
 resource "snowflake_grant_privileges_to_role" "developer_access_db_grant_dev" {
-  privileges = ["USAGE", "MODIFY", "MONITOR"]
+  privileges = ["USAGE", "MODIFY", "MONITOR","CREATE SCHEMA"]
   role_name  = var.developer_role
   on_account_object {
     object_type = "DATABASE"

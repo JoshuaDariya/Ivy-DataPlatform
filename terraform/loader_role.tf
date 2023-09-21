@@ -1,7 +1,7 @@
 
 // ------------- LOADER ROLE ACCESS -----------------
 resource "snowflake_grant_privileges_to_role" "loader_access_db_grant" {
-  privileges = ["USAGE","MODIFY", "MONITOR"]
+  privileges = ["USAGE","MODIFY", "MONITOR","CREATE SCHEMA"]
   role_name  = var.loader_role
   on_account_object {
     object_type = "DATABASE"
