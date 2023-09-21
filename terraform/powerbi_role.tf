@@ -131,7 +131,6 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_l
   on_schema_object {
     all {
         object_type_plural = "VIEWS"
-        for_each = var.databases
 
         in_database = "LANDING"
     }
@@ -157,7 +156,6 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_d
   on_schema_object {
     all {
         object_type_plural = "VIEWS"
-        for_each = var.databases
 
         in_database = "DEV"
     }
@@ -183,7 +181,6 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_q
   on_schema_object {
     all {
         object_type_plural = "VIEWS"
-        for_each = var.databases
 
         in_database = "QA"
     }
@@ -209,7 +206,6 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_p
   on_schema_object {
     all {
         object_type_plural = "VIEWS"
-        for_each = var.databases
 
         in_database = "PROD"
     }
