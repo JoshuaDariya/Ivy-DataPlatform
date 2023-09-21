@@ -29,7 +29,7 @@ resource "snowflake_database_grant" "access_grant_prod" {
 }
 
 resource "snowflake_grant_privileges_to_role" "developer_access_grant" {
-  privileges = ["USAGE","CREATE SCHEMA", "MODIFY", "REFERENCE_USAGE", "MONITOR"]
+  privileges = ["USAGE","CREATE SCHEMA", "MODIFY", "MONITOR"]
   role_name  = "TRANSFORMER_DEV"
   on_account_object {
     object_type = "DATABASE"
