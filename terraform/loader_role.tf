@@ -8,15 +8,7 @@ resource "snowflake_grant_privileges_to_role" "fivetran_access_db_grant" {
     object_name = var.landing
   }
 }
-resource "snowflake_grant_privileges_to_role" "fivetran_access_all_object_grant" {
-  privileges = ["SELECT", "INSERT"]
-  role_name  = "LOADER"
-  on_schema_object {
-    all {
-      in_database = var.landing
-    }
-  }
-}
+
 
 resource "snowflake_grant_privileges_to_role" "fivetran_access_schema_grant" {
   privileges = ["USAGE","CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE","MODIFY", "MONITOR"]
@@ -32,5 +24,40 @@ resource "snowflake_grant_privileges_to_role" "fivetran_future_access_grant" {
   role_name  = "LOADER"
   on_schema {
     future_schemas_in_database = var.landing
+  }
+}
+
+//--------- TESTING --------
+
+resource "snowflake_grant_privileges_to_role" "fivetran_access_all_tables_grant" {
+  privileges = ["SELECT", "INSERT"]
+  role_name  = "LOADER"
+  on_schema_object {
+    all {
+        object_type_plural = "TABLES"
+        in_database = var.landing
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_role" "fivetran_access_all_views_grant" {
+  privileges = ["SELECT", "INSERT"]
+  role_name  = "LOADER"
+  on_schema_object {
+    all {
+        object_type_plural = "VIEWS"
+        in_database = var.landing
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_role" "fivetran_access_all_materialized_grant" {
+  privileges = ["SELECT", "INSERT"]
+  role_name  = "LOADER"
+  on_schema_object {
+    all {
+        object_type_plural = "DYNAMIC TABLES"
+        in_database = var.landing
+    }
   }
 }
