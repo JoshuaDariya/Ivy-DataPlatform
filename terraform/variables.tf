@@ -20,6 +20,12 @@ variable "databases" {
   default = ["LANDING","DEV","QA","PROD"]
 }
 
+variable "databases_with_schema" {
+  type = set(string)
+
+  default = ["DEV","QA","PROD"]
+}
+
 variable "landing"{
   type = string
 
