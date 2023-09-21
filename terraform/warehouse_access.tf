@@ -8,14 +8,14 @@ resource "snowflake_warehouse_grant" "developer_grant" {
   with_grant_option = false
 }
 
-resource "snowflake_warehouse_grant" "fivetran_grant" {
-  warehouse_name = "PC_FIVETRAN_WH"
-  privilege      = "USAGE"
+# resource "snowflake_warehouse_grant" "fivetran_grant" {
+#   warehouse_name = "PC_FIVETRAN_WH"
+#   privilege      = "USAGE"
 
-  roles = ["LOADER"]
+#   roles = ["LOADER"]
 
-  with_grant_option = false
-}
+#   with_grant_option = false
+# }
 
 resource "snowflake_warehouse_grant" "power_bi_grant" {
   warehouse_name = "POWER_BI_WH"
