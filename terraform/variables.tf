@@ -73,3 +73,9 @@ variable "qa_role"{
 
   default = "TRANSFORMER_QA"
 }
+
+variable "prod_role"{
+  type = string
+
+  default = "TRANSFORMER_PROD"
+}
