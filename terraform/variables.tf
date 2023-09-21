@@ -67,3 +67,9 @@ variable "developer_role"{
 
   default = "TRANSFORMER_DEV"
 }
+
+variable "qa_role"{
+  type = string
+
+  default = "TRANSFORMER_QA"
+}

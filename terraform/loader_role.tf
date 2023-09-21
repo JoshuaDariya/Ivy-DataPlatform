@@ -54,7 +54,7 @@ resource "snowflake_grant_privileges_to_role" "loader_access_all_views_grant" {
 
 // ------------ FUTURE TABLES AND VIEWS -----------------
 resource "snowflake_grant_privileges_to_role" "loader_access_future_tables_landing" {
-  privileges = ["SELECT"]
+  privileges = ["SELECT","INSERT"]
   role_name  = var.loader_role
   on_schema_object {
     future {
@@ -64,7 +64,7 @@ resource "snowflake_grant_privileges_to_role" "loader_access_future_tables_landi
   }
 }
 resource "snowflake_grant_privileges_to_role" "loader_access_future_views_landing" {
-  privileges = ["SELECT"]
+  privileges = ["SELECT","INSERT"]
   role_name  = var.loader_role
   on_schema_object {
     future {
