@@ -2,7 +2,7 @@
 // ------------- POWER BI ROLE ACCESS -----------------
 
 resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_landing" {
-  privileges = ["USAGE","MODIFY", "MONITOR"]
+  privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   on_account_object {
     object_type = "DATABASE"
@@ -12,7 +12,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_landing"
 }
 
 resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_dev" {
-  privileges = ["USAGE","MODIFY", "MONITOR"]
+  privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   on_account_object {
     object_type = "DATABASE"
@@ -22,7 +22,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_dev" {
 }
 
 resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_qa" {
-  privileges = ["USAGE","MODIFY", "MONITOR"]
+  privileges = ["USAGE","MONITOR"]
   role_name  = var.powerbi_role
   on_account_object {
     object_type = "DATABASE"
@@ -32,7 +32,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_qa" {
 }
 
 resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_prod" {
-  privileges = ["USAGE","MODIFY", "MONITOR"]
+  privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   on_account_object {
     object_type = "DATABASE"
