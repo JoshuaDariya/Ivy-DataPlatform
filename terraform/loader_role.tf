@@ -56,7 +56,7 @@ resource "snowflake_grant_privileges_to_role" "fivetran_access_all_materialized_
   role_name  = "LOADER"
   on_schema_object {
     all {
-        object_type_plural = "DYNAMIC TABLES"
+        object_type_plural = "MATERIALIZED VIEWS"
         in_database = var.landing
     }
   }
