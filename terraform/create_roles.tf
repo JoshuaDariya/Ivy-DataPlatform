@@ -1,8 +1,8 @@
 // ------------- ROLES (This should eventually match Azure Provisions) -----------------
-resource "snowflake_role" "loader" {
-  name = "LOADER"
-  comment = "For Fivetran connection"
-}
+# resource "snowflake_role" "loader" {
+#   name = "LOADER"
+#   comment = "For Fivetran connection"
+# }
 
 resource "snowflake_role" "transformer_dev" {
   name = "TRANSFORMER_DEV"
