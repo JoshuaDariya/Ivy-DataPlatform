@@ -53,29 +53,29 @@ variable "prod"{
 variable "loader_role"{
   type = string
 
-  default = "LOADER"
+  default = "SNOWFLAKELOADER"
 }
 
 variable "powerbi_role"{
   type = string
 
-  default = "REPORTER"
+  default = "SNOWFLAKEREPORTER"
 }
 
 variable "developer_role"{
   type = string
 
-  default = "TRANSFORMER_DEV"
+  default = "SNOWFLAKEDEV"
 }
 
 variable "qa_role"{
   type = string
 
-  default = "TRANSFORMER_QA"
+  default = "SNOWFLAKEQA"
 }
 
 variable "prod_role"{
   type = string
 
-  default = "TRANSFORMER_PROD"
+  default = "SNOWFLAKEPROD"
 }
