@@ -7,7 +7,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_landing"
   on_account_object {
     object_type = "DATABASE"
 
-    object_name = "LANDING"
+    object_name = var.landing
   }
 }
 
@@ -17,7 +17,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_dev" {
   on_account_object {
     object_type = "DATABASE"
 
-    object_name = "DEV"
+    object_name = var.dev
   }
 }
 
@@ -27,7 +27,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_qa" {
   on_account_object {
     object_type = "DATABASE"
 
-    object_name = "QA"
+    object_name = var.qa
   }
 }
 
@@ -37,7 +37,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_prod" {
   on_account_object {
     object_type = "DATABASE"
 
-    object_name = "PROD"
+    object_name = var.prod
   }
 }
 
@@ -48,7 +48,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_land
   role_name  = var.powerbi_role
   on_schema {
 
-    future_schemas_in_database = "LANDING"
+    future_schemas_in_database = var.landing
   }
 }
 
@@ -57,7 +57,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_dev"
   role_name  = var.powerbi_role
   on_schema {
 
-    future_schemas_in_database = "DEV"
+    future_schemas_in_database = var.dev
   }
 }
 
@@ -66,7 +66,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_qa" 
   role_name  = var.powerbi_role
   on_schema {
 
-    future_schemas_in_database = "QA"
+    future_schemas_in_database = var.qa
   }
 }
 
@@ -75,7 +75,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_prod
   role_name  = var.powerbi_role
   on_schema {
 
-    future_schemas_in_database = "PROD"
+    future_schemas_in_database = var.prod
   }
 }
 
@@ -86,28 +86,28 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_land
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   on_schema {
-    all_schemas_in_database = "LANDING"
+    all_schemas_in_database = var.landing
   }
 }
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_dev" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   on_schema {
-    all_schemas_in_database = "DEV"
+    all_schemas_in_database = var.dev
   }
 }
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_qa" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   on_schema {
-    all_schemas_in_database = "QA"
+    all_schemas_in_database = var.qa
   }
 }
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_prod" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   on_schema {
-    all_schemas_in_database = "PROD"
+    all_schemas_in_database = var.prod
   }
 }
 
@@ -120,7 +120,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_tables_grant_
     all {
         object_type_plural = "TABLES"
 
-        in_database = "LANDING"
+        in_database = var.landing
     }
   }
 }
@@ -132,7 +132,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_l
     all {
         object_type_plural = "VIEWS"
 
-        in_database = "LANDING"
+        in_database = var.landing
     }
   }
 }
@@ -145,7 +145,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_tables_grant_
     all {
         object_type_plural = "TABLES"
 
-        in_database = "DEV"
+        in_database = var.dev
     }
   }
 }
@@ -157,7 +157,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_d
     all {
         object_type_plural = "VIEWS"
 
-        in_database = "DEV"
+        in_database = var.dev
     }
   }
 }
@@ -170,7 +170,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_tables_grant_
     all {
         object_type_plural = "TABLES"
 
-        in_database = "QA"
+        in_database = var.qa
     }
   }
 }
@@ -182,7 +182,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_q
     all {
         object_type_plural = "VIEWS"
 
-        in_database = "QA"
+        in_database = var.qa
     }
   }
 }
@@ -195,7 +195,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_tables_grant_
     all {
         object_type_plural = "TABLES"
 
-        in_database = "PROD"
+        in_database = var.prod
     }
   }
 }
@@ -207,7 +207,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_p
     all {
         object_type_plural = "VIEWS"
 
-        in_database = "PROD"
+        in_database = var.prod
     }
   }
 }
@@ -220,7 +220,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_tables_lan
   on_schema_object {
     future {
       object_type_plural = "TABLES"
-      in_database        = "LANDING"
+      in_database        = var.landing
     }
   }
 }
@@ -230,7 +230,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_tables_dev
   on_schema_object {
     future {
       object_type_plural = "TABLES"
-      in_database        = "DEV"
+      in_database        = var.dev
     }
   }
 }
@@ -241,7 +241,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_tables_qa"
   on_schema_object {
     future {
       object_type_plural = "TABLES"
-      in_database        = "QA"
+      in_database        = var.qa
     }
   }
 }
@@ -252,7 +252,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_tables_pro
   on_schema_object {
     future {
       object_type_plural = "TABLES"
-      in_database        = "PROD"
+      in_database        = var.prod
     }
   }
 }
@@ -265,7 +265,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_views_land
   on_schema_object {
     future {
       object_type_plural = "VIEWS"
-      in_database        = "LANDING"
+      in_database        = var.landing
     }
   }
 }
@@ -276,7 +276,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_views_dev"
   on_schema_object {
     future {
       object_type_plural = "VIEWS"
-      in_database        = "DEV"
+      in_database        = var.dev
     }
   }
 }
@@ -287,7 +287,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_views_qa" 
   on_schema_object {
     future {
       object_type_plural = "VIEWS"
-      in_database        = "QA"
+      in_database        = var.qa
     }
   }
 }
@@ -298,7 +298,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_views_prod
   on_schema_object {
     future {
       object_type_plural = "VIEWS"
-      in_database        = "PROD"
+      in_database        = var.prod
     }
   }
 }

@@ -59,7 +59,7 @@ resource "snowflake_grant_privileges_to_role" "loader_access_future_tables_landi
   on_schema_object {
     future {
       object_type_plural = "TABLES"
-      in_database        = "LANDING"
+      in_database        = var.landing
     }
   }
 }
@@ -69,7 +69,7 @@ resource "snowflake_grant_privileges_to_role" "loader_access_future_views_landin
   on_schema_object {
     future {
       object_type_plural = "VIEWS"
-      in_database        = "LANDING"
+      in_database        = var.landing
     }
   }
 }

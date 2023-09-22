@@ -1,5 +1,5 @@
 
-// ------------- DEV SCHEMA CREATION -----------------
+// ------------- SCHEMA CREATION -----------------
 
 resource "snowflake_schema" "staging_schema" {
       for_each = var.databases_with_schema

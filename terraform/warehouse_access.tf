@@ -3,7 +3,7 @@ resource "snowflake_warehouse_grant" "developer_grant" {
   warehouse_name = "IVY_WH"
   privilege      = "USAGE"
 
-  roles = ["TRANSFORMER_DEV", "TRANSFORMER_QA", "TRANSFORMER_PROD"]
+  roles = [var.developer_role, var.qa_role , var.prod_role]
 
   with_grant_option = false
 }

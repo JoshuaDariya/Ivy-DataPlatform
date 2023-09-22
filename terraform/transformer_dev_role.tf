@@ -6,7 +6,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_db_grant_landing
   on_account_object {
     object_type = "DATABASE"
 
-    object_name = "LANDING"
+    object_name = var.landing
   }
 }
 
@@ -16,7 +16,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_db_grant_dev" {
   on_account_object {
     object_type = "DATABASE"
 
-    object_name = "DEV"
+    object_name = var.dev
   }
 }
 
@@ -28,7 +28,7 @@ resource "snowflake_grant_privileges_to_role" "developer_future_access_grant_lan
   role_name  = var.developer_role
   on_schema {
 
-    future_schemas_in_database = "LANDING"
+    future_schemas_in_database = var.landing
   }
 }
 
@@ -37,7 +37,7 @@ resource "snowflake_grant_privileges_to_role" "developer_future_access_grant_dev
   role_name  = var.developer_role
   on_schema {
 
-    future_schemas_in_database = "DEV"
+    future_schemas_in_database = var.dev
   }
 }
 
@@ -48,14 +48,14 @@ resource "snowflake_grant_privileges_to_role" "developer_access_schema_grant_lan
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.developer_role
   on_schema {
-    all_schemas_in_database = "LANDING"
+    all_schemas_in_database = var.landing
   }
 }
 resource "snowflake_grant_privileges_to_role" "developer_access_schema_grant_dev" {
   privileges = ["USAGE","CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE","MODIFY", "MONITOR"]
   role_name  = var.developer_role
   on_schema {
-    all_schemas_in_database = "DEV"
+    all_schemas_in_database = var.dev
   }
 }
 
@@ -69,7 +69,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_all_tables_grant
     all {
         object_type_plural = "TABLES"
 
-        in_database = "LANDING"
+        in_database = var.landing
     }
   }
 }
@@ -81,7 +81,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_all_views_grant_
     all {
         object_type_plural = "VIEWS"
 
-        in_database = "LANDING"
+        in_database = var.landing
     }
   }
 }
@@ -95,7 +95,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_all_tables_grant
     all {
         object_type_plural = "TABLES"
 
-        in_database = "DEV"
+        in_database = var.dev
     }
   }
 }
@@ -107,7 +107,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_all_views_grant_
     all {
         object_type_plural = "VIEWS"
 
-        in_database = "DEV"
+        in_database = var.dev
     }
   }
 }
@@ -120,7 +120,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_future_tables_la
   on_schema_object {
     future {
       object_type_plural = "TABLES"
-      in_database        = "LANDING"
+      in_database        = var.landing
     }
   }
 }
@@ -130,7 +130,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_future_tables_de
   on_schema_object {
     future {
       object_type_plural = "TABLES"
-      in_database        = "DEV"
+      in_database        = var.dev
     }
   }
 }
@@ -143,7 +143,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_future_views_lan
   on_schema_object {
     future {
       object_type_plural = "VIEWS"
-      in_database        = "LANDING"
+      in_database        = var.landing
     }
   }
 }
@@ -154,7 +154,7 @@ resource "snowflake_grant_privileges_to_role" "developer_access_future_views_dev
   on_schema_object {
     future {
       object_type_plural = "VIEWS"
-      in_database        = "DEV"
+      in_database        = var.dev
     }
   }
 }

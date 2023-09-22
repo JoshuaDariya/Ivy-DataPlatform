@@ -5,17 +5,17 @@ resource "snowflake_role" "loader" {
 }
 
 resource "snowflake_role" "transformer_dev" {
-  name = "TRANSFORMER_DEV"
+  name = var.developer_role
   comment = "For developers and Dev dbt connection"
 }
 
 resource "snowflake_role" "transformer_qa" {
-  name = "TRANSFORMER_QA"
+  name = var.qa_role
   comment = "For QA dbt connection"
 }
 
 resource "snowflake_role" "transformer_prod" {
-  name = "TRANSFORMER_PROD"
+  name = var.prod_role
   comment = "For Prod dbt job connection"
 }
 
