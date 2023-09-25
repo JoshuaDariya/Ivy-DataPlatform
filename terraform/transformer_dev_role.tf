@@ -11,7 +11,8 @@ resource "snowflake_grant_privileges_to_role" "developer_access_db_grant_landing
 }
 
 resource "snowflake_grant_privileges_to_role" "developer_access_db_grant_dev" {
-  privileges = ["USAGE", "MODIFY", "MONITOR","CREATE SCHEMA"]
+  all_privileges = true
+  # privileges = ["USAGE", "MODIFY", "MONITOR","CREATE SCHEMA"]
   role_name  = var.developer_role
   on_account_object {
     object_type = "DATABASE"
@@ -33,7 +34,8 @@ resource "snowflake_grant_privileges_to_role" "developer_future_access_grant_lan
 }
 
 resource "snowflake_grant_privileges_to_role" "developer_future_access_grant_dev" {
-  privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE","MONITOR"]
+  all_privileges = true
+  # privileges = ["MODIFY", "CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE", "USAGE","MONITOR"]
   role_name  = var.developer_role
   on_schema {
 
@@ -52,7 +54,8 @@ resource "snowflake_grant_privileges_to_role" "developer_access_schema_grant_lan
   }
 }
 resource "snowflake_grant_privileges_to_role" "developer_access_schema_grant_dev" {
-  privileges = ["USAGE","CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE","MODIFY", "MONITOR"]
+  all_privileges = true
+  # privileges = ["USAGE","CREATE TABLE", "CREATE VIEW", "CREATE DYNAMIC TABLE","MODIFY", "MONITOR"]
   role_name  = var.developer_role
   on_schema {
     all_schemas_in_database = var.dev
