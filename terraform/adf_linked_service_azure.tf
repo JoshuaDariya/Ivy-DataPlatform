@@ -1,18 +1,5 @@
-resource "azurerm_resource_group" "rg_dev" {
-    location = "East US"
-    name = "rg-ivydataplatform-dev-eastus"
-}
 
-data "azurerm_client_config" "current" {
-}
-
-resource "azurerm_data_factory" "adf" {
-  name                = "Ivy-dataplatform-test"
-  location            = azurerm_resource_group.rg_dev.location
-  resource_group_name = azurerm_resource_group.rg_dev.name
-}
-
-resource "azurerm_key_vault" "key_vault" {
+resource "azurerm_key_vault" "ivydwstoragedevSASToken" {
   name                = "ivydwstoragedevSASToken"
   location            = azurerm_resource_group.rg_dev.location
   resource_group_name = azurerm_resource_group.rg_dev.name
@@ -23,7 +10,7 @@ resource "azurerm_key_vault" "key_vault" {
 resource "azurerm_data_factory_linked_service_key_vault" "linked_key_vault" {
   name            = "sastoken"
   data_factory_id = azurerm_data_factory.adf.id
-  key_vault_id    = azurerm_key_vault.key_vault.id
+  key_vault_id    = azurerm_key_vault.ivydwstoragedevSASToken.id
 }
 
 

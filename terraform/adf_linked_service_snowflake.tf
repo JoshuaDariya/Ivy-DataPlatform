@@ -1,11 +1,4 @@
-resource "azurerm_resource_group" "rg_dev" {
-    location = "East US"
-    name = "rg-ivydataplatform-dev-eastus"
-}
-
-data "azurerm_client_config" "current" {}
-
-resource "azurerm_key_vault" "key_vault" {
+resource "azurerm_key_vault" "snowflakeLoginPassword" {
   name                = "snowflakeLoginPassword"
   location            = azurerm_resource_group.rg_dev.location
   resource_group_name = azurerm_resource_group.rg_dev.name
@@ -13,16 +6,10 @@ resource "azurerm_key_vault" "key_vault" {
   sku_name            = "standard"
 }
 
-resource "azurerm_data_factory" "adf" {
-  name                = "Ivy-dataplatform-test"
-  location            = azurerm_resource_group.rg_dev.location
-  resource_group_name = azurerm_resource_group.rg_dev.name
-}
-
 resource "azurerm_data_factory_linked_service_key_vault" "linked_key_vault" {
   name            = "snowflakecredential"
   data_factory_id = azurerm_data_factory.adf.id
-  key_vault_id    = azurerm_key_vault.key_vault.id
+  key_vault_id    = azurerm_key_vault.snowflakeLoginPassword.id
 }
 
 resource "azurerm_data_factory_linked_service_snowflake" "linked_service" {
