@@ -29,7 +29,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     "source": {
                         "type": "DelimitedTextSource",
                         "linkedServiceName": {
-                            "referenceName": "adf_linked_service_azure",
+                            "referenceName": "linkedservice_azureblobstorage",
                             "type": "LinkedServiceReference"
                         },
                         "folderPath": "analytics/raw/raintree/rbi_referral.csv"
@@ -175,7 +175,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     "sink": {
                         "type": "SnowflakeSink",
                         "linkedServiceName": {
-                            "referenceName": "adf_linked_service_snowflake",
+                            "referenceName": "linkedservice_snowflake",
                             "type": "LinkedServiceReference"
                         },
                         "folderPath": "analytics/raw/raintree/rbi_referral.csv",

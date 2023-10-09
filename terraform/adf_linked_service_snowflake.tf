@@ -27,7 +27,7 @@ resource "azurerm_data_factory_linked_service_key_vault" "linked_key_vault" {
 
 resource "azurerm_data_factory_linked_service_snowflake" "linked_service" {
   name            = "linkedservice_snowflake"
-  data_factory_id = azurerm_data_factory.example.id
+  data_factory_id = azurerm_data_factory.adf.id
 
   connection_string = "jdbc:snowflake://JL89715.east-us-2.azure.snowflakecomputing.com/?user=LingHe &db=LANDING&warehouse=IVY_WH"
   key_vault_password {
