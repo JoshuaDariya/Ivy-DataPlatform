@@ -4,6 +4,10 @@ terraform {
       source  = "Snowflake-Labs/snowflake"
       version = "~> 0.70"
     }
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = ">= 1.216.23"  
+    }
   }
   // ------- LOCATION OF TERRAFORM STATE FILE -------
   backend "azurerm" {
