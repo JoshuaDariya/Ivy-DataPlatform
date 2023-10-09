@@ -423,7 +423,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                         ],
                         "preCopyScript": {
                             "type": "SnowflakeSqlScript",
-                            "script": "TRUNCATE TABLE RAINTREE.RAINTREE.RBI_REFERRAL"
+                            "script": "TRUNCATE TABLE RAINTREE.RBI_REFERRAL"
                         }
                     },
                     "enableStaging": false,
