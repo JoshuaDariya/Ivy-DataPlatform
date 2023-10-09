@@ -38,6 +38,11 @@ resource "azurerm_resource_group" "rg_dev" {
     name = "rg-ivydataplatform-dev-eastus"
 }
 
+# Import the existing resource into Terraform's state
+data "azurerm_resource_group" "imported_rg_dev" {
+  name     = "rg-ivydataplatform-dev-eastus"
+}
+
 resource "azurerm_data_factory" "adf" {
   name                = "Ivy-dataplatform-test"
   location            = azurerm_resource_group.rg_dev.location
@@ -47,10 +52,6 @@ resource "azurerm_data_factory" "adf" {
 data "azurerm_client_config" "current" {
 }
 
-# Import the existing resource into Terraform's state
-data "azurerm_resource_group" "imported_rg_dev" {
-  name     = "rg-ivydataplatform-dev-eastus"
-}
 
 // ------------- WAREHOUSE -----------------
 // resource "snowflake_warehouse" "warehouse" {
