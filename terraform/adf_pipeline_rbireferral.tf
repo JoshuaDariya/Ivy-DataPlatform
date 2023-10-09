@@ -1,9 +1,3 @@
-
-//------------- TERRAFORM ACCOUNT WITH AZURE -----------------
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "rg_dev" {
     location = "East US"
     name = "rg-ivydataplatform-dev-eastus"
@@ -31,24 +25,148 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     "secureOutput": false,
                     "secureInput": false
                 },
-        "userProperties": [
-                    {
-                        "name": "Source",
-                        "value": "analytics/raw/raintree/rbi_insur.csv"
-                    },
-                    {
-                        "name": "Destination",
-                        "value": "PUBLIC.RBI_INSUR"
-                    }
-                ],
         "typeProperties": {
                     "source": {
                         "type": "DelimitedTextSource",
+                        "linkedServiceName": {
+                            "referenceName": "adf_linked_service_azure",
+                            "type": "LinkedServiceReference"
+                        },
+                        "folderPath": "analytics/raw/raintree/rbi_referral.csv"
                         "storeSettings": {
                             "type": "AzureBlobStorageReadSettings",
                             "recursive": true,
                             "enablePartitionDiscovery": false
                         },
+                        "columnDelimiter": ";",
+                        "rowDelimiter": "\n",
+                        "encodingName": "iso-8859-1",
+                        "escapeChar": "\\",
+                        "firstRowAsHeader": false,
+                        "quoteChar": "",
+                        "schema": [
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            },
+                            {
+                                "type": "String"
+                            }
+                        ]
+                    },
                         "formatSettings": {
                             "type": "DelimitedTextReadSettings",
                             "skipLineCount": 0
@@ -56,9 +174,256 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     },
                     "sink": {
                         "type": "SnowflakeSink",
-                        "preCopyScript": "Truncate table RAINTREE.RBI_REFERRAL",
-                        "importSettings": {
-                            "type": "SnowflakeImportCopyCommand"
+                        "linkedServiceName": {
+                            "referenceName": "adf_linked_service_snowflake",
+                            "type": "LinkedServiceReference"
+                        },
+                        "folderPath": "analytics/raw/raintree/rbi_referral.csv",
+                        "schema": [
+                            {
+                                "name": "ID",
+                                "type": "NUMBER",
+                                "precision": 38,
+                                "scale": 0
+                            },
+                            {
+                                "name": "PN",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "BC",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "GUID",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "CODE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "CASE_CODE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "INAME",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "FC",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "FDATE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "EDATE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "REL",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "COPAY",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "COPAY_TYPE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "SUPPRESS",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "DEDUCT",
+                                "type": "NUMBER",
+                                "precision": 38,
+                                "scale": 0
+                            },
+                            {
+                                "name": "DEDUCT_MET",
+                                "type": "NUMBER",
+                                "precision": 38,
+                                "scale": 0
+                            },
+                            {
+                                "name": "DEDUCT_REM",
+                                "type": "NUMBER",
+                                "precision": 38,
+                                "scale": 0
+                            },
+                            {
+                                "name": "DEDUCT_DATE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "DEDUCT_REFRESH_DATE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "DEDUCTIS_MET",
+                                "type": "NUMBER",
+                                "precision": 38,
+                                "scale": 0
+                            },
+                            {
+                                "name": "AMOUNTS_VERIFIED_DATE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "AUTH_REQ",
+                                "type": "NUMBER",
+                                "precision": 38,
+                                "scale": 0
+                            },
+                            {
+                                "name": "OVR_AUTH_REQ",
+                                "type": "NUMBER",
+                                "precision": 38,
+                                "scale": 0
+                            },
+                            {
+                                "name": "SUP_REASON_CB",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "MAX_OUT_POCK_REM",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "CC_AS_OF",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "ECODE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "ENAME",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "EADDR1",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "EADDR2",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "ECITY",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "ESTATE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "EZIP",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "EPHONE",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "ECELL",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "EFAX",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "EEMAIL",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "SSID",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "GROUP_ID",
+                                "type": "VARCHAR",
+                                "precision": 0,
+                                "scale": 0
+                            },
+                            {
+                                "name": "REF_REQ",
+                                "type": "NUMBER",
+                                "precision": 38,
+                                "scale": 0
+                            }
+                        ],
+                        "preCopyScript": {
+                            "type": "SnowflakeSqlScript",
+                            "script": "TRUNCATE TABLE RAINTREE.RAINTREE.RBI_REFERRAL"
                         }
                     },
                     "enableStaging": false,
@@ -338,20 +703,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                         ]
                     },
                     "escapeQuoteEscaping": true
-                },
-                "inputs": [
-                    {
-                        "referenceName": "rbi_referral_source",
-                        "type": "DatasetReference"
-                    }
-                ],
-                "outputs": [
-                    {
-                        "referenceName": "rbi_referral_destination",
-                        "type": "DatasetReference"
-                    }
-                ]
-            
+                }
     }
 ]
   JSON

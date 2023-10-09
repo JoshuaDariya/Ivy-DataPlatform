@@ -1,8 +1,3 @@
-//------------- TERRAFORM ACCOUNT WITH AZURE -----------------
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "rg_dev" {
     location = "East US"
     name = "rg-ivydataplatform-dev-eastus"

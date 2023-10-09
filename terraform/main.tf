@@ -23,7 +23,10 @@ provider "snowflake" {
   region = var.region
 }
 
-
+//------------- TERRAFORM ACCOUNT WITH AZURE -----------------
+provider "azurerm" {
+  features {}
+}
 
 
 
