@@ -47,6 +47,11 @@ resource "azurerm_data_factory" "adf" {
 data "azurerm_client_config" "current" {
 }
 
+# Import the existing resource into Terraform's state
+data "azurerm_resource_group" "imported_rg_dev" {
+  name     = "rg-ivydataplatform-dev-eastus"
+}
+
 // ------------- WAREHOUSE -----------------
 // resource "snowflake_warehouse" "warehouse" {
 //   name           = "IVY_WH_TF" #Change to desired name
