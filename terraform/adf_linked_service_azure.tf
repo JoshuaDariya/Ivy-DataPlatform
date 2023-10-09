@@ -7,20 +7,20 @@ resource "azurerm_key_vault" "ivydwstoragedevSASToken" {
   sku_name            = "standard"
 }
 
-resource "azurerm_data_factory_linked_service_key_vault" "linked_key_vault" {
+resource "azurerm_data_factory_linked_service_key_vault" "sastoken" {
   name            = "sastoken"
   data_factory_id = azurerm_data_factory.adf.id
   key_vault_id    = azurerm_key_vault.ivydwstoragedevSASToken.id
 }
 
 
-resource "azurerm_data_factory_linked_service_azure_blob_storage" "linked_service" {
+resource "azurerm_data_factory_linked_service_azure_blob_storage" "linkedservice_azureblobstorage" {
   name            = "linkedservice_azureblobstorage"
   data_factory_id = azurerm_data_factory.adf.id
 
   sas_uri = "https://ivydwstoragedev.blob.core.windows.net/analytics/"
   key_vault_sas_token {
-    linked_service_name = azurerm_data_factory_linked_service_key_vault.linked_key_vault.name
+    linked_service_name = azurerm_data_factory_linked_service_key_vault.sastoken.name
     secret_name         = "secret"
   }
 }

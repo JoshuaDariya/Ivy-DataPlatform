@@ -6,19 +6,19 @@ resource "azurerm_key_vault" "snowflakeLoginPassword" {
   sku_name            = "standard"
 }
 
-resource "azurerm_data_factory_linked_service_key_vault" "linked_key_vault" {
+resource "azurerm_data_factory_linked_service_key_vault" "snowflakecredential" {
   name            = "snowflakecredential"
   data_factory_id = azurerm_data_factory.adf.id
   key_vault_id    = azurerm_key_vault.snowflakeLoginPassword.id
 }
 
-resource "azurerm_data_factory_linked_service_snowflake" "linked_service" {
+resource "azurerm_data_factory_linked_service_snowflake" "linkedservice_snowflake" {
   name            = "linkedservice_snowflake"
   data_factory_id = azurerm_data_factory.adf.id
 
   connection_string = "jdbc:snowflake://JL89715.east-us-2.azure.snowflakecomputing.com/?user=LingHe &db=LANDING&warehouse=IVY_WH"
   key_vault_password {
-    linked_service_name = azurerm_data_factory_linked_service_key_vault.linked_key_vault.name
+    linked_service_name = azurerm_data_factory_linked_service_key_vault.snowflakecredential.name
     secret_name         = "secret"
   }
 }
