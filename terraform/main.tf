@@ -34,7 +34,7 @@ provider "azurerm" {
 }
 
 # Import the existing resource into Terraform's state
-data "azurerm_resource_group" "imported_rg_dev" {
+data "azurerm_resource_group" "rg_dev" {
   name     = "rg-ivydataplatform-dev-eastus"
 }
 
