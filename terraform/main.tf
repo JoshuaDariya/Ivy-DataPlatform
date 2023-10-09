@@ -28,8 +28,25 @@ provider "azurerm" {
   features {}
 }
 
+resource "azurerm_resource_group" "rg_dev" {
+    location = "East US"
+    name = "rg-ivydataplatform-dev-eastus"
+}
 
+resource "azurerm_data_factory" "adf" {
+  name                = "Ivy-dataplatform-test"
+  location            = azurerm_resource_group.rg_dev.location
+  resource_group_name = azurerm_resource_group.rg_dev.name
+}
 
+data "azurerm_client_config" "current" {
+}
+
+resource "azurerm_data_factory" "adf" {
+  name                = "Ivy-dataplatform-test"
+  location            = azurerm_resource_group.rg_dev_snowflake.location
+  resource_group_name = azurerm_resource_group.rg_dev_snowflake.name
+}
 
 // ------------- WAREHOUSE -----------------
 // resource "snowflake_warehouse" "warehouse" {
