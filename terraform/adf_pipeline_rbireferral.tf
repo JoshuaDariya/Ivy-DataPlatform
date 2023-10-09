@@ -1,14 +1,3 @@
-resource "azurerm_resource_group" "rg_dev" {
-    location = "East US"
-    name = "rg-ivydataplatform-dev-eastus"
-}
-
-resource "azurerm_data_factory" "adf" {
-  name                = "Ivy-dataplatform-test"
-  location            = azurerm_resource_group.rg_dev.location
-  resource_group_name = azurerm_resource_group.rg_dev.name
-}
-
 resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
   name            = "pipeline_rib_referral"
   data_factory_id = azurerm_data_factory.adf.id
