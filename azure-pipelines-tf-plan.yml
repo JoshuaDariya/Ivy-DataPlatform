@@ -25,11 +25,11 @@ stages:
               terraformVersion: 'latest'
               
 
-  - stage: TerraformInitPlanApply
-    displayName: Terraform Init Plan Apply
+  - stage: TerraformInitPlan
+    displayName: Terraform Init Plan
     jobs:
       - job: TFinit
-        displayName: Terraform Init Plan Apply
+        displayName: Terraform Init Plan
         steps:
           - task: TerraformTaskV4@4
             inputs:
