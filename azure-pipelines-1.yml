@@ -46,7 +46,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'custom'
-              customCommand: 'terraform import azurerm_resource_group.rg_dev'
+              customCommand: 'import azurerm_resource_group.rg_dev'
               outputTo: 'console'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
 
