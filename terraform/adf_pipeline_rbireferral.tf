@@ -27,6 +27,10 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                             "recursive": true,
                             "enablePartitionDiscovery": false
                         },
+                        "formatSettings": {
+                            "type": "DelimitedTextReadSettings",
+                            "skipLineCount": 0
+                        },
                         "columnDelimiter": ";",
                         "rowDelimiter": "\n",
                         "encodingName": "iso-8859-1",
@@ -155,11 +159,6 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                                 "type": "String"
                             }
                         ]
-                    },
-                        "formatSettings": {
-                            "type": "DelimitedTextReadSettings",
-                            "skipLineCount": 0
-                        }
                     },
                     "sink": {
                         "type": "SnowflakeSink",
