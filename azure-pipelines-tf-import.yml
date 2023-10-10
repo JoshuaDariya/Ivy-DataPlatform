@@ -48,7 +48,7 @@ stages:
               command: 'custom'
               workingDirectory: 'terraform'
               customCommand: 'import'
-              commandOptions: '-input=false azurerm_resource_group.rg_dev'
+              commandOptions: '-input=false azurerm_resource_group.rg_dev /subscriptions/cbecafd1-1b42-4db3-a26a-e2851ce44268/resourceGroups/rg-ivydataplatform-dev-eastus'
               outputTo: 'console'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
           
