@@ -20,9 +20,9 @@ stages:
       - job: TFinstall
         displayName: Install Terraform
         steps:
-          - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
-            inputs:
-              terraformVersion: 'latest'
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
               
 
   - stage: TerraformInitPlan
