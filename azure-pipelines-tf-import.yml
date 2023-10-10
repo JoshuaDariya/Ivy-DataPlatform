@@ -46,7 +46,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'custom'
-              customCommand: 'import azurerm_resource_group.rg_dev'
+              customCommand: 'import'
               outputTo: 'console'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
 
