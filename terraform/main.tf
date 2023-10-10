@@ -33,15 +33,14 @@ provider "azurerm" {
   features {}
 }
 
+resource "azurerm_resource_group" "rg_dev" {
+    location = "East US"
+    name = "rg-ivydataplatform-dev-eastus"
+}
 
 # Import the existing resource into Terraform's state
 data "azurerm_resource_group" "imported_rg_dev" {
 name     = "rg-ivydataplatform-dev-eastus"
-}
-
-resource "azurerm_resource_group" "rg_dev" {
-    location = "East US"
-    name = "rg-ivydataplatform-dev-test"
 }
 
 resource "azurerm_data_factory" "adf" {
