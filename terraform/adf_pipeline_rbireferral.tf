@@ -21,7 +21,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                             "referenceName": "linkedservice_azureblobstorage",
                             "type": "LinkedServiceReference"
                         },
-                        "folderPath": "analytics/raw/raintree/rbi_referral.csv"
+                        "folderPath": "analytics/raw/raintree/rbi_referral.csv",
                         "storeSettings": {
                             "type": "AzureBlobStorageReadSettings",
                             "recursive": true,
