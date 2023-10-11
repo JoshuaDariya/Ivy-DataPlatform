@@ -9,7 +9,7 @@ data "azurerm_key_vault_secret" "sastoken" {
   key_vault_id = data.azurerm_key_vault.ivydwstoragedevSASToken.id
 }
 
-output "azure_secret_value" {
+output "azure_sas_token" {
   value     = data.azurerm_key_vault_secret.sastoken.value
   sensitive = true
 }

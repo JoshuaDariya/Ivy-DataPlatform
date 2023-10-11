@@ -8,7 +8,7 @@ data "azurerm_key_vault_secret" "snowflakepassword" {
   key_vault_id = data.azurerm_key_vault.snowflakeLoginPassword.id
 }
 
-output "azure_secret_value" {
+output "snowflake_password" {
   value     = data.azurerm_key_vault_secret.snowflakepassword.value
   sensitive = true
 }
