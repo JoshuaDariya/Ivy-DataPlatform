@@ -49,6 +49,24 @@ resource "azurerm_data_factory" "adf" {
   resource_group_name = azurerm_resource_group.rg_dev.name
 }
 
+resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  key_permissions = [
+    "get", "list",
+  ]
+
+  secret_permissions = [
+    "get", "list",
+  ]
+
+  certificate_permissions = [
+    "get", "list",
+  ]
+}
+
 data "azurerm_client_config" "current" {
 }
 
