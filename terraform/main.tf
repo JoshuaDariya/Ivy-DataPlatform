@@ -21,6 +21,7 @@ provider "snowflake" {
   username = var.username
   password = var.password
   region = var.region
+  feature {}
 }
 
 
