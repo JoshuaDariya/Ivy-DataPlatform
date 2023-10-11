@@ -1,3 +1,12 @@
+
+resource "azurerm_data_factory_dataset_azure_blob" "source_dataset" {
+  name                = "source-dataset"
+  data_factory_id     = azurerm_data_factory.adf.id
+  linked_service_name = azurerm_data_factory_linked_service_azure_blob_storage.linkedservice_azureblobstorage.name
+  path  = "analytics/raw/raintree"
+  filename = "rbi_referral.csv"
+}
+
 resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
   name            = "pipeline_rib_referral"
   data_factory_id = azurerm_data_factory.adf.id
@@ -21,7 +30,14 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                             "referenceName": "linkedservice_azureblobstorage",
                             "type": "LinkedServiceReference"
                         },
-                        "folderPath": "analytics/raw/raintree/rbi_referral.csv",
+                        "folderPath": {
+                            "value": "@{dataset().folderPath}",
+                            "type": "Expression"
+                        },
+                        "fileName": {
+                            "value": "@{dataset().fileName}",
+                            "type": "Expression"
+                        },
                         "storeSettings": {
                             "type": "AzureBlobStorageReadSettings",
                             "recursive": true,
