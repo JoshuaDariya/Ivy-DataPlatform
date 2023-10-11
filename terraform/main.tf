@@ -14,6 +14,10 @@ terraform {
   }
 }
 
+provider "azurerm" {
+   features {}
+}
+
 //------------- TERRAFORM ACCOUNT WITH SNOWFLAKE -----------------
 provider "snowflake" {
   role = "ACCOUNTADMIN"
