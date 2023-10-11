@@ -1,9 +1,3 @@
-
-data "azurerm_key_vault" "ivydwstoragedevSASToken" {
-  name                = "ivy-kv-lakehouse-dev"
-  resource_group_name = azurerm_resource_group.rg_dev.name
-}
-
 data "azurerm_key_vault_secret" "sastoken" {
   name         = "ivydwstoragedevSASToken"
   key_vault_id = data.azurerm_key_vault.ivydwstoragedevSASToken.id
