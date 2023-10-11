@@ -6,106 +6,106 @@ resource "snowflake_table" "ingest_ivyfotoexport" {
 
   column {
     name = "score"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "goal"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "latest"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "tab"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "assessment_section"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "patient"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "caseindex"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "fotoindex"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "episodeid"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "reportid"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "surveystarted"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "surveycompleted"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "reporttype"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "mcii"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "mdc"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "episodeduration"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "physicalfschange"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "riskadjfoto"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "visitsperepisode"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "dischargefsscore"
-    type = "VARCHAR"
+    type = "STRING"
   }
 
   column {
     name = "avgsatisfaction"
-    type = "VARCHAR"
+    type = "STRING"
   }
 }
