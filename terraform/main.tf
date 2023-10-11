@@ -49,6 +49,11 @@ resource "azurerm_data_factory" "adf" {
   resource_group_name = azurerm_resource_group.rg_dev.name
 }
 
+data "azurerm_key_vault" "key_vault" {
+  name                = "ivy-kv-lakehouse-dev"
+  resource_group_name = azurerm_resource_group.rg_dev.name
+}
+
 resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id

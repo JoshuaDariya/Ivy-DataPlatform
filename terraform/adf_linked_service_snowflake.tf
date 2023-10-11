@@ -1,11 +1,6 @@
-data "azurerm_key_vault" "snowflakeLoginPassword" {
-  name                = "ivy-kv-lakehouse-dev"
-  resource_group_name = azurerm_resource_group.rg_dev.name
-}
-
 data "azurerm_key_vault_secret" "snowflakepassword" {
   name         = "snowflakeLoginPassword"
-  key_vault_id = data.azurerm_key_vault.snowflakeLoginPassword.id
+  key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
 output "snowflake_password" {
@@ -16,7 +11,7 @@ output "snowflake_password" {
 resource "azurerm_data_factory_linked_service_key_vault" "snowflakecredential" {
   name            = "snowflakecredential"
   data_factory_id = azurerm_data_factory.adf.id
-  key_vault_id    = data.azurerm_key_vault.snowflakeLoginPassword.id
+  key_vault_id    = data.azurerm_key_vault.key_vault.id
 }
 
 resource "azurerm_data_factory_linked_service_snowflake" "linkedservice_snowflake" {
