@@ -27,6 +27,6 @@ resource "azurerm_data_factory_linked_service_azure_blob_storage" "linkedservice
   sas_uri = "https://ivydwstoragedev.blob.core.windows.net/analytics/"
   key_vault_sas_token {
     linked_service_name = azurerm_data_factory_linked_service_key_vault.sastoken.name
-    secret_name         = "ivydwstoragedevSASToken"
+    secret_name         = data.azurerm_key_vault_secret.sastoken.name
   }
 }
