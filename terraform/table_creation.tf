@@ -4,7 +4,6 @@ resource "snowflake_table" "ingest_ivyfotoexport" {
   name                = "IVYFOTOEXPORT"
   change_tracking     = true
 
-
   column {
     name = "score"
     type = "VARCHAR"
