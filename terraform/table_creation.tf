@@ -603,3 +603,166 @@ resource "snowflake_table" "ingest_ivycasedataexport" {
   }
 }
 
+resource "snowflake_table" "ingest_rbi_insurance_stage" {
+  database            = var.landing
+  schema              = "RAINTREE"
+  name                = "z_rbi_insurance"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceAddr1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceAddr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceState"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceZip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsurancePhone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceFax"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCell"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsurancePayorid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCategory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCategoryDescription"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_insurance" {
+  database            = var.landing
+  schema              = "RAINTREE"
+  name                = "rbi_insurance"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceAddr1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceAddr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceState"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceZip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsurancePhone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceFax"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCell"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsurancePayorid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCategory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCategoryDescription"
+    type = "VARCHAR"
+  }
+}
