@@ -606,7 +606,7 @@ resource "snowflake_table" "ingest_ivycasedataexport" {
 resource "snowflake_table" "ingest_rbi_insurance_stage" {
   database            = var.landing
   schema              = "RAINTREE"
-  name                = "z_rbi_insurance"
+  name                = "Z_RBI_INSURANCE"
   change_tracking     = true
 
   column {
@@ -688,7 +688,7 @@ resource "snowflake_table" "ingest_rbi_insurance_stage" {
 resource "snowflake_table" "ingest_rbi_insurance" {
   database            = var.landing
   schema              = "RAINTREE"
-  name                = "rbi_insurance"
+  name                = "RBI_INSURANCE"
   change_tracking     = true
 
   column {
