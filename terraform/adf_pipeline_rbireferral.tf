@@ -33,10 +33,14 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                 },
         "typeProperties": {
             "source": {
-                "type": "AzureBlobSource",
+                "type": "DelimitedTextSource",
                 "linkedServiceName": {
                     "referenceName": "linkedservice_azureblobstorage",
                     "type": "LinkedServiceReference"
+                },
+                "dataset": {
+                    "referenceName": "azurerm_data_factory_dataset_azure_blob.azure_blob_source_dataset.name",
+                    "type": "DatasetReference"
                 },
                 "storeSettings": {
                     "type": "AzureBlobStorageReadSettings",
@@ -181,7 +185,11 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                 "linkedServiceName": {
                     "referenceName": "linkedservice_snowflake",
                     "type": "LinkedServiceReference"
-                },
+                },          
+                "dataset": {
+                        "referenceName": "azurerm_data_factory_dataset_snowflake.snowflake_sink_datase.name",
+                        "type": "DatasetReference"
+                },             
                 "schema": [
                     {
                         "name": "ID",
@@ -706,19 +714,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                 ]
             },
             "escapeQuoteEscaping": true
-        },
-        "inputs": [
-            {
-                "referenceName": "azurerm_data_factory_dataset_azure_blob.azure_blob_source_dataset.name",
-                "type": "DatasetReference"
-            }
-        ],
-        "outputs": [
-            {
-                "referenceName": "azurerm_data_factory_dataset_snowflake.snowflake_sink_datase.name",
-                "type": "DatasetReference"
-            }
-        ]
+        }
     }
 ]
   JSON
