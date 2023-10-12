@@ -187,7 +187,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     "type": "LinkedServiceReference"
                 },          
                 "dataset": {
-                        "referenceName": "rbi_referral_source",
+                        "referenceName": "rbi_referral_destination",
                         "type": "DatasetReference"
                 },             
                 "schema": [
