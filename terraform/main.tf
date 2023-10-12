@@ -18,6 +18,7 @@ terraform {
   }
 }
 
+
 //------------- TERRAFORM ACCOUNT WITH SNOWFLAKE -----------------
 provider "snowflake" {
   role = "ACCOUNTADMIN"
