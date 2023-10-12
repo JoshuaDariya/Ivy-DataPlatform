@@ -38,9 +38,9 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                             "referenceName": "linkedservice_azureblobstorage",
                             "type": "LinkedServiceReference"
                         },
-                        dataset {
-                            referenceName = azurerm_data_factory_dataset_azure_blob.azure_blob_source_dataset.name
-                            type          = "DatasetReference"
+                        "dataset": {
+                            "referenceName": "azurerm_data_factory_dataset_azure_blob.azure_blob_source_dataset.name",
+                            "type": "DatasetReference"
                         },
                         "storeSettings": {
                             "type": "AzureBlobStorageReadSettings",
@@ -186,9 +186,9 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                             "referenceName": "linkedservice_snowflake",
                             "type": "LinkedServiceReference"
                         },
-                        dataset {
-                            referenceName = azurerm_data_factory_dataset_snowflake.snowflake_sink_dataset.name
-                            type          = "DatasetReference"
+                        "dataset": {
+                            "referenceName": "azurerm_data_factory_dataset_snowflake.snowflake_sink_dataset.name",
+                            "type": "DatasetReference"
                         },
                         "schema": [
                             {
