@@ -31,6 +31,16 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     "secureOutput": false,
                     "secureInput": false
                 },
+        "inputs": 
+            {
+                "referenceName": "azurerm_data_factory_dataset_azure_blob.azure_blob_source_dataset",
+                "type": "DatasetReference"
+            },
+        "outputs": 
+            {
+                "referenceName": "azurerm_data_factory_dataset_snowflake.snowflake_sink_datase",
+                "type": "DatasetReference"
+            },
         "typeProperties": {
                     "source": {
                         "type": "AzureBlobSource",
@@ -707,20 +717,6 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     },
                     "escapeQuoteEscaping": true
                 }
-            },
-            "inputs": [
-                {
-                    "referenceName": "azurerm_data_factory_dataset_azure_blob.azure_blob_source_dataset",
-                    "type": "DatasetReference"
-                }
-            ],
-            "outputs": [
-                {
-                    "referenceName": "azurerm_data_factory_dataset_snowflake.snowflake_sink_datase",
-                    "type": "DatasetReference"
-                }
-            ]
-        }
     }
 ]
   JSON
