@@ -1,10 +1,18 @@
 
-resource "azurerm_data_factory_dataset_azure_blob" "source_dataset" {
-  name                = "source-dataset"
+resource "azurerm_data_factory_dataset_azure_blob" "azure_blob_source_dataset" {
+  name                = "rbi_referral_source"
   data_factory_id     = azurerm_data_factory.adf.id
   linked_service_name = azurerm_data_factory_linked_service_azure_blob_storage.linkedservice_azureblobstorage.name
   path  = "analytics/raw/raintree"
   filename = "rbi_referral.csv"
+}
+
+resource "azurerm_data_factory_dataset_snowflake" "snowflake_sink_dataset" {
+  name                = "rbi_referral_destination"
+  data_factory_id     = azurerm_data_factory.adf.id
+  linked_service_name = azurerm_data_factory_linked_service_snowflake.linkedservice_snowflake.name
+  schema_name         = "RAINTREE"
+  table_name          = "RBI_REFERRAL"
 }
 
 resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
@@ -13,7 +21,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
   activities_json = <<JSON
 [
     {
-        "name": "copy_rbireferral_test",
+        "name": "copy_rbireferral_to_snowflake",
         "type": "Copy",
         "dependsOn": [],
         "policy": {
@@ -25,18 +33,14 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                 },
         "typeProperties": {
                     "source": {
-                        "type": "DelimitedTextSource",
+                        "type": "AzureBlobSource",
                         "linkedServiceName": {
                             "referenceName": "linkedservice_azureblobstorage",
                             "type": "LinkedServiceReference"
                         },
-                        "folderPath": {
-                            "value": "@{dataset().folderPath}",
-                            "type": "Expression"
-                        },
-                        "fileName": {
-                            "value": "@{dataset().fileName}",
-                            "type": "Expression"
+                        dataset {
+                            referenceName = azurerm_data_factory_dataset_azure_blob.azure_blob_source_dataset.name
+                            type          = "DatasetReference"
                         },
                         "storeSettings": {
                             "type": "AzureBlobStorageReadSettings",
@@ -182,7 +186,10 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                             "referenceName": "linkedservice_snowflake",
                             "type": "LinkedServiceReference"
                         },
-                        "folderPath": "analytics/raw/raintree/rbi_referral.csv",
+                        dataset {
+                            referenceName = azurerm_data_factory_dataset_snowflake.snowflake_sink_dataset.name
+                            type          = "DatasetReference"
+                        },
                         "schema": [
                             {
                                 "name": "ID",
