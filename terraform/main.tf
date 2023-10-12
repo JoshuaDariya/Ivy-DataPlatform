@@ -48,6 +48,10 @@ resource "azurerm_data_factory" "adf" {
   name                = "Ivy-dataplatform-test"
   location            = azurerm_resource_group.rg_dev.location
   resource_group_name = azurerm_resource_group.rg_dev.name
+
+    identity {
+    type = "SystemAssigned"
+  }
 }
 
 data "azurerm_key_vault" "key_vault" {

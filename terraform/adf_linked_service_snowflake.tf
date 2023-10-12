@@ -21,6 +21,6 @@ resource "azurerm_data_factory_linked_service_snowflake" "linkedservice_snowflak
   connection_string = "jdbc:snowflake://JL89715.east-us-2.azure.snowflakecomputing.com/?user=LingHe &db=LANDING&warehouse=IVY_WH"
   key_vault_password {
     linked_service_name = azurerm_data_factory_linked_service_key_vault.snowflakecredential.name
-    secret_name         = data.azurerm_key_vault_secret.snowflakepassword.name
+    secret_name         = "snowflakeLoginPassword"
   }
 }
