@@ -39,7 +39,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     "type": "LinkedServiceReference"
                 },
                 "dataset": {
-                    "referenceName": "azurerm_data_factory_dataset_azure_blob.azure_blob_source_dataset.name",
+                    "referenceName": "rbi_referral_source",
                     "type": "DatasetReference"
                 },
                 "storeSettings": {
@@ -187,7 +187,7 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     "type": "LinkedServiceReference"
                 },          
                 "dataset": {
-                        "referenceName": "azurerm_data_factory_dataset_snowflake.snowflake_sink_datase.name",
+                        "referenceName": "rbi_referral_source",
                         "type": "DatasetReference"
                 },             
                 "schema": [
