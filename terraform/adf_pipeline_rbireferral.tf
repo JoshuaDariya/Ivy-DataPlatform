@@ -716,10 +716,12 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
             ],
             "outputs": [
                 {
-                    "referenceName": "azurerm_data_factory_dataset_snowflake.snowflake_sink_dataset",
+                    "referenceName": "azurerm_data_factory_dataset_snowflake.snowflake_sink_datase",
                     "type": "DatasetReference"
                 }
             ]
+        }
+    }
 ]
   JSON
 }
