@@ -611,7 +611,7 @@ resource "snowflake_table" "ingest_rbi_insurance_stage" {
 
   column {
     name = "_id"
-    type = "VARCHAR"
+    type = "INT"
   }
 
   column {
@@ -693,7 +693,7 @@ resource "snowflake_table" "ingest_rbi_insurance" {
 
   column {
     name = "_id"
-    type = "VARCHAR"
+    type = "INT"
   }
 
   column {
