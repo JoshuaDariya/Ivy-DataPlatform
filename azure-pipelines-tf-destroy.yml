@@ -42,14 +42,16 @@ stages:
               backendAzureRmContainerName: 'ivy-tf-container'
               backendAzureRmKey: 'tf/terraform.tfstate'
 
-          
+
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
-              command: 'destroy'
+              command: 'plan'
               workingDirectory: 'terraform'
-              commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user) $(ADDRESS_AND_ID)'
+              commandOptions: '-destroy  -target="snowflake_table.ingest_ivyfotoexport" -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+
+          
           
 
           
