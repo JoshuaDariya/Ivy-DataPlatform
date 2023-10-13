@@ -42,13 +42,14 @@ stages:
               backendAzureRmContainerName: 'ivy-tf-container'
               backendAzureRmKey: 'tf/terraform.tfstate'
 
+          
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
-              command: 'custom'
+              command: 'destroy'
               workingDirectory: 'terraform'
-              customCommand: 'import'
               commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user) $(ADDRESS_AND_ID)'
-              outputTo: 'console'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+          
+
           
