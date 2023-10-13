@@ -64,8 +64,8 @@ stages:
               provider: 'azurerm'
               command: 'custom'
               workingDirectory: 'terraform'
-              customCommand: 'state push'
-              commandOptions: 'errored.tfstate'
+              customCommand: 'state'
+              commandOptions: 'push errored.tfstate'
               outputTo: 'console'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
           
