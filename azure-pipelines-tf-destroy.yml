@@ -1,0 +1,54 @@
+# Starter pipeline
+
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: TFvars
+
+stages:
+  - stage: TerraformInstall
+    displayName: Install Terraform
+    jobs:
+      - job: TFinstall
+        displayName: Install Terraform
+        steps:
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
+              
+
+  - stage: TerraformInitImport
+    displayName: Terraform Init Import
+    jobs:
+      - job: TFinit
+        displayName: Terraform Init import
+        steps:
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: 'terraform'
+              backendServiceArm: 'Ivy Dev Data Platform'
+              backendAzureRmResourceGroupName: 'rg-ivydataplatform-prod-eastus'
+              backendAzureRmStorageAccountName: 'stivylakehouseprod'
+              backendAzureRmContainerName: 'ivy-tf-container'
+              backendAzureRmKey: 'tf/terraform.tfstate'
+
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'custom'
+              workingDirectory: 'terraform'
+              customCommand: 'import'
+              commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user) $(ADDRESS_AND_ID)'
+              outputTo: 'console'
+              environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+          
