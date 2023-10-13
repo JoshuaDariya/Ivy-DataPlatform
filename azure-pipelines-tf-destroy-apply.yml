@@ -43,20 +43,30 @@ stages:
               backendAzureRmKey: 'tf/terraform.tfstate'
 
 
-          - task: TerraformTaskV4@4
-            inputs:
-              provider: 'azurerm'
-              command: 'plan'
-              workingDirectory: 'terraform'
-              commandOptions: '-destroy -lock=false -target="$(TARGET)" -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
-              environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+          # - task: TerraformTaskV4@4
+          #   inputs:
+          #     provider: 'azurerm'
+          #     command: 'plan'
+          #     workingDirectory: 'terraform'
+          #     commandOptions: '-destroy -lock=false -target="$(TARGET)" -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+          #     environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
+
+          # - task: TerraformTaskV4@4
+          #   inputs:
+          #     provider: 'azurerm'
+          #     command: 'destroy'
+          #     workingDirectory: 'terraform'
+          #     commandOptions: '-lock=false -target="$(TARGET)" -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+          #     environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
 
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
-              command: 'destroy'
+              command: 'custom'
               workingDirectory: 'terraform'
-              commandOptions: '-lock=false -target="$(TARGET)" -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              customCommand: 'state push'
+              commandOptions: 'errored.tfstate'
+              outputTo: 'console'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
           
 
