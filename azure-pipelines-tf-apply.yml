@@ -48,7 +48,7 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'terraform'
-              commandOptions: '-var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              commandOptions: '-lock=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
 
 
