@@ -58,7 +58,7 @@ stages:
               command: 'apply'
               workingDirectory: 'terraform'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-              commandOptions: '-input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              commandOptions: '-lock=false -input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
 
 
           
