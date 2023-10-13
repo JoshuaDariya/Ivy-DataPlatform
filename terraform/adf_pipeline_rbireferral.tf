@@ -31,16 +31,20 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                     "secureOutput": false,
                     "secureInput": false
                 },
+        "inputs": {
+            "referenceName": "rbi_referral_source",
+            "type": "DatasetReference"
+        },
+         "outputs": {
+            "referenceName": "rbi_referral_destination",
+            "type": "DatasetReference"
+        },
         "typeProperties": {
             "source": {
                 "type": "DelimitedTextSource",
                 "linkedServiceName": {
                     "referenceName": "linkedservice_azureblobstorage",
                     "type": "LinkedServiceReference"
-                },
-                "dataset": {
-                    "referenceName": "rbi_referral_source",
-                    "type": "DatasetReference"
                 },
                 "storeSettings": {
                     "type": "AzureBlobStorageReadSettings",
@@ -185,10 +189,6 @@ resource "azurerm_data_factory_pipeline" "pipeline_rib_referral" {
                 "linkedServiceName": {
                     "referenceName": "linkedservice_snowflake",
                     "type": "LinkedServiceReference"
-                },          
-                "dataset": {
-                        "referenceName": "rbi_referral_destination",
-                        "type": "DatasetReference"
                 },             
                 "schema": [
                     {
