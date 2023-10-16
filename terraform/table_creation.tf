@@ -766,3 +766,40 @@ resource "snowflake_table" "ingest_rbi_insurance" {
     type = "VARCHAR"
   }
 }
+
+resource "snowflake_table" "ingest_rbi_aptype" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_APTYPE"
+  change_tracking     = true
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visit_type"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "slot"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "limit_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "databasename"
+    type = "VARCHAR"
+  }
+}
