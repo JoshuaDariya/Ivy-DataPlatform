@@ -235,34 +235,34 @@ resource "azurerm_resource_group_template_deployment" "armDeployment" {
                                 "type": "string"
                             },
                             {
-#                               "name": "Prop_2",
+                                "name": "Prop_2",
                                 "type": "string"
-#                           },
-#                           {
-#                               "name": "Prop_3",
+                            },
+                            {
+                                "name": "Prop_3",
                                 "type": "string"
-#                           },
-#                           {
-#                               "name": "Prop_4",
+                            },
+                            {
+                                "name": "Prop_4",
                                 "type": "string"
-#                           },
-#                           {
-#                               "name": "Prop_5",
+                            },
+                            {
+                                "name": "Prop_5",
                                 "type": "string"
-#                           }
+                            }
                         ],
                         "typeProperties": {
                             "format": {
                                 "formatSettings": {
-                #                     "type": "DelimitedTextReadSettings",
-                #                     "skipLineCount": 0
-                #                 },
+                                      "type": "DelimitedTextReadSettings",
+                                      "skipLineCount": 0
+                                  },
                                 "columnDelimiter": ";",
-                #               "rowDelimiter": "\n",
-                #               "encodingName": "iso-8859-1",
-                #               "escapeChar": "\\",
-                #               "firstRowAsHeader": false,
-                #               "quoteChar": "",
+                                "rowDelimiter": "\n",
+                                "encodingName": "iso-8859-1",
+                                "escapeChar": "\\",
+                                "firstRowAsHeader": false,
+                                "quoteChar": "",
                             },
                             "folderPath": "[concat(parameters('blobContainer'), '/', parameters('inputBlobFolder'), '/')]",
                             "fileName": "[parameters('inputBlobName')]"
