@@ -34,29 +34,41 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "rg_dev" {
+//---------------- AZURE DW BLOB ACCOUNT-------------------------
+resource "azurerm_resource_group" "rg_dw_dev" {
+    location = "East US"
+    name = "Ivy-DW-DEV"
+}
+
+# Import the existing resource into Terraform's state
+data "azurerm_resource_group" "imported_rg_dw_dev" {
+name     = "Ivy-DW-DEV"
+}
+
+data "azurerm_storage_account" "dw_storage_account" {
+  name                     = "ivydwstoragedev"
+  resource_group_name = data.azurerm_resource_group.dataplatform.name
+}
+
+output "storage_account_tier" {
+  value = data.azurerm_storage_account.dw_storage_account.account_tier
+}
+
+//-------------- AZURE Dataplatform Resource Group-----------------
+resource "azurerm_resource_group" "rg_dataplatform_dev" {
     location = "East US"
     name = "rg-ivydataplatform-dev-eastus"
 }
 
 # Import the existing resource into Terraform's state
-data "azurerm_resource_group" "imported_rg_dev" {
+data "azurerm_resource_group" "imported_rg_dataplatform_dev" {
 name     = "rg-ivydataplatform-dev-eastus"
-}
-
-data "azurerm_storage_account" "storage_account" {
-  name                     = "ivydwstoragedev"
-  resource_group_name = data.azurerm_resource_group.imported_rg_dev.name
-}
-
-output "storage_account_tier" {
-  value = data.azurerm_storage_account.storage_account.account_tier
 }
 
 resource "azurerm_data_factory" "adf" {
   name                = "Ivy-dataplatform-test"
-  location            = azurerm_resource_group.rg_dev.location
-  resource_group_name = azurerm_resource_group.rg_dev.name
+  location            = azurerm_resource_group.rg_dataplatform_dev.location
+  resource_group_name = azurerm_resource_group.rg_dataplatform_dev.name
 
     identity {
     type = "SystemAssigned"
