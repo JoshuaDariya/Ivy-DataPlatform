@@ -112,15 +112,62 @@ resource "azurerm_resource_group_template_deployment" "armDeployment" {
             "metadata": {
             "description": "Snowflake password"
         },
+        "vaults_ivy_kv_lakehouse_dev_name": {
+            "defaultValue": "ivy-kv-lakehouse-dev",
+            "type": "String"
+        }
     },
     "variables": {
         "azureStorageLinkedServiceName": "AzureBlobStorage_Snowflake",
         "snowflakeLinkedServiceName": "Azure_Snowflake",
         "inputDatasetName": "azure_blob_source_dataset",
         "outputDatasetName": "snowflake_sink_dataset",
-        "pipelineName": "copy_rbireferral_to_snowflake"
+        "pipelineName": "copy_rbireferral_to_snowflake",
+        "tenant_id": "04d6e0a5-c077-4729-a90e-9790d11d2389",
+        "object_id": "163c85c7-05fa-4c43-adda-fd2752302d02"
     },
     "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2023-02-01",
+            "name": "[parameters('vaults_ivy_kv_lakehouse_dev_name')]",
+            "location": "eastus",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[variables('tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[variables('object_id')]",
+                        "permissions": {
+                            "certificates": [
+                                "get",
+                                "list"
+                            ],
+                            "keys": [
+                                "get",
+                                "list"
+                            ],
+                            "secrets": [
+                                "get",
+                                "list"
+                            ]
+                        }
+                    }
+                ],
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": false,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 90,
+                "vaultUri": "[concat('https://', parameters('vaults_ivy_kv_lakehouse_dev_name'), '.vault.azure.net/')]",
+                "provisioningState": "Succeeded",
+                "publicNetworkAccess": "Enabled"
+            }
+        },
         {
             "type": "Microsoft.DataFactory/factories",
             "apiVersion": "2020-05-01",
