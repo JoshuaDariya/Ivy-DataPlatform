@@ -30,7 +30,7 @@ resource "snowflake_table" "ingest_ivyfotoexport" {
   }
 
   column {
-    name = id
+    name = "id"
     type = "VARCHAR"
   }
 
