@@ -17,7 +17,7 @@ resource "azurerm_data_factory_dataset_snowflake" "snowflake_sink_dataset" {
 
 resource "azurerm_resource_group_template_deployment" "armDeployment" {
   name                = "adf_arm_deploy"
-  resource_group_name = data.azurerm_resource_group.imported_rg_dataplatform_dev.name
+  resource_group_name = azurerm_resource_group.rg_dataplatform_dev.name
   deployment_mode     = "Incremental"
     
   template_content =  <<TEMPLATE
