@@ -35,10 +35,10 @@ provider "azurerm" {
 }
 
 //---------------- AZURE DW BLOB ACCOUNT-------------------------
-resource "azurerm_resource_group" "rg_dw_dev" {
-    location = "East US"
-    name = "Ivy-DW-DEV"
-}
+# resource "azurerm_resource_group" "rg_dw_dev" {
+#     location = "East US"
+#     name = "Ivy-DW-DEV"
+# }
 
 # Import the existing resource into Terraform's state
 # data "azurerm_resource_group" "imported_rg_dw_dev" {
@@ -55,10 +55,10 @@ resource "azurerm_resource_group" "rg_dw_dev" {
 # }
 
 //-------------- AZURE Dataplatform Resource Group-----------------
-resource "azurerm_resource_group" "rg_dataplatform_dev" {
-    location = "East US"
-    name = "rg-ivydataplatform-dev-eastus"
-}
+# resource "azurerm_resource_group" "rg_dataplatform_dev" {
+#     location = "East US"
+#     name = "rg-ivydataplatform-dev-eastus"
+# }
 
 # Import the existing resource into Terraform's state
 data "azurerm_resource_group" "imported_rg_dataplatform_dev" {
