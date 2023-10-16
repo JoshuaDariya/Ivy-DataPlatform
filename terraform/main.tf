@@ -47,7 +47,7 @@ name     = "Ivy-DW-DEV"
 
 data "azurerm_storage_account" "dw_storage_account" {
   name                     = "ivydwstoragedev"
-  resource_group_name = data.azurerm_resource_group.dataplatform.name
+  resource_group_name = data.azurerm_resource_group.imported_rg_dw_dev.name
 }
 
 output "storage_account_tier" {
@@ -78,7 +78,7 @@ resource "azurerm_data_factory" "adf" {
 
 data "azurerm_key_vault" "key_vault" {
   name                = "ivy-kv-lakehouse-dev"
-  resource_group_name = azurerm_resource_group.rg_dev.name
+  resource_group_name = azurerm_resource_group.rg_dataplatform_dev.name
 }
 
 data "azurerm_client_config" "current" {
