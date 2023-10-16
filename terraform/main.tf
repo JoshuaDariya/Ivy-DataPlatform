@@ -67,8 +67,8 @@ name     = "rg-ivydataplatform-dev-eastus"
 
 resource "azurerm_data_factory" "adf" {
   name                = "Ivy-dataplatform-test"
-  location            = azurerm_resource_group.rg_dataplatform_dev.location
-  resource_group_name = azurerm_resource_group.rg_dataplatform_dev.name
+  location            = data.azurerm_resource_group.imported_rg_dataplatform_dev.location
+  resource_group_name = data.azurerm_resource_group.imported_rg_dataplatform_dev.name
 
     identity {
     type = "SystemAssigned"
@@ -78,7 +78,7 @@ resource "azurerm_data_factory" "adf" {
 
 data "azurerm_key_vault" "key_vault" {
   name                = "ivy-kv-lakehouse-dev"
-  resource_group_name = azurerm_resource_group.rg_dataplatform_dev.name
+  resource_group_name = data.azurerm_resource_group.imported_rg_dataplatform_dev.name
 }
 
 data "azurerm_client_config" "current" {
