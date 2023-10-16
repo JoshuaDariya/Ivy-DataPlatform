@@ -46,7 +46,7 @@ name     = "rg-ivydataplatform-dev-eastus"
 
 data "azurerm_storage_account" "storage_account" {
   name                     = "ivydwstoragedev"
-  resource_group_name = data.azurerm_resource_group.rg_dev.name
+  resource_group_name = data.azurerm_resource_group.imported_rg_dev.name
 }
 
 output "storage_account_tier" {
