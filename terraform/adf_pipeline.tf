@@ -258,7 +258,7 @@ resource "azurerm_resource_group_template_deployment" "armDeployment" {
                                       "skipLineCount": 0
                                   },
                                 "columnDelimiter": ";",
-                                "rowDelimiter": "\n",
+                                "rowDelimiter": "\\n",
                                 "encodingName": "iso-8859-1",
                                 "escapeChar": "\\",
                                 "firstRowAsHeader": false,
