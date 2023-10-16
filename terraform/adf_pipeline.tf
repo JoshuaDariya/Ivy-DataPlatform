@@ -45,7 +45,7 @@ resource "azurerm_resource_group_template_deployment" "armDeployment" {
         },
         "azureStorage_connectionString": {
             "type": "SecureString",
-            "defaultValue": "${data.azurerm_storage_account.dw_storage_account.primary_connection_string}",
+            "defaultValue": "https://ivydwstoragedev.blob.core.windows.net/analytics/",
             "metadata": {
                 "description": "Connection string for the Azure Storage account."
             }

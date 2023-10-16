@@ -41,18 +41,18 @@ resource "azurerm_resource_group" "rg_dw_dev" {
 }
 
 # Import the existing resource into Terraform's state
-data "azurerm_resource_group" "imported_rg_dw_dev" {
-name     = "Ivy-DW-DEV"
-}
+# data "azurerm_resource_group" "imported_rg_dw_dev" {
+# name     = "Ivy-DW-DEV"
+# }
 
-data "azurerm_storage_account" "dw_storage_account" {
-  name                     = "ivydwstoragedev"
-  resource_group_name = data.azurerm_resource_group.imported_rg_dw_dev.name
-}
+# data "azurerm_storage_account" "dw_storage_account" {
+#   name                     = "ivydwstoragedev"
+#   resource_group_name = data.azurerm_resource_group.imported_rg_dw_dev.name
+# }
 
-output "storage_account_tier" {
-  value = data.azurerm_storage_account.dw_storage_account.account_tier
-}
+# output "storage_account_tier" {
+#   value = data.azurerm_storage_account.dw_storage_account.account_tier
+# }
 
 //-------------- AZURE Dataplatform Resource Group-----------------
 resource "azurerm_resource_group" "rg_dataplatform_dev" {
