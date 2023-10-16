@@ -44,6 +44,15 @@ data "azurerm_resource_group" "imported_rg_dev" {
 name     = "rg-ivydataplatform-dev-eastus"
 }
 
+data "azurerm_storage_account" "storage_account" {
+  name                     = "ivydwstoragedev"
+  resource_group_name = data.azurerm_resource_group.rg_dev.name
+}
+
+output "storage_account_tier" {
+  value = data.azurerm_storage_account.storage_account.account_tier
+}
+
 resource "azurerm_data_factory" "adf" {
   name                = "Ivy-dataplatform-test"
   location            = azurerm_resource_group.rg_dev.location
@@ -52,6 +61,7 @@ resource "azurerm_data_factory" "adf" {
     identity {
     type = "SystemAssigned"
   }
+    
 }
 
 data "azurerm_key_vault" "key_vault" {
@@ -68,15 +78,15 @@ resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
   object_id    = azurerm_data_factory.adf.identity[0].principal_id
 
   key_permissions = [
-    "Get",
+    "Get", "List",
   ]
 
   secret_permissions = [
-    "Get",
+    "Get", "List",
   ]
 
   certificate_permissions = [
-    "Get",
+    "Get", "List",
   ]
 }
 
