@@ -30,6 +30,11 @@ resource "snowflake_table" "ingest_ivyfotoexport" {
   }
 
   column {
+    name = id
+    type = "VARCHAR"
+  }
+
+  column {
     name = "patient"
     type = "VARCHAR"
   }
