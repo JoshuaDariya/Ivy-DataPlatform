@@ -46,42 +46,31 @@ data "azurerm_resource_group" "imported_rg_dev" {
 name     = "rg-ivydataplatform-dev-eastus"
 }
 
-resource "azurerm_data_factory" "adf_dev" {
-  name                = "Ivy-dataplatform-snowflake"
-  location            = data.azurerm_resource_group.imported_rg_dev.location
-  resource_group_name = data.azurerm_resource_group.imported_rg_dev.name
+# data "azurerm_key_vault" "key_vault" {
+#   name                = "ivy-kv-dev"
+#   resource_group_name = data.azurerm_resource_group.imported_rg_dev.name
+# }
 
-    identity {
-    type = "SystemAssigned"
-  }
-    
-}
+# data "azurerm_client_config" "current" {
+# }
 
-data "azurerm_key_vault" "key_vault" {
-  name                = "ivy-kv-dev"
-  resource_group_name = data.azurerm_resource_group.imported_rg_dev.name
-}
+# resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
+#   key_vault_id = data.azurerm_key_vault.key_vault.id
+#   tenant_id    = data.azurerm_client_config.current.tenant_id
+#   object_id    = azurerm_data_factory.adf_dev.identity[0].principal_id
 
-data "azurerm_client_config" "current" {
-}
+#   key_permissions = [
+#     "Get", "List",
+#   ]
 
-resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = azurerm_data_factory.adf_dev.identity[0].principal_id
+#   secret_permissions = [
+#     "Get", "List",
+#   ]
 
-  key_permissions = [
-    "Get", "List",
-  ]
-
-  secret_permissions = [
-    "Get", "List",
-  ]
-
-  certificate_permissions = [
-    "Get", "List",
-  ]
-}
+#   certificate_permissions = [
+#     "Get", "List",
+#   ]
+# }
 
 
 // ------------- WAREHOUSE -----------------
