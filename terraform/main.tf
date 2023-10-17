@@ -55,20 +55,20 @@ provider "azurerm" {
 # }
 
 //-------------- AZURE Dataplatform Resource Group-----------------
-resource "azurerm_resource_group" "rg_dataplatform_dev" {
+resource "azurerm_resource_group" "rg_dev" {
     location = "East US"
     name = "rg-ivydataplatform-dev-eastus"
 }
 
 # Import the existing resource into Terraform's state
-data "azurerm_resource_group" "imported_rg_dataplatform_dev" {
+data "azurerm_resource_group" "imported_rg_dev" {
 name     = "rg-ivydataplatform-dev-eastus"
 }
 
-resource "azurerm_data_factory" "adf" {
+resource "azurerm_data_factory" "adf_dev" {
   name                = "Ivy-dataplatform-snowflake"
-  location            = azurerm_resource_group.rg_dataplatform_dev.location
-  resource_group_name = azurerm_resource_group.rg_dataplatform_dev.name
+  location            = azurerm_resource_group.rg_dev.location
+  resource_group_name = azurerm_resource_group.rg_dev.name
 
     identity {
     type = "SystemAssigned"
@@ -78,7 +78,7 @@ resource "azurerm_data_factory" "adf" {
 
 data "azurerm_key_vault" "key_vault" {
   name                = "ivy-kv-dev"
-  resource_group_name = azurerm_resource_group.rg_dataplatform_dev.name
+  resource_group_name = azurerm_resource_group.rg_dev.name
 }
 
 data "azurerm_client_config" "current" {
@@ -87,7 +87,7 @@ data "azurerm_client_config" "current" {
 resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = azurerm_data_factory.adf.identity[0].principal_id
+  object_id    = azurerm_data_factory.adf_dev.identity[0].principal_id
 
   key_permissions = [
     "Get", "List",
