@@ -4,16 +4,25 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory name",
+			"metadata": {
+				"type": "string",
+				"description": "Data Factory name"
+			},
 			"defaultValue": "Ivy-dataplatform-snowflake"
 		},
 		"Azure_Snowflake_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'Azure_Snowflake'"
+			"type": "securestring",
+			"metadata":  {
+				"type": "string",
+				"description": "Secure string for 'connectionString' of 'Azure_Snowflake'"
+			}
 		},
 		"AzureBlobStorage_Snowflake_sasUri": {
-			"type": "secureString",
-			"metadata": "Secure string for 'sasUri' of 'AzureBlobStorage_Snowflake'"
+			"type": "securestring",
+			"metadata":  {
+				"type": "string",
+				"description": "Secure string for 'sasUri' of 'AzureBlobStorage_Snowflake'"
+			}
 		},
 		"ivycasedataexportUpdateTrigger_properties_typeProperties_scope": {
 			"type": "string",
