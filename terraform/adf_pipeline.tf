@@ -15,12 +15,12 @@ resource "azurerm_data_factory_dataset_snowflake" "snowflake_sink_dataset" {
   table_name          = "RBI_REFERRAL"
 }
 
-resource "azurerm_resource_group_template_deployment" "armDeployment" {
+resource "azurerm_template_deployment" "armDeployment" {
   name                = "adf_arm_deploy"
   resource_group_name = azurerm_resource_group.rg_dataplatform_dev.name
   deployment_mode     = "Incremental"
     
-  template_content =  <<TEMPLATE
+  template_body =  <<DEPLOY
 { 
 
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
@@ -28,7 +28,7 @@ resource "azurerm_resource_group_template_deployment" "armDeployment" {
     "parameters": {
         "dataFactoryName": {
             "type": "String",
-              "defaultValue": "Ivy-dataplatform-test",
+              "defaultValue": "Ivy-dataplatform-snowflake",
             "metadata": {
                 "description": "Name of the data factory. Must be globally unique."
             }
@@ -366,5 +366,5 @@ resource "azurerm_resource_group_template_deployment" "armDeployment" {
     ]
 }
  
-TEMPLATE
+DEPLOY
 }
