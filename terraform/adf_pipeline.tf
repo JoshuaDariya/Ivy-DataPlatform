@@ -1,6 +1,6 @@
 resource "azurerm_template_deployment" "armDeployment" {
   name                = "adf_arm_deploy"
-  resource_group_name = azurerm_resource_group.rg_dev.name
+  resource_group_name = data.azurerm_resource_group.imported_rg_dev.name
   deployment_mode     = "Incremental"
     
   template_body =  <<DEPLOY

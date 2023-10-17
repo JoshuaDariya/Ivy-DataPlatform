@@ -48,8 +48,8 @@ name     = "rg-ivydataplatform-dev-eastus"
 
 resource "azurerm_data_factory" "adf_dev" {
   name                = "Ivy-dataplatform-snowflake"
-  location            = azurerm_resource_group.rg_dev.location
-  resource_group_name = azurerm_resource_group.rg_dev.name
+  location            = data.azurerm_resource_group.imported_rg_dev.location
+  resource_group_name = data.azurerm_resource_group.imported_rg_dev.name
 
     identity {
     type = "SystemAssigned"
@@ -59,7 +59,7 @@ resource "azurerm_data_factory" "adf_dev" {
 
 data "azurerm_key_vault" "key_vault" {
   name                = "ivy-kv-dev"
-  resource_group_name = azurerm_resource_group.rg_dev.name
+  resource_group_name = data.azurerm_resource_group.imported_rg_dev.name
 }
 
 data "azurerm_client_config" "current" {
