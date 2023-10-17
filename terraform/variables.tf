@@ -79,15 +79,3 @@ variable "prod_role"{
 
   default = "SNOWFLAKEPROD"
 }
-
-variable "ivydwstorageSASToken" {
-  type = string
-
-  default = "ivydwstorageSASToken"
-}
-
-variable "snowflakeLoginPassword" {
-  type = string
-
-  default = "snowflakeLoginPassword"
-}
