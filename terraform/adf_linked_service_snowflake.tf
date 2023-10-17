@@ -10,13 +10,13 @@ output "snowflake_password" {
 
 resource "azurerm_data_factory_linked_service_key_vault" "snowflakecredential" {
   name            = "snowflakecredential"
-  data_factory_id = azurerm_data_factory.adf.id
+  data_factory_id = azurerm_data_factory.adf_dev.id
   key_vault_id    = data.azurerm_key_vault.key_vault.id
 }
 
 resource "azurerm_data_factory_linked_service_snowflake" "linkedservice_snowflake" {
   name            = "linkedservice_snowflake"
-  data_factory_id = azurerm_data_factory.adf.id
+  data_factory_id = azurerm_data_factory.adf_dev.id
 
   connection_string = "jdbc:snowflake://JL89715.east-us-2.azure.snowflakecomputing.com/?user=LingHe &db=LANDING&warehouse=IVY_WH"
   key_vault_password {
