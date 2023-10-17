@@ -1,20 +1,3 @@
-
-resource "azurerm_data_factory_dataset_azure_blob" "azure_blob_source_dataset" {
-  name                = "rbi_referral_source"
-  data_factory_id     = azurerm_data_factory.adf_dev.id
-  linked_service_name = azurerm_data_factory_linked_service_azure_blob_storage.linkedservice_azureblobstorage.name
-  path  = "analytics/raw/raintree"
-  filename = "rbi_referral.csv"
-}
-
-resource "azurerm_data_factory_dataset_snowflake" "snowflake_sink_dataset" {
-  name                = "rbi_referral_destination"
-  data_factory_id     = azurerm_data_factory.adf_dev.id
-  linked_service_name = azurerm_data_factory_linked_service_snowflake.linkedservice_snowflake.name
-  schema_name         = "RAINTREE"
-  table_name          = "RBI_REFERRAL"
-}
-
 resource "azurerm_template_deployment" "armDeployment" {
   name                = "adf_arm_deploy"
   resource_group_name = azurerm_resource_group.rg_dev.name
