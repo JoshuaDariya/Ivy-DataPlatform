@@ -113,7 +113,7 @@ resource "azurerm_template_deployment" "armDeployment" {
             "description": "Snowflake password"
         },
         "vaults_ivy_kv_lakehouse_dev_name": {
-            "defaultValue": "ivy-kv-lakehouse-dev",
+            "defaultValue": "ivy-kv-dev",
             "type": "String"
         }
     },

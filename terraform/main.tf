@@ -77,7 +77,7 @@ resource "azurerm_data_factory" "adf" {
 }
 
 data "azurerm_key_vault" "key_vault" {
-  name                = "ivy-kv-lakehouse-dev"
+  name                = "ivy-kv-dev"
   resource_group_name = azurerm_resource_group.rg_dataplatform_dev.name
 }
 
