@@ -1,6 +1,4 @@
 {
-	"contentVersion": "1.0.0.0",
-	"parameters": {
 		"factoryName": {
 			"value": "Ivy-dataplatform-snowflake"
 		},
@@ -25,5 +23,4 @@
 		"rbivisitUpdateTrigger_properties_typeProperties_scope": {
 			"value": "/subscriptions/cbecafd1-1b42-4db3-a26a-e2851ce44268/resourceGroups/Ivy-DW-DEV/providers/Microsoft.Storage/storageAccounts/ivydwstoragedev"
 		}
-	}
 }
