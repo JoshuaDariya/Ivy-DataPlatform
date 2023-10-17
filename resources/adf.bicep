@@ -1,5 +1,5 @@
 @description('Data Factory Name')
-param dataFactoryName string = 'Ivy-dataplatform-main'
+param dataFactoryName string = 'Ivy-adf-main'
 
 @description('Location of the data factory.')
 param location string = 'East US'
