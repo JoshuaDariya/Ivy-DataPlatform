@@ -6,7 +6,7 @@ targetScope = 'resourceGroup'
 param location string // TODO: Make the region config
 param storageAccountName string
 param storageAccountType string = 'Standard_LRS'
-param dataFactoryName string = 'Ivy-adf-main'
+param dataFactoryName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   name: storageAccountName
