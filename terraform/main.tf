@@ -2,7 +2,7 @@ terraform {
   required_providers {
     snowflake = {
       source  = "Snowflake-Labs/snowflake"
-      version = "~> 0.70"
+      version = "0.73"
     }
     azurerm = {
       source = "hashicorp/azurerm"
