@@ -23,7 +23,7 @@ terraform {
 provider "snowflake" {
   role = "ACCOUNTADMIN"
   account = var.account
-  username = var.username
+  user = var.username
   password = var.password
   region = var.region
 }
