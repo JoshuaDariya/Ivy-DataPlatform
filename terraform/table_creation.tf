@@ -808,3 +808,175 @@ database            = var.landing
     type = "VARCHAR"
   }
 }
+
+resource "snowflake_table" "ingest_rbi_patient" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_PATIENT"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientFirst"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientMiddle"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientLast"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientPn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientCity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientState"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientZip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientDob"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientSex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientPrcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientRefs"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientTphys"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientStatus"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientLoc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientEemp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientOccupation"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientMonthc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientOneID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasSSN"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasAddress"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasFirstN"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasLastN"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasPhoneH"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasPhoneW"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasPhoneC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PrefferedPhone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasEmail"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasPsw"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientHasPO"
+    type = "VARCHAR"
+  }
+}
