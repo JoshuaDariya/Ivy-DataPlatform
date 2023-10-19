@@ -1,7 +1,7 @@
-resource "snowflake_table" "ingest_ivyfotoexport" {
+resource "snowflake_table" "ingest_ivyfotoexport_stage" {
   database            = var.landing
   schema              = "RAINTREE"
-  name                = "IVYFOTOEXPORT"
+  name                = "Z_IVYFOTOEXPORT"
   change_tracking     = true
 
   column {
@@ -115,10 +115,10 @@ resource "snowflake_table" "ingest_ivyfotoexport" {
   }
 }
 
-resource "snowflake_table" "ingest_ivycasedataexport" {
+resource "snowflake_table" "ingest_ivycasedataexport_stage" {
   database            = var.landing
   schema              = "RAINTREE"
-  name                = "IVYCASEDATAEXPORT"
+  name                = "Z_IVYCASEDATAEXPORT"
   change_tracking     = true
 
 
