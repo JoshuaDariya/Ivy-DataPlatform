@@ -22,10 +22,9 @@ terraform {
 //------------- TERRAFORM ACCOUNT WITH SNOWFLAKE -----------------
 provider "snowflake" {
   role = "ACCOUNTADMIN"
-  account = var.account
+  account = "jl89715.east-us-2.azure"
   user = var.username
   password = var.password
-  region = var.region
 }
 
 //------------- TERRAFORM ACCOUNT WITH AZURE -----------------
