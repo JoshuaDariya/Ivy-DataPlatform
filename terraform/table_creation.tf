@@ -921,7 +921,7 @@ database            = var.landing
   }
 
   column {
-    name = "PatientOneID"
+    name = "ProviderOneID"
     type = "VARCHAR"
   }
 
