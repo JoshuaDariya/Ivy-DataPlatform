@@ -1945,7 +1945,7 @@ database            = var.landing
 
   column {
     name = "PatientName"
-    type = "INT"
+    type = "VARCHAR"
   }
 
   column {
@@ -2148,7 +2148,7 @@ database            = var.landing
 
   column {
     name = "PatientName"
-    type = "INT"
+    type = "VARCHAR"
   }
 
   column {
