@@ -1661,7 +1661,7 @@ database            = var.landing
 
   column {
     name = "ReferralState"
-    type = "INT"
+    type = "VARCHAR"
   }
 
   column {
@@ -1803,7 +1803,7 @@ database            = var.landing
 
   column {
     name = "ReferralState"
-    type = "INT"
+    type = "VARCHAR"
   }
 
   column {
