@@ -1600,7 +1600,7 @@ database            = var.landing
   change_tracking     = true
 
   column {
-    name = "id"
+    name = "_id"
     type = "INT"
   }
 
@@ -1742,7 +1742,7 @@ database            = var.landing
   change_tracking     = true
 
   column {
-    name = "id"
+    name = "_id"
     type = "INT"
   }
 
