@@ -2626,3 +2626,267 @@ database            = var.landing
     type = "VARCHAR"
   }
 }
+
+resource "snowflake_table" "ingest_rbi_provider" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_PROVIDER"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "INT"
+  }
+
+  column {
+    name = "ProviderCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderFirst"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderLast"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCredentials"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderAddr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderState"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderZip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderPhone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCell"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderFax"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Providerlic1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Providerlic2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Providerlic3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Providerlic4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderTaxid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderGuid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderTxnmycode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderGtxnmycode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCategory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "SupressBillingUntil"
+    type = "DATE"
+  }
+
+  column {
+    name = "EffectiveTo"
+    type = "DATE"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_provider_stage" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_PROVIDER"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "INT"
+  }
+
+  column {
+    name = "ProviderCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderFirst"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderLast"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCredentials"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderAddr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderState"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderZip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderPhone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCell"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderFax"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Providerlic1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Providerlic2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Providerlic3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Providerlic4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderTaxid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderGuid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderTxnmycode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderGtxnmycode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCategory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "SupressBillingUntil"
+    type = "DATE"
+  }
+
+  column {
+    name = "EffectiveTo"
+    type = "DATE"
+  }
+}
