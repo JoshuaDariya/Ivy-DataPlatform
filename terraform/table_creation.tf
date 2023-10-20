@@ -1421,6 +1421,868 @@ database            = var.landing
   }
 }
 
+resource "snowflake_table" "ingest_z_rbi_aptype" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_APTYPE"
+  change_tracking     = true
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visit_type"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "slot"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "limit_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "databasename"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_tablec_custom" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_TABLEC_CUSTOM"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "INT"
+  }
+
+  column {
+    name = "mcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "filter"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "effectivefrom"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "effectiveto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_modifiedby"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_modified"
+    type = "VARCHAR"
+  }
+  
+}
+
+resource "snowflake_table" "ingest_z_rbi_tablec_custom" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_TABLEC_CUSTOM"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "INT"
+  }
+
+  column {
+    name = "mcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "filter"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "effectivefrom"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "effectiveto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_modifiedby"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_modified"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_referral" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_REFERRAL"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "INT"
+  }
+
+  column {
+    name = "ReferralCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralFirst"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralLast"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralmi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralCredentials"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralSpecial"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralGroup"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralOrg"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralAddr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralAddr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralCity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralState"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralZip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralphone1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralphone2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralphone3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralContact"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralemail"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralpassword"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lic1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lic2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lic3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lic4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "taxcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "taxid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralName"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_rbi_referral" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_REFERRAL"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "INT"
+  }
+
+  column {
+    name = "ReferralCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralFirst"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralLast"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralmi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralCredentials"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralSpecial"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralGroup"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralOrg"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralAddr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralAddr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralCity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralState"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralZip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralphone1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralphone2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralphone3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralContact"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralemail"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referralpassword"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lic1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lic2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lic3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lic4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "taxcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "taxid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralName"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_scheduler" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_SCHEDULER"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "INT"
+  }
+
+  column {
+    name = "AppointGuid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CreateDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CreateDateTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ActionUser"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ActionDateTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppointmentDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "RescheduleAppointmentDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppointmentTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppointmentDateTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppointmentType"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Owner"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppStatus"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CheckIn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CheckOut"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CancelReason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CancelComment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CaseIndex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CaseCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CasePrefix"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Minutes"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LastMinuteReSchedule"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LastMinuteCancel"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "NewPatientAppoint"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "HistoryRecord"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TicketIndex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "isSigned"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "requiresCosign"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "appointmentComment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "signDate"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "CreatedBy"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noteDesc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "paidIcon"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "icon"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_rbi_scheduler" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_SCHEDULER"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "INT"
+  }
+
+  column {
+    name = "AppointGuid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CreateDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CreateDateTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ActionUser"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ActionDateTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppointmentDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "RescheduleAppointmentDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppointmentTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppointmentDateTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppointmentType"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PatientName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Owner"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReferralCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AppStatus"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CheckIn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CheckOut"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CancelReason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CancelComment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CaseIndex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CaseCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CasePrefix"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Minutes"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LastMinuteReSchedule"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "LastMinuteCancel"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "NewPatientAppoint"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "HistoryRecord"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TicketIndex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "isSigned"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "requiresCosign"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "appointmentComment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "signDate"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "CreatedBy"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noteDesc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "paidIcon"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "icon"
+    type = "VARCHAR"
+  }
+}
+
 resource "snowflake_table" "ingest_rbi_patient" {
 database            = var.landing
   schema              = "RAINTREE"
