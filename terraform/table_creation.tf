@@ -2890,3 +2890,208 @@ database            = var.landing
     type = "DATE"
   }
 }
+
+resource "snowflake_table" "ingest_ivylocationsreport" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "IVY_LOCATIONS_REPORT"
+  change_tracking     = true
+
+  column {
+    name = "LocationCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AccountingCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AccountingName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DepartmentCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationAddress"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationCity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationState"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationZip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationTerritory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationRegion"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationArea"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationTaxID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationNPI"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "goLiveDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "effectiveto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationBillingName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationStatementName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "GreatPlainsID"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_ivylocationsreport" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_IVY_LOCATIONS_REPORT"
+  change_tracking     = true
+
+  column {
+    name = "LocationCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AccountingCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AccountingName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DepartmentCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationAddress"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationCity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationState"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationZip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationTerritory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationRegion"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationArea"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationTaxID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationNPI"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "goLiveDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "effectiveto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationBillingName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LocationStatementName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "GreatPlainsID"
+    type = "VARCHAR"
+  }
+}
+ 
