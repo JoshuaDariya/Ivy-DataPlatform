@@ -24,6 +24,9 @@ param timeGrain string = 'Monthly'
 @description('The start date must be first of the month in YYYY-MM-DD format. Future start date should not be more than three months. Past start date should be selected within the timegrain preiod.')
 param startDate string = '2023-08-01'
 
+@description('The start date must be first of the month in YYYY-MM-DD format. Future start date should not be more than three months. Past start date should be selected within the timegrain preiod.')
+param adfStartDate string = '2023-10-01'
+
 @description('The end date for the budget in YYYY-MM-DD format. If not provided, we default this to 10 years from the start date.')
 param endDate string = '2024-08-01'
 
@@ -70,7 +73,7 @@ resource adfBudget 'Microsoft.Consumption/budgets@2021-10-01' = {
   name: adf_budgetName
   properties: {
     timePeriod: {
-      startDate: startDate
+      startDate: adfStartDate
       endDate: endDate
     }
     timeGrain: timeGrain
