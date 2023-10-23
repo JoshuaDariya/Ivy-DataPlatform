@@ -4,7 +4,7 @@ targetScope = 'resourceGroup'
 
 @description('Name of the Budget. It should be unique within a resource group.')
 param budgetName string = 'Ivy Data Platform Test Budget'
-param adf_budgetName string = 'IVY Data Factory Budget'
+param adf_budgetName string = 'Ivy Data Factory Budget'
 
 @description('The total amount of cost or usage to track with the budget')
 param amount int = 1000
