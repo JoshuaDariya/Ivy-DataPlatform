@@ -1573,7 +1573,7 @@ database            = var.landing
   }
 
   column {
-    name = "PrefferedPhone"
+    name = "PreferredPhone"
     type = "VARCHAR"
   }
 
@@ -1745,7 +1745,7 @@ database            = var.landing
   }
 
   column {
-    name = "PrefferedPhone"
+    name = "PreferredPhone"
     type = "VARCHAR"
   }
 
