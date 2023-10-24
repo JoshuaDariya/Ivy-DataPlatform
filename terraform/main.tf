@@ -2,7 +2,7 @@ terraform {
   required_providers {
     snowflake = {
       source  = "Snowflake-Labs/snowflake"
-      version = "~> 0.70"
+      version = "0.73"
     }
     azurerm = {
       source = "hashicorp/azurerm"
@@ -34,48 +34,10 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "rg_dev" {
-    location = "East US"
-    name = "rg-ivydataplatform-dev-eastus"
-}
-
 # Import the existing resource into Terraform's state
 data "azurerm_resource_group" "imported_rg_dev" {
 name     = "rg-ivydataplatform-dev-eastus"
 }
-
-resource "azurerm_data_factory" "adf" {
-  name                = "Ivy-dataplatform-test"
-  location            = azurerm_resource_group.rg_dev.location
-  resource_group_name = azurerm_resource_group.rg_dev.name
-}
-
-data "azurerm_key_vault" "key_vault" {
-  name                = "ivy-kv-lakehouse-dev"
-  resource_group_name = azurerm_resource_group.rg_dev.name
-}
-
-data "azurerm_client_config" "current" {
-}
-
-resource "azurerm_key_vault_access_policy" "terraform_sp_access" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
-
-  key_permissions = [
-    "Get",
-  ]
-
-  secret_permissions = [
-    "Get",
-  ]
-
-  certificate_permissions = [
-    "Get",
-  ]
-}
-
 
 // ------------- WAREHOUSE -----------------
 // resource "snowflake_warehouse" "warehouse" {

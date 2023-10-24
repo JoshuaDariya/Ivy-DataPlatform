@@ -20,16 +20,16 @@ stages:
       - job: TFinstall
         displayName: Install Terraform
         steps:
-          - task: TerraformInstaller@1
-            inputs:
-              terraformVersion: 'latest'
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
               
 
-  - stage: TerraformInitPlanApply
-    displayName: Terraform Init Plan Apply
+  - stage: TerraformInitImport
+    displayName: Terraform Init Import
     jobs:
       - job: TFinit
-        displayName: Terraform Init Plan Apply
+        displayName: Terraform Init import
         steps:
           - task: TerraformTaskV4@4
             inputs:
@@ -48,18 +48,10 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'terraform'
-              commandOptions: '-lock=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
+              commandOptions: '-destroy -lock=false -target="$(TARGET)" -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-
-
-          - task: TerraformTaskV4@4
-            inputs:
-              provider: 'azurerm'
-              command: 'apply'
-              workingDirectory: 'terraform'
-              environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
-              commandOptions: '-lock=false -input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user)'
-
 
           
+          
 
+          
