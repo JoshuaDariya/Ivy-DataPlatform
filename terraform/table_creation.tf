@@ -1,7 +1,7 @@
 resource "snowflake_table" "ingest_ivyfotoexport_stage" {
   database            = var.landing
   schema              = "RAINTREE"
-  name                = "Z_IVYFOTOEXPORT"
+  name                = "Z_IVY_FOTO_EXPORT"
   change_tracking     = true
 
   column {
@@ -118,7 +118,7 @@ resource "snowflake_table" "ingest_ivyfotoexport_stage" {
 resource "snowflake_table" "ingest_ivyfotoexport" {
   database            = var.landing
   schema              = "RAINTREE"
-  name                = "IVYFOTOEXPORT"
+  name                = "IVY_FOTO_EXPORT"
   change_tracking     = true
 
   column {
@@ -236,7 +236,7 @@ resource "snowflake_table" "ingest_ivyfotoexport" {
 resource "snowflake_table" "ingest_ivycasedataexport_stage" {
   database            = var.landing
   schema              = "RAINTREE"
-  name                = "Z_IVYCASEDATAEXPORT"
+  name                = "Z_IVY_CASE_DATA_EXPORT"
   change_tracking     = true
 
 
@@ -730,7 +730,7 @@ resource "snowflake_table" "ingest_ivycasedataexport_stage" {
 resource "snowflake_table" "ingest_ivycasedataexport" {
   database            = var.landing
   schema              = "RAINTREE"
-  name                = "IVYCASEDATAEXPORT"
+  name                = "IVY_CASE_DATA_EXPORT"
   change_tracking     = true
 
 
@@ -2435,7 +2435,7 @@ database            = var.landing
   }
 
   column {
-    name = "PrefferedPhone"
+    name = "PreferredPhone"
     type = "VARCHAR"
   }
 
@@ -2607,7 +2607,7 @@ database            = var.landing
   }
 
   column {
-    name = "PrefferedPhone"
+    name = "PreferredPhone"
     type = "VARCHAR"
   }
 
