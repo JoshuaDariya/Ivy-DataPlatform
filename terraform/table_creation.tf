@@ -2891,7 +2891,7 @@ database            = var.landing
   }
 }
 
-resource "snowflake_table" "ingest_ivylocationsreport" {
+resource "snowflake_table" "ingest_ivy_locations_report_export" {
 database            = var.landing
   schema              = "RAINTREE"
   name                = "IVY_LOCATIONS_REPORT"
@@ -2993,7 +2993,7 @@ database            = var.landing
   }
 }
 
-resource "snowflake_table" "ingest_z_ivylocationsreport" {
+resource "snowflake_table" "ingest_z_ivy_locations_report_export" {
 database            = var.landing
   schema              = "RAINTREE"
   name                = "Z_IVY_LOCATIONS_REPORT"
