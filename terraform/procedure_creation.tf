@@ -69,14 +69,14 @@ resource "snowflake_procedure" "delete_row" {
   execute_as          = "caller"
   return_behavior     = "IMMUTABLE"
   statement           = <<EOT
-try {
-    var sql_command = "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN1_NAME + " = ? AND " + COLUMN2_NAME + " = ?";
-    var statement1 = snowflake.createStatement({sqlText: sql_command, binds: [VALUE1_TO_MATCH, VALUE2_TO_MATCH]});
-    var result = statement1.execute();
-    var rowCount = statement1.getRowCount();
-    return rowCount + " row(s) deleted successfully.";
-  } catch (err) {
-    return "Error: " + err;
-}
+    try {
+        var sql_command = "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN1_NAME + " = ? AND " + COLUMN2_NAME + " = ?";
+        var statement1 = snowflake.createStatement({sqlText: sql_command, binds: [VALUE1_TO_MATCH, VALUE2_TO_MATCH]});
+        var result = statement1.execute();
+        var rowCount = statement1.getRowCount();
+        return rowCount + " row(s) deleted successfully.";
+    } catch (err) {
+      return "Error: " + err;
+    }
 EOT
 }
