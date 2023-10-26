@@ -27,7 +27,7 @@ resource "snowflake_grant_privileges_to_role" "loader_access_schema_grant" {
   }
 }
 
-//--------- LANDING ACCESS TO CURRENT TABLES, VIEWS --------
+//--------- LANDING ACCESS TO CURRENT TABLES, VIEWS, AND PROCEDURES --------
 
 resource "snowflake_grant_privileges_to_role" "loader_access_all_tables_grant" {
   privileges = ["SELECT", "INSERT"]
@@ -51,8 +51,15 @@ resource "snowflake_grant_privileges_to_role" "loader_access_all_views_grant" {
   }
 }
 
+resource "snowflake_procedure_grant" "loader_access_all_procedures" {
+  database_name  = var.landing
+  schema_name = "RAINTREE"
+  privilege   = "OWNERSHIP"
+  roles       = [var.loader_role]
+  on_all   = true
+}
 
-// ------------ FUTURE TABLES AND VIEWS -----------------
+// ------------ FUTURE TABLES, VIEWS, AND PROCEDURES -----------------
 resource "snowflake_grant_privileges_to_role" "loader_access_future_tables_landing" {
   privileges = ["SELECT","INSERT"]
   role_name  = var.loader_role
@@ -74,57 +81,10 @@ resource "snowflake_grant_privileges_to_role" "loader_access_future_views_landin
   }
 }
 
-//--------- LANDING ACCESS TO PROCEDURES --------
-resource "snowflake_procedure_grant" "loader_grant_load_data" {
+resource "snowflake_procedure_grant" "loader_access_future_procedures" {
   database_name  = var.landing
   schema_name = "RAINTREE"
-  procedure_name = snowflake_procedure.load_data.name
-  arguments {
-    name = "Source_Table"
-    type = "varchar"
-  }
-  arguments {
-    name = "Destination_Table"
-    type = "varchar"
-  }
-  return_type = "number"
   privilege   = "OWNERSHIP"
   roles       = [var.loader_role]
-
-  lifecycle {
-    replace_triggered_by = [snowflake_procedure.load_data]
-  }
-}
-
-resource "snowflake_procedure_grant" "loader_grant_delete_row" {
-  database_name  = var.landing
-  schema_name = "RAINTREE"
-  procedure_name = snowflake_procedure.delete_row.name
-  arguments {
-    name = "TABLE_NAME"
-    type = "varchar"
-  }
-  arguments {
-    name = "COLUMN1_NAME"
-    type = "varchar"
-  }
-  arguments {
-    name = "VALUE1_TO_MATCH"
-    type = "varchar"
-  }
-  arguments {
-    name = "COLUMN2_NAME"
-    type = "varchar"
-  }
-  arguments {
-    name = "VALUE2_TO_MATCH"
-    type = "varchar"
-  }
-  return_type = "varchar"
-  privilege   = "OWNERSHIP"
-  roles       = [var.loader_role]
-
-  lifecycle {
-    replace_triggered_by = [snowflake_procedure.delete_row]
-  }
+  on_future   = true
 }
