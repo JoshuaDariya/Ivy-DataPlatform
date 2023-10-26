@@ -73,3 +73,58 @@ resource "snowflake_grant_privileges_to_role" "loader_access_future_views_landin
     }
   }
 }
+
+//--------- LANDING ACCESS TO PROCEDURES --------
+resource "snowflake_procedure_grant" "loader_grant_load_data" {
+  database_name  = var.landing
+  schema_name = "RAINTREE"
+  procedure_name = snowflake_procedure.load_data.name
+  arguments {
+    name = "Source_Table"
+    type = "varchar"
+  }
+  arguments {
+    name = "Destination_Table"
+    type = "varchar"
+  }
+  return_type = "number"
+  privilege   = "OWNERSHIP"
+  roles       = [var.loader_role]
+
+  lifecycle {
+    replace_triggered_by = [snowflake_procedure.load_data]
+  }
+}
+
+resource "snowflake_procedure_grant" "loader_grant_delete_row" {
+  database_name  = var.landing
+  schema_name = "RAINTREE"
+  procedure_name = snowflake_procedure.delete_row.name
+  arguments {
+    name = "TABLE_NAME"
+    type = "varchar"
+  }
+  arguments {
+    name = "COLUMN1_NAME"
+    type = "varchar"
+  }
+  arguments {
+    name = "VALUE1_TO_MATCH"
+    type = "varchar"
+  }
+  arguments {
+    name = "COLUMN2_NAME"
+    type = "varchar"
+  }
+  arguments {
+    name = "VALUE2_TO_MATCH"
+    type = "varchar"
+  }
+  return_type = "varchar"
+  privilege   = "OWNERSHIP"
+  roles       = [var.loader_role]
+
+  lifecycle {
+    replace_triggered_by = [snowflake_procedure.delete_row]
+  }
+}
