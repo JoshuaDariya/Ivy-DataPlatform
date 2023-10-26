@@ -12,7 +12,7 @@ resource "snowflake_procedure" "load_data" {
     type = "varchar"
   }
   comment             = "Copy data from staging table to source, will rollback on error."
-  return_type         = "number"
+  return_type         = "NUMBER(38,0)"
   execute_as          = "caller"
   return_behavior     = "IMMUTABLE"
   statement           = <<EOT
