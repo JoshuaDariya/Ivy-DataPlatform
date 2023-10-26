@@ -12,7 +12,7 @@ resource "snowflake_procedure" "load_data" {
     type = "varchar"
   }
   comment             = "Copy data from staging table to source, will rollback on error."
-  return_type         = "number"
+  return_type         = "NUMBER(38,0)"
   execute_as          = "caller"
   return_behavior     = "IMMUTABLE"
   statement           = <<EOT
@@ -36,5 +36,47 @@ exception
         raise;
         rollback;
 END
+EOT
+}
+
+resource "snowflake_procedure" "delete_row" {
+  name     = "DELETE_ROW_BY_COLUMN_VALUES"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "JAVASCRIPT"
+  arguments {
+    name = "TABLE_NAME"
+    type = "varchar"
+  }
+  arguments {
+    name = "COLUMN1_NAME"
+    type = "varchar"
+  }
+  arguments {
+    name = "VALUE1_TO_MATCH"
+    type = "varchar"
+  }
+  arguments {
+    name = "COLUMN2_NAME"
+    type = "varchar"
+  }
+  arguments {
+    name = "VALUE2_TO_MATCH"
+    type = "varchar"
+  }
+  comment             = "Delete header row based on columns to match."
+  return_type         = "varchar"
+  execute_as          = "caller"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+try {
+    var sql_command = "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN1_NAME + " = ? AND " + COLUMN2_NAME + " = ?";
+    var statement1 = snowflake.createStatement({sqlText: sql_command, binds: [VALUE1_TO_MATCH, VALUE2_TO_MATCH]});
+    var result = statement1.execute();
+    var rowCount = statement1.getRowCount();
+    return rowCount + " row(s) deleted successfully.";
+  } catch (err) {
+    return "Error: " + err;
+}
 EOT
 }

@@ -27,7 +27,7 @@ resource "snowflake_grant_privileges_to_role" "loader_access_schema_grant" {
   }
 }
 
-//--------- LANDING ACCESS TO CURRENT TABLES, VIEWS --------
+//--------- LANDING ACCESS TO CURRENT TABLES, VIEWS, AND PROCEDURES --------
 
 resource "snowflake_grant_privileges_to_role" "loader_access_all_tables_grant" {
   privileges = ["SELECT", "INSERT"]
@@ -51,8 +51,15 @@ resource "snowflake_grant_privileges_to_role" "loader_access_all_views_grant" {
   }
 }
 
+resource "snowflake_procedure_grant" "loader_access_all_procedures" {
+  database_name  = var.landing
+  schema_name = "RAINTREE"
+  privilege   = "OWNERSHIP"
+  roles       = [var.loader_role]
+  on_all   = true
+}
 
-// ------------ FUTURE TABLES AND VIEWS -----------------
+// ------------ FUTURE TABLES, VIEWS, AND PROCEDURES -----------------
 resource "snowflake_grant_privileges_to_role" "loader_access_future_tables_landing" {
   privileges = ["SELECT","INSERT"]
   role_name  = var.loader_role
@@ -72,4 +79,12 @@ resource "snowflake_grant_privileges_to_role" "loader_access_future_views_landin
       in_database        = var.landing
     }
   }
+}
+
+resource "snowflake_procedure_grant" "loader_access_future_procedures" {
+  database_name  = var.landing
+  schema_name = "RAINTREE"
+  privilege   = "OWNERSHIP"
+  roles       = [var.loader_role]
+  on_future   = true
 }
