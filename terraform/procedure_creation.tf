@@ -64,7 +64,7 @@ resource "snowflake_procedure" "delete_row" {
     name = "VALUE2_TO_MATCH"
     type = "varchar"
   }
-  comment             = "Copy data from staging table to source, will rollback on error."
+  comment             = "Delete header row based on columns to match."
   return_type         = "varchar"
   execute_as          = "caller"
   return_behavior     = "IMMUTABLE"
