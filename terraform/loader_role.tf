@@ -30,7 +30,7 @@ resource "snowflake_grant_privileges_to_role" "loader_access_schema_grant" {
 //--------- LANDING ACCESS TO CURRENT TABLES, VIEWS, AND PROCEDURES --------
 
 resource "snowflake_grant_privileges_to_role" "loader_access_all_tables_grant" {
-  privileges = ["SELECT", "INSERT", "TRUNCATE"]
+  privileges = ["SELECT", "INSERT", "TRUNCATE", "DELETE"]
   role_name  = var.loader_role
   on_schema_object {
     all {
@@ -61,7 +61,7 @@ resource "snowflake_procedure_grant" "loader_access_all_procedures" {
 
 // ------------ FUTURE TABLES, VIEWS, AND PROCEDURES -----------------
 resource "snowflake_grant_privileges_to_role" "loader_access_future_tables_landing" {
-  privileges = ["SELECT","INSERT", "TRUNCATE"]
+  privileges = ["SELECT","INSERT", "TRUNCATE", "DELETE"]
   role_name  = var.loader_role
   on_schema_object {
     future {
