@@ -3095,3 +3095,750 @@ database            = var.landing
   }
 }
  
+resource "snowflake_table" "ingest_rbi_ledger" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_LEDGER"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PostingDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "OriginalDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AddDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Entry"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LedgerItemID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ApplyToChargeID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ApplyToPayAdjID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgRVS"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgPos"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PayCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AdjCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TranCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CreditAmount"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DebitAmount"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Dos"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceResp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCode"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "InsuranceFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PrimaryInsuranceID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PrimaryInsuranceResp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PrimaryInsuranceCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PrimaryInsuranceFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Clinic"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Location"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "RendDoc"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "BillDoc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referral"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Units"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TicketIndex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CaseIndex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CaseCode"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "User"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TotalRVU"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Diag1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Diag2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Diag3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Diag4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ApType"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CopayTransfer"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VirtualAdjChgPost"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VirtualAdjPayPost"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VirtualPayment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "NewPatCount"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VirtualCharge"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VisitByDosCaseDoc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VisitByCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PayAdjCount"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "UnBilled"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Category"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChargeDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReversedCharge"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReasonCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "BillStatus"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DataBaseName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "FirstPassPayment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "FirstPassDenial"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChargeAgePostDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "EmrOwner"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DepositDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DepositLocation"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PayCheckNum"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PayBankRef"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "OrigTicketGuid"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_rbi_ledger" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_LEDGER"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PostingDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "OriginalDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AddDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Entry"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "LedgerItemID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ApplyToChargeID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ApplyToPayAdjID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgRVS"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgMod6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChgPos"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PayCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "AdjCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TranCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CreditAmount"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DebitAmount"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Dos"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceResp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "InsuranceCode"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "InsuranceFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PrimaryInsuranceID"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PrimaryInsuranceResp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PrimaryInsuranceCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PrimaryInsuranceFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Clinic"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Location"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "RendDoc"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "BillDoc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Referral"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Units"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TicketIndex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CaseIndex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CaseCode"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "User"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TotalRVU"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Diag1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Diag2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Diag3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Diag4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ApType"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "CopayTransfer"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VirtualAdjChgPost"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VirtualAdjPayPost"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VirtualPayment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "NewPatCount"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VirtualCharge"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VisitByDosCaseDoc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "VisitByCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PayAdjCount"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "UnBilled"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Category"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChargeDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReversedCharge"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ReasonCode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "BillStatus"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DataBaseName"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "FirstPassPayment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "FirstPassDenial"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ChargeAgePostDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "EmrOwner"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DepositDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DepositLocation"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PayCheckNum"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "PayBankRef"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "OrigTicketGuid"
+    type = "VARCHAR"
+  }
+}
