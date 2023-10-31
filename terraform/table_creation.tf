@@ -3842,3 +3842,3759 @@ database            = var.landing
     type = "VARCHAR"
   }
 }
+
+resource "snowflake_table" "ingest_rbi_insur" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_INSUR"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "bc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "guid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "casecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "iname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "edate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rel"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copayTypes"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "suppress"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deduct"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductMet"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductRem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductrefreshdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductismet"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "amountsVerifiedDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "authreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ovrauthreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "supreasoncb"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxOutPockRem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ccasof"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ename"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "eaddr1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "eaddr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ecity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "estate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ezip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ephone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ecell"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "efax"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "eemail"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ssid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "group"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "refreq"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_rbi_insur" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_INSUR"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "bc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "guid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "casecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "iname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "edate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rel"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copayTypes"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "suppress"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deduct"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductMet"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductRem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductrefreshdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductismet"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "amountsVerifiedDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "authreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ovrauthreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "supreasoncb"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxOutPockRem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ccasof"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ename"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "eaddr1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "eaddr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ecity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "estate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ezip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ephone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ecell"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "efax"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "eemail"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ssid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "group"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "refreq"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_charge" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_CHARGE"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "guid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aiguid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "loc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "doc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cslip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rvs"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "revcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "place"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "bcharge"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "tos"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "charge"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "bu"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rvu"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "link"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "med"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ccategory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "effdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "modified"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_rbi_charge" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_CHARGE"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "guid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aiguid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "loc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "doc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cslip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rvs"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "revcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "place"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "bcharge"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "tos"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "charge"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "bu"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rvu"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "link"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "med"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ccategory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "effdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "modified"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_chgat" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_CHGAT"
+  change_tracking     = true
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_rbi_chgat" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_CHGAT"
+  change_tracking     = true
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "desc"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_visit_insur" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_VISIT_INSUR"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ticket_index"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dos"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "insurance_code"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_rbi_visit_insur" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_VISIT_INSUR"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ticket_index"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dos"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "insurance_code"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_visit" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_VISIT"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "casecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "discipline"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ticketindex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "caseindex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DOS"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noteOpenDateTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "intime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "outtime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "primaryIns"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "primaryInsGuid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "primaryFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "secIns"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "secInsGuid"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "secFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "location"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "provider"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "billingprovider"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "referral"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "owner"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cosigner"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "minutes"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "nonbillmins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "billablemins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "untimed"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "units"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "appStatus"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "appointmentType"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "billedCharges"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "expectedCharges"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noserviceticket"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "notetype"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "novisit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "postingdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "isSigned"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "isAmendment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "billingreview"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copayMissingReason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copayMissingComment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "currentSurgeryDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "currentSurgeryDetails"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "authguid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "signDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "originalsigndate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cosignrequired"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "used"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "icopay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "skippedProcedureReason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "FotoNotReq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "limberCreated"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noLimReason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "templ"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_rbi_visit" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_VISIT"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "casecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "discipline"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ticketindex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "caseindex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DOS"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noteOpenDateTime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "intime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "outtime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "diag12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "primaryIns"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "primaryInsGuid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "primaryFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "secIns"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "secInsGuid"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "secFC"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "location"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "provider"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "billingprovider"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "referral"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "owner"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cosigner"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "minutes"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "nonbillmins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "billablemins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "untimed"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "units"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "appStatus"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "appointmentType"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "billedCharges"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "expectedCharges"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noserviceticket"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "notetype"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "novisit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "postingdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "isSigned"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "isAmendment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "billingreview"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copayMissingReason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copayMissingComment"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "currentSurgeryDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "currentSurgeryDetails"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "authguid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "signDate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "originalsigndate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cosignrequired"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "used"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "icopay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "skippedProcedureReason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "FotoNotReq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "limberCreated"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noLimReason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "templ"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_payor_payor" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "PAYOR_PAYOR"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_seq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_lastmodified_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ablewrk"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "addr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ass"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "astate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "auth"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "authreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "bc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_rel_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "city"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "com1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "com2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "com3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "conde"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copay1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dfc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dob"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "doi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "edate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "emerg"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "empid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "group_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "hospf"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "hospt"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "iname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lab"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "labch"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "medi1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "medi2"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "oins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "otherf"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "otherfn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "partialdisf"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "partialdist"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pcp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pcpreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "refs"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "refsn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rel"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reld"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reltod"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sign"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sims"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "spoketo"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ssid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "state"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "supid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "supress"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "zip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "totaldisf"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "totaldist"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "v_standard_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "vby"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "vdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_myvariabledata"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "last"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "next"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "plan"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cauto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "relto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrdollar"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrvisits"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_cdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_ctimeampm"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_culfname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_cuserid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mtimeampm"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mulfname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_muserid"
+    type = "VARCHAR"
+  }
+  
+  column {
+    name = "_timestamp_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "autodeduct"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_disctype_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy2"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "chgcatcopy3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay2"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "chgcatcopay3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chkcopayoverrideins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "country"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductmet"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductrefreshdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductrem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "image_back"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "image_front"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "image_verif"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "instypecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpock"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpockrem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpockused"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "outsidededuct"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "outsidedeductasof"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pocfrom"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pocto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prog"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rejdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "yearlydeduct"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_country_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_instypecode_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrvisitsrem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrvisitsused"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lastresortresp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "patmaxoutpocket"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sfirst"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "slast"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "smi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpockusedout"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benefitrefreshdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benoverideins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrdollarrem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrdollarused"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrdollarusedoutside"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrvisitsusedoutside"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "outsidebenefitasof"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ovrauthreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deducincludecopay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_disctype_2_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_disctype1_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_disctype2_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copaytypes"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "disccode1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "disccode2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "discper1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "discper2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "disctype1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "disctype2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lstpatppac"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "supreasoncb"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "billingreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chkreviewoverrideins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewbeforebilling"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewbeforebillingresp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewexcludecopay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewontran"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewontranto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ccasof"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cclimit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cclimitperiod"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductismet"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reqpaymentusetransfer"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpockperiod"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "patmaxoutpocketadj"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "payplanlimit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "payplantype"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_payor_payor" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_PAYOR_PAYOR"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_seq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_lastmodified_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ablewrk"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "addr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ass"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "astate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "auth"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "authreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "bc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_rel_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "city"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "com1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "com2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "com3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "conde"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copay1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dfc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dob"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "doi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "edate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "emerg"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "empid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "group_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "hospf"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "hospt"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "iname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lab"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "labch"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "medi1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "medi2"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "oins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "otherf"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "otherfn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "partialdisf"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "partialdist"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pcp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pcpreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "refs"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "refsn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rel"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reld"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reltod"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sign"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sims"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "spoketo"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ssid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "state"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "supid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "supress"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "zip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "totaldisf"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "totaldist"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "v_standard_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "vby"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "vdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_myvariabledata"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "last"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "next"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "plan"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cauto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "relto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrdollar"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrvisits"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_cdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_ctimeampm"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_culfname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_cuserid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mtimeampm"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mulfname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_muserid"
+    type = "VARCHAR"
+  }
+  
+  column {
+    name = "_timestamp_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "autodeduct"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_disctype_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy2"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "chgcatcopy3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopy6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay2"
+    type = "VARCHAR"
+  }
+
+  
+  column {
+    name = "chgcatcopay3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chkcopayoverrideins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "country"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductmet"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductrefreshdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductrem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "image_back"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "image_front"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "image_verif"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "instypecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpock"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpockrem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpockused"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "outsidededuct"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "outsidedeductasof"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pocfrom"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pocto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prog"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "rejdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayamt6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayfrom6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "visitcopayto6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "yearlydeduct"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_country_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_instypecode_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrvisitsrem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrvisitsused"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lastresortresp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "patmaxoutpocket"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sfirst"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "slast"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "smi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpockusedout"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benefitrefreshdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benoverideins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrdollarrem"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrdollarused"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrdollarusedoutside"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "benyrvisitsusedoutside"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "outsidebenefitasof"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopay9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chgcatcopayamt9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopayamt9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg10"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg11"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg12"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg7"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg8"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cptcopaychg9"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ovrauthreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deducincludecopay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_disctype_2_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_disctype1_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_disctype2_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "copaytypes"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "disccode1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "disccode2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "discper1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "discper2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "disctype1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "disctype2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lstpatppac"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "supreasoncb"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat5"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "moopexclchgcat6"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "billingreq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "chkreviewoverrideins"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewbeforebilling"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewbeforebillingresp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewexcludecopay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewontran"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reviewontranto"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ccasof"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cclimit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cclimitperiod"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deductismet"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "reqpaymentusetransfer"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "maxoutpockperiod"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "patmaxoutpocketadj"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "payplanlimit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "payplantype"
+    type = "VARCHAR"
+  }
+}
