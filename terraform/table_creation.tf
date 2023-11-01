@@ -4770,7 +4770,7 @@ database            = var.landing
     type = "VARCHAR"
   }
 
-    column {
+  column {
     name = "secFC"
     type = "VARCHAR"
   }
@@ -4840,7 +4840,6 @@ database            = var.landing
     name = "appointmentType"
     type = "VARCHAR"
   }
-
   
   column {
     name = "billedCharges"
@@ -5104,7 +5103,7 @@ database            = var.landing
     type = "VARCHAR"
   }
 
-    column {
+  column {
     name = "secFC"
     type = "VARCHAR"
   }
@@ -5143,7 +5142,6 @@ database            = var.landing
     name = "minutes"
     type = "VARCHAR"
   }
-
   
   column {
     name = "nonbillmins"
