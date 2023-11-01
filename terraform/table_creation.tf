@@ -4531,10 +4531,10 @@ database            = var.landing
   }
 }
 
-resource "snowflake_table" "ingest_rbi_chgat" {
+resource "snowflake_table" "ingest_rbi_chgcat" {
 database            = var.landing
   schema              = "RAINTREE"
-  name                = "RBI_CHGAT"
+  name                = "RBI_CHGCAT"
   change_tracking     = true
 
   column {
@@ -4548,10 +4548,10 @@ database            = var.landing
   }
 }
 
-resource "snowflake_table" "ingest_z_rbi_chgat" {
+resource "snowflake_table" "ingest_z_rbi_chgcat" {
 database            = var.landing
   schema              = "RAINTREE"
-  name                = "Z_RBI_CHGAT"
+  name                = "Z_RBI_CHGCAT"
   change_tracking     = true
 
   column {
