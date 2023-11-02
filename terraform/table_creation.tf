@@ -3095,6 +3095,93 @@ database            = var.landing
   }
 }
 
+resource "snowflake_table" "ingest_active_schedules" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "ACTIVE_SCHEDULES"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "INT"
+  }
+
+  column {
+    name = "_Date"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_Start"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Len"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TimeUnit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DoubleBook"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Doc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Loc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_Type"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Typed"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Defdoc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Defloc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Com"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Wsid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Lastmodiftime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Lastmodifuser"
+    type = "VARCHAR"
+  }
+}
+
 resource "snowflake_table" "ingest_z_active_schedules" {
 database            = var.landing
   schema              = "RAINTREE"
@@ -3181,6 +3268,7 @@ database            = var.landing
     type = "VARCHAR"
   }
 }
+
 resource "snowflake_table" "ingest_rbi_ledger" {
 database            = var.landing
   schema              = "RAINTREE"
