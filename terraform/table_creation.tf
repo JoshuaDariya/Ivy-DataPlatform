@@ -7789,7 +7789,7 @@ database            = var.landing
 
   column {
     name = "_seq"
-    type = "INT"
+    type = "VARCHAR"
   }
 
   column {
@@ -8606,7 +8606,7 @@ database            = var.landing
 
   column {
     name = "_seq"
-    type = "INT"
+    type = "VARCHAR"
   }
 
   column {
