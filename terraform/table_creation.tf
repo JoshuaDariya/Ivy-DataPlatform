@@ -3094,7 +3094,183 @@ database            = var.landing
     type = "VARCHAR"
   }
 }
- 
+
+resource "snowflake_table" "ingest_active_schedules" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "ACTIVE_SCHEDULES"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "INT"
+  }
+
+  column {
+    name = "_Date"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_Start"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Len"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TimeUnit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DoubleBook"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Doc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Loc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_Type"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Typed"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Defdoc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Defloc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Com"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Wsid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Lastmodiftime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Lastmodifuser"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_active_schedules" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_ACTIVE_SCHEDULES"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "INT"
+  }
+
+  column {
+    name = "_Date"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_Start"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Len"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "TimeUnit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "DoubleBook"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Doc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Loc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_Type"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Typed"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Defdoc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Defloc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Com"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Wsid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Lastmodiftime"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "Lastmodifuser"
+    type = "VARCHAR"
+  }
+}
+
+
+
 resource "snowflake_table" "ingest_rbi_ledger" {
 database            = var.landing
   schema              = "RAINTREE"
@@ -7591,6 +7767,1640 @@ database            = var.landing
 
   column {
     name = "payplantype"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_demo_demo" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "DEMO_DEMO"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "INT"
+  }
+
+  column {
+    name = "_pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_seq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_myvariabledata"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "email"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "v_standard_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_lastmodified_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_timestamp_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_title_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_best1_"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "cd_estat_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_mstat_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_best3_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_sstat_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_best2_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "addr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aliasview"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "best1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "best2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "best3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_f_best1_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_m_best1_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "city"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dln"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dob_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "eemp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "estat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "first_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "household"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "im1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "im2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "im3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "last_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "leg"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "livsit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "loc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "monthc"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "mstat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "number"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "occ"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ok1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ok2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ok3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "othlivsit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "password"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phaddr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phcity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phstate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phzip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pm1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pm2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pm3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "recday"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "recser"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "refs"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "semp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "socc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sstat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ss_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "state"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "status"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "title"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "tob"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "tphys"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "zip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_cdate_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_ctimeampm"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_culfname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_cuserid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mdate_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mtimeampm"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mulfname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_muserid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "accessmode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aclhistory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aclview"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkfather"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkguardian"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkmother"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkprimaryphysician"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkprimaryreferral"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "country"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "databasename"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "date"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "imgpatient"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "intneeded"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "language"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lbcontacts"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "leadid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "patpic"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "patreminder"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phcounty"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "statuscode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "viewcases"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "viewroles"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "addr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_preflang_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "languintneeded"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phaddr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "preflang"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "primaryrace"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkmarkref"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mrefs"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mrefscat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkpreferredhospital"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkpreferredpharmacy"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lbpforms"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "consentrecieved"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deceased"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "military"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "nonbariatric"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "selfpay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "statusdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aremail"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "artext"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lwcompr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkcasemanager"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dmail"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethnadd1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "genderidentity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "payordiscmoopused"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "raceadd1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "raceadd2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sexorient"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "colstat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "best4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_best4_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ok4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "femp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "focc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "memp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mocc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkspouse"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethncode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethngroupcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethnicity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prefpronoun"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "race"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "racecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "racegroupcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "race_00000"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "immpublicitydate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "immregstatusdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "arphone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "firstpn_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "preferredname"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_demo_demo" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_DEMO_DEMO"
+  change_tracking     = true
+
+  column {
+    name = "_id"
+    type = "INT"
+  }
+
+  column {
+    name = "_pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_seq"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_code"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_desc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_myvariabledata"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "email"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "v_standard_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_lastmodified_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_timestamp_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_title_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_best1_"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "cd_estat_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_mstat_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_best3_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_sstat_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_best2_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "addr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aliasview"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "best1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "best2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "best3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_f_best1_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_m_best1_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "city"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dln"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dob_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "eemp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "estat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "fc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "first_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "household"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "im1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "im2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "im3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "last_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "leg"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "livsit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "loc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mi"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "monthc"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "mstat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "number"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "occ"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ok1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ok2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ok3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "othlivsit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "password"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phaddr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phcity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phstate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phzip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pm1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pm2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pm3"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "pn_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "recday"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "recser"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "refs"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "semp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sex"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "socc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sstat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ss_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "state"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "status"
+    type = "VARCHAR"
+  }
+
+    column {
+    name = "title"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "tob"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "tphys"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "zip"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_cdate_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_ctimeampm"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_culfname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_cuserid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mdate_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mtimeampm"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_mulfname"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "_muserid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "accessmode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aclhistory"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aclview"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkfather"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkguardian"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkmother"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkprimaryphysician"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkprimaryreferral"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "country"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "databasename"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "date"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "imgpatient"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "intneeded"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "language"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lbcontacts"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "leadid"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "patpic"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "patreminder"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phcounty"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "statuscode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "viewcases"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "viewroles"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "addr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_preflang_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "languintneeded"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phaddr2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "preflang"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "primaryrace"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkmarkref"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mrefs"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mrefscat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkpreferredhospital"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkpreferredpharmacy"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lbpforms"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "consentrecieved"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "deceased"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "military"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "nonbariatric"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "selfpay"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "statusdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "aremail"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "artext"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "lwcompr"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkcasemanager"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "dmail"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethnadd1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "genderidentity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "payordiscmoopused"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "raceadd1"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "raceadd2"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "sexorient"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "colstat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "best4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "cd_best4_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ok4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "phone4"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "femp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "focc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "memp"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "mocc"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "contlinkspouse"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethncode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethngroupcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ethnicity"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "prefpronoun"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "race"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "racecode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "racegroupcode"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "race_00000"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "immpublicitydate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "immregstatusdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "arphone"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "firstpn_"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "preferredname"
     type = "VARCHAR"
   }
 }
