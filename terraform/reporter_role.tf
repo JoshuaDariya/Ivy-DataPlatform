@@ -137,6 +137,18 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_l
   }
 }
 
+resource "snowflake_grant_privileges_to_role" "reporter_access_all_dts_grant_landing" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    all {
+        object_type_plural = "DYNAMIC TABLES"
+
+        in_database = var.landing
+    }
+  }
+}
+
 // -------------- DEV -------------------
 resource "snowflake_grant_privileges_to_role" "reporter_access_all_tables_grant_dev" {
   privileges = ["SELECT"]
@@ -156,6 +168,18 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_d
   on_schema_object {
     all {
         object_type_plural = "VIEWS"
+
+        in_database = var.dev
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_all_dts_grant_dev" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    all {
+        object_type_plural = "DYNAMIC TABLES"
 
         in_database = var.dev
     }
@@ -187,6 +211,18 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_q
   }
 }
 
+resource "snowflake_grant_privileges_to_role" "reporter_access_all_dts_grant_qa" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    all {
+        object_type_plural = "DYNAMIC TABLES"
+
+        in_database = var.qa
+    }
+  }
+}
+
 // --------- PROD -------
 resource "snowflake_grant_privileges_to_role" "reporter_access_all_tables_grant_prod" {
   privileges = ["SELECT"]
@@ -206,6 +242,18 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_all_views_grant_p
   on_schema_object {
     all {
         object_type_plural = "VIEWS"
+
+        in_database = var.prod
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_all_dts_grant_prod" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    all {
+        object_type_plural = "DYNAMIC TABLES"
 
         in_database = var.prod
     }
@@ -298,6 +346,52 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_views_prod
   on_schema_object {
     future {
       object_type_plural = "VIEWS"
+      in_database        = var.prod
+    }
+  }
+}
+
+// -------- FUTURE DYNAMIC TABLES ----------
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_landing" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    future {
+      object_type_plural = "DYNAMIC TABLES"
+      in_database        = var.landing
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_dev" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    future {
+      object_type_plural = "DYNAMIC TABLES"
+      in_database        = var.dev
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_qa" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    future {
+      object_type_plural = "DYNAMIC TABLES"
+      in_database        = var.qa
+    }
+  }
+}
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_prod" {
+  privileges = ["SELECT"]
+  role_name  = var.powerbi_role
+  on_schema_object {
+    future {
+      object_type_plural = "DYNAMIC TABLES"
       in_database        = var.prod
     }
   }
