@@ -4719,7 +4719,7 @@ database            = var.landing
   }
 
   column {
-    name = "desc"
+    name = "_desc"
     type = "VARCHAR"
   }
 }
@@ -4736,7 +4736,7 @@ database            = var.landing
   }
 
   column {
-    name = "desc"
+    name = "_desc"
     type = "VARCHAR"
   }
 }
