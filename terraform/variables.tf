@@ -32,6 +32,18 @@ variable "landing"{
   default = "LANDING"
 }
 
+variable "landing_dev"{
+  type = string
+
+  default = "LANDING_DEV"
+}
+
+variable "landing_qa"{
+  type = string
+
+  default = "LANDING_QA"
+}
+
 variable "dev"{
   type = string
 
