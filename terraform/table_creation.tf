@@ -4565,7 +4565,7 @@ database            = var.landing
   }
 
   column {
-    name = "modified_"
+    name = "_modified"
     type = "VARCHAR"
   }
 }
@@ -4702,7 +4702,7 @@ database            = var.landing
   }
 
   column {
-    name = "modified_"
+    name = "_modified"
     type = "VARCHAR"
   }
 }
