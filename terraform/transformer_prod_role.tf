@@ -120,8 +120,6 @@ resource "snowflake_task_grant" "dbt_tests_grant" {
 
   privilege = "ALL PRIVILEGES"
   roles     = [var.prod_role]
-
-  on_all = true
 }
 
 resource "snowflake_procedure_grant" "prod_access_all_procedures" {
@@ -186,15 +184,4 @@ resource "snowflake_procedure_grant" "prod_access_future_procedures" {
   privilege   = "USAGE"
   roles       = [var.prod_role]
   on_future   = true
-}
-
-resource "snowflake_task_grant" "dbt_tests_future_grant" {
-  database_name = var.prod
-  schema_name   = "DBT_TESTS"
-  task_name     = "dbt_tests_data_check_task"
-
-  privilege = "ALL PRIVILEGES"
-  roles     = [var.prod_role]
-
-  on_future = true
 }
