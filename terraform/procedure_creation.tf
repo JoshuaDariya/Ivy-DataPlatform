@@ -122,7 +122,7 @@ try {
  
     for (var i = 0; i < failedTables.length; i++) {
       var tableInfo = failedTables[i];
-      emailContent += `Table: ${tableInfo.tableName}, Row Count: ${tableInfo.rowCount}\\nScript: ${tableInfo.script}\\n\\n`;
+      emailContent += `Table: ' + tableInfo.tableName +', Row Count: '+ tableInfo.rowCount + '\\nScript: '+ tableInfo.script + '\\n\\n`;
     }
  
     // Send an alert using the notification integration
