@@ -39,9 +39,3 @@ data "azurerm_resource_group" "imported_rg_dev" {
 name     = "rg-ivydataplatform-dev-eastus"
 }
 
-// ------------- WAREHOUSE -----------------
-// resource "snowflake_warehouse" "warehouse" {
-//   name           = "IVY_WH_TF" #Change to desired name
-//   warehouse_size = "x-small" #Change to desired size
-//   auto_suspend   = 60
-// }
