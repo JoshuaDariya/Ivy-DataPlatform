@@ -88,7 +88,7 @@ resource "snowflake_grant_privileges_to_role" "prod_access_all_views_grant_landi
 
 
 
-// -------------- PROD ACCESS TO CURRENT TABLES, VIEWS, PRODCEDURES, INTERGRATION -------------------
+// -------------- PROD ACCESS TO CURRENT TABLES, VIEWS, PRODCEDURES, INTEGRATION -------------------
 resource "snowflake_grant_privileges_to_role" "prod_access_all_tables_grant_prod" {
   all_privileges = true
   role_name  = var.prod_role
