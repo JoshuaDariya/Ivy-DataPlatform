@@ -113,11 +113,8 @@ resource "snowflake_grant_privileges_to_role" "prod_access_all_views_grant_prod"
   }
 }
 
-resource "snowflake_task_grant" "dbt_tests_grant" {
+resource "snowflake_task_grant" "prod_access_all_tasks_grant_prod" {
   database_name = var.prod
-  schema_name   = "DBT_TESTS"
-  task_name     = "dbt_tests_data_check_task"
-
   privilege = "ALL PRIVILEGES"
   roles     = [var.prod_role]
 }

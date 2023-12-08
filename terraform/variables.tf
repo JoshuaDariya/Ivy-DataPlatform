@@ -91,3 +91,15 @@ variable "prod_role"{
 
   default = "SNOWFLAKEPROD"
 }
+
+variable "raintree_v2_schema"{
+  type = string
+
+  default = "RAINTREE V2"
+}
+
+variable "raintree_s3_int"{
+  type = string
+
+  default = "s3_int"
+}

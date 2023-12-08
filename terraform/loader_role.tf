@@ -27,7 +27,7 @@ resource "snowflake_grant_privileges_to_role" "loader_access_schema_grant" {
   }
 }
 
-//--------- LANDING ACCESS TO CURRENT TABLES, VIEWS, AND PROCEDURES --------
+//--------- LANDING ACCESS TO CURRENT TABLES, VIEWS, FILE FORMAT, AND PROCEDURES --------
 
 resource "snowflake_grant_privileges_to_role" "loader_access_all_tables_grant" {
   privileges = ["SELECT", "INSERT", "TRUNCATE", "DELETE"]
@@ -59,7 +59,34 @@ resource "snowflake_procedure_grant" "loader_access_all_procedures" {
   on_all   = true
 }
 
-// ------------ FUTURE TABLES, VIEWS, AND PROCEDURES -----------------
+resource "snowflake_stage_grant" "loader_current_access_stage_grant" {
+  database_name = var.landing
+  privilege = "ALL PRIVILEGES"
+
+  roles = [var.loader_role]
+
+  on_all         = true
+}
+
+resource "snowflake_file_format_grant" "loader_current_file_format_grant" {
+  database_name    = var.landing
+
+  privilege = "ALL PRIVILEGES"
+  roles     = [var.loader_role]
+
+  on_all         = true
+}
+
+resource "snowflake_task_grant" "loader_access_all_tasks_grant_landing" {
+  database_name = var.landing
+  privilege = "ALL PRIVILEGES"
+  roles     = [var.loader_role]
+
+  on_all    = true
+}
+
+
+// ------------ FUTURE TABLES, VIEWS, FILE FORMAT, TASKS AND PROCEDURES -----------------
 resource "snowflake_grant_privileges_to_role" "loader_access_future_tables_landing" {
   privileges = ["SELECT","INSERT", "TRUNCATE", "DELETE"]
   role_name  = var.loader_role
@@ -88,3 +115,39 @@ resource "snowflake_procedure_grant" "loader_access_future_procedures" {
   roles       = [var.loader_role]
   on_future   = true
 }
+
+resource "snowflake_stage_grant" "loader_future_access_stage_grant" {
+  database_name = var.landing
+  privilege = "ALL PRIVILEGES"
+
+  roles = [var.loader_role]
+
+  on_future         = true
+}
+
+resource "snowflake_file_format_grant" "loader_future_file_format_grant" {
+  database_name    = var.landing
+
+  privilege = "ALL PRIVILEGES"
+  roles     = [var.loader_role]
+
+  on_future        = true
+}
+
+resource "snowflake_task_grant" "loader_access_future_tasks_grant_landing" {
+  database_name = var.landing
+  privilege = "ALL PRIVILEGES"
+  roles     = [var.loader_role]
+
+  on_future         = true
+}
+
+// ------------ RAINTREE V2 SPECIFC ACCESS -----------------
+resource "snowflake_integration_grant" "raintree_v2_s3_grant" {
+  integration_name = var.raintree_s3_int
+
+  privilege = "ALL PRIVILEGES"
+  roles     = [var.loader_role]
+
+}
+
