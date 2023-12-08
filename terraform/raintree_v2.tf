@@ -42,4 +42,15 @@ resource "snowflake_task" "ingest_raintreev2_data_from_s3" {
   name          = "ingest_raintreev2_data_from_s3"
   schedule      = "0 0 5 * * America/New_York" // Use Cron syntax for 5:00 AM every day in EST or anytime
   sql_statement = "CALL INGEST_RAINTREE_V2_DATA('raintree_v2_stage');"
+
+#   UNCOMMENT THIS IF THE DESIRE IS TO HAVE SERVERLESS TASKS. RESEARCH WHAT AND HOW THIS WORKS 
+#   session_parameters = {
+#     "foo" : "bar",
+#   }
+
+#   user_task_timeout_ms                     = 10000
+#   user_task_managed_initial_warehouse_size = "XSMALL"
+#   after                                    = [snowflake_task.task.name]
+#   when                                     = "foo AND bar"
+#   enabled                                  = true
 }
