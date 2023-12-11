@@ -95,7 +95,7 @@ variable "prod_role"{
 variable "raintree_v2_schema"{
   type = string
 
-  default = "RAINTREE V2"
+  default = "RAINTREE"
 }
 
 variable "raintree_s3_int"{
