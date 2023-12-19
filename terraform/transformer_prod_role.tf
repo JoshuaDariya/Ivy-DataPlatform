@@ -117,6 +117,7 @@ resource "snowflake_task_grant" "prod_access_all_tasks_grant_prod" {
   database_name = var.prod
   privilege = "ALL PRIVILEGES"
   roles     = [var.prod_role]
+  on_all = true
 }
 
 resource "snowflake_procedure_grant" "prod_access_all_procedures" {
@@ -189,4 +190,12 @@ resource "snowflake_procedure_grant" "prod_access_future_procedures" {
   privilege   = "USAGE"
   roles       = [var.prod_role]
   on_future   = true
+}
+
+// -------- FUTURE TASKS ----------
+resource "snowflake_task_grant" "prod_access_future_tasks_grant_prod" {
+  database_name = var.prod
+  privilege = "ALL PRIVILEGES"
+  roles     = [var.prod_role]
+  on_future = true
 }
