@@ -115,5 +115,5 @@ variable "raintree_s3_int"{
 variable "raintree_stage"{
   type = string
 
-  default = "snowflake_raintree_stage"
+  default = "SNOWFLAKE_RAINTREE_STAGE"
 }
