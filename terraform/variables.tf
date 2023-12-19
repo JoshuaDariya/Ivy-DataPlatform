@@ -109,7 +109,7 @@ variable "raintree_v2_schema"{
 variable "raintree_s3_int"{
   type = string
 
-  default = "s3_snowflake_int"
+  default = "S3_SNOWFLAKE_INT"
 }
 
 variable "raintree_stage"{

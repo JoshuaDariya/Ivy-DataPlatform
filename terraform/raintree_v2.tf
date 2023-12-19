@@ -5,6 +5,7 @@ resource "snowflake_file_format" "raintree_parquet_file_format" {
   database    = var.landing
   schema      = var.raintree_v2_schema
   format_type = "PARQUET"
+  binary_as_text = true
 }
 
 //Might need Loader Access (DONE)
