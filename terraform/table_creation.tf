@@ -1228,7 +1228,7 @@ resource "snowflake_table" "ingest_rbi_insurance_stage" {
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -1310,7 +1310,7 @@ resource "snowflake_table" "ingest_rbi_insurance" {
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -1466,7 +1466,7 @@ database            = var.landing
 
   column {
     name = "id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -1534,7 +1534,7 @@ database            = var.landing
 
   column {
     name = "id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -1601,7 +1601,7 @@ database            = var.landing
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -1743,7 +1743,7 @@ database            = var.landing
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -1885,7 +1885,7 @@ database            = var.landing
 
   column {
     name = "id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -2088,7 +2088,7 @@ database            = var.landing
 
   column {
     name = "id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -2635,7 +2635,7 @@ database            = var.landing
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -2772,7 +2772,7 @@ database            = var.landing
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -3113,7 +3113,7 @@ database            = var.landing
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -3200,7 +3200,7 @@ database            = var.landing
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -7789,7 +7789,7 @@ database            = var.landing
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
@@ -8606,7 +8606,7 @@ database            = var.landing
 
   column {
     name = "_id"
-    type = "INT"
+    type = "NUMBER(38,0)"
   }
 
   column {
