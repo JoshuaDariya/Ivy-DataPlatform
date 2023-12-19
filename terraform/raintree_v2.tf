@@ -1,7 +1,7 @@
 
 //Might need Loader Access (DONE)
 resource "snowflake_file_format" "raintree_parquet_file_format" {
-  name        = "parquet_format"
+  name        = "PARQUET_FORMAT"
   database    = var.landing
   schema      = var.raintree_v2_schema
   format_type = "PARQUET"
