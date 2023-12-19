@@ -2699,6 +2699,11 @@ database            = var.landing
   }
 
   column {
+    name = "ProviderEmail"
+    type = "VARCHAR"
+  }
+
+  column {
     name = "Providerlic1"
     type = "VARCHAR"
   }
@@ -2827,6 +2832,11 @@ database            = var.landing
 
   column {
     name = "ProviderFax"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "ProviderEmail"
     type = "VARCHAR"
   }
 
