@@ -11,7 +11,6 @@ resource "snowflake_file_format" "raintree_parquet_file_format" {
 //Might need Loader Access (DONE)
 resource "snowflake_storage_integration" "s3_raintree_v2" {
   name    = var.raintree_s3_int
-  comment = "A storage integration for the ingestion of Raintree V2."
   type    = "EXTERNAL_STAGE"
 
   enabled = true
