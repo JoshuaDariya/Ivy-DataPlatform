@@ -14,6 +14,14 @@ variable "region" {
   type = string
 }
 
+variable "storage_aws_role_arn"{
+  type = string
+}
+
+variable "aws_url_storage_allowed_locations"{
+  type = string
+}
+
 variable "databases" {
   type = set(string)
 
@@ -90,4 +98,22 @@ variable "prod_role"{
   type = string
 
   default = "SNOWFLAKEPROD"
+}
+
+variable "raintree_v2_schema"{
+  type = string
+
+  default = "RAINTREE"
+}
+
+variable "raintree_s3_int"{
+  type = string
+
+  default = "S3_SNOWFLAKE_INT"
+}
+
+variable "raintree_stage"{
+  type = string
+
+  default = "SNOWFLAKE_RAINTREE_STAGE"
 }

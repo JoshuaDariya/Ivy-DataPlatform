@@ -13,7 +13,7 @@ resource "snowflake_procedure" "load_data" {
   }
   comment             = "Copy data from staging table to source, will rollback on error."
   return_type         = "NUMBER(38,0)"
-  execute_as          = "caller"
+  execute_as          = "CALLER"
   return_behavior     = "IMMUTABLE"
   statement           = <<EOT
 DECLARE
@@ -66,7 +66,7 @@ resource "snowflake_procedure" "delete_row" {
   }
   comment             = "Delete header row based on columns to match."
   return_type         = "varchar"
-  execute_as          = "caller"
+  execute_as          = "CALLER"
   return_behavior     = "IMMUTABLE"
   statement           = <<EOT
 try {
@@ -89,7 +89,7 @@ resource "snowflake_procedure" "dbttests_alerts" {
 
   comment             = "Read the dbt_tests schema and alert back which tests have rows which means fails"
   return_type         = "varchar"
-  execute_as          = "caller"
+  execute_as          = "CALLER"
   return_behavior     = "IMMUTABLE"
   statement           = <<EOT
 try {
