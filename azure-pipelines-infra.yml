@@ -73,7 +73,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/functionApp.bicep
-              overrideParameters: '-functionAppName $(functionAppName) -functionStorageAccountName $(functionStorageAccountName) -serviceAppName $(functionAppName)-dev -rgName $(ResourceGroupName)dev-$(DeploymentDefaultLocation)'
+              overrideParameters: '-functionAppName $(functionAppName)dev -functionStorageAccountName $(functionStorageAccountName)dev -serviceAppName $(functionAppName)dev -rgName $(ResourceGroupName)dev-$(DeploymentDefaultLocation)'
 
 
   - stage: StageDeployment
@@ -134,7 +134,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
               csmFile: resources/functionApp.bicep
-              overrideParameters: '-functionAppName $(functionAppName) -functionStorageAccountName $(functionStorageAccountName) -serviceAppName $(functionAppName)-stage -rgName $(ResourceGroupName)stage-$(DeploymentDefaultLocation)'
+              overrideParameters: '-functionAppName $(functionAppName)stage -functionStorageAccountName $(functionStorageAccountName)stage -serviceAppName $(functionAppName)stage -rgName $(ResourceGroupName)stage-$(DeploymentDefaultLocation)'
 
 
   - stage: ProdDeployment
@@ -197,7 +197,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
               csmFile: resources/functionApp.bicep
-              overrideParameters: '-functionAppName $(functionAppName) -functionStorageAccountName $(functionStorageAccountName) -serviceAppName $(functionAppName)-prod -rgName $(ResourceGroupName)prod-$(DeploymentDefaultLocation)'
+              overrideParameters: '-functionAppName $(functionAppName)prod -functionStorageAccountName $(functionStorageAccountName)prod -serviceAppName $(functionAppName)prod -rgName $(ResourceGroupName)prod-$(DeploymentDefaultLocation)'
 
 
               
