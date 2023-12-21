@@ -27,6 +27,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
 resource functionApp 'Microsoft.Web/sites@2020-12-01' = {
   name: functionAppName
   location: location
+  kind: 'functionapp'
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
