@@ -73,7 +73,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/functionApp.bicep
-              overrideParameters: '-functionAppName $(functionAppName)dev -functionStorageAccountName $(functionStorageAccountName)dev -serviceAppName $(functionAppName)dev'
+              overrideParameters: '-functionAppName $(functionAppName)dev -location $(Location) -functionStorageAccountName $(functionStorageAccountName)dev -serviceAppName $(functionAppName)dev'
 
 
   - stage: StageDeployment
@@ -134,7 +134,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
               csmFile: resources/functionApp.bicep
-              overrideParameters: '-functionAppName $(functionAppName)stage -functionStorageAccountName $(functionStorageAccountName)stage -serviceAppName $(functionAppName)stage'
+              overrideParameters: '-functionAppName $(functionAppName)stage -location $(Location) -functionStorageAccountName $(functionStorageAccountName)stage -serviceAppName $(functionAppName)stage'
 
 
   - stage: ProdDeployment
@@ -197,7 +197,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
               csmFile: resources/functionApp.bicep
-              overrideParameters: '-functionAppName $(functionAppName)prod -functionStorageAccountName $(functionStorageAccountName)prod -serviceAppName $(functionAppName)prod'
+              overrideParameters: '-functionAppName $(functionAppName)prod -location $(Location) -functionStorageAccountName $(functionStorageAccountName)prod -serviceAppName $(functionAppName)prod'
 
 
               
