@@ -14,16 +14,16 @@ resource "snowflake_storage_integration" "azure_adaptive_integration" {
 
   enabled = true
 
-  storage_allowed_locations = [var.aws_url_storage_allowed_locations]
+  storage_allowed_locations = [var.azure_adaptive_url_storage_allowed_locations]
 
   storage_provider         = "Azure"
-  storage_aws_role_arn     = var.storage_aws_role_arn
+  storage_aws_role_arn     = var.storage_aws_role_arn ~
 }
 
 //Might need Loader Access (DONE)
 resource "snowflake_stage" "raintree_v2_stage" {
-  name        = var.raintree_stage
-  url         = var.aws_url_storage_allowed_locations
+  name        = var.adaptive_stage
+  url         = var.azure_adaptive_url_storage_allowed_locations
   storage_integration = var.adaptive_azure_int
   database    = var.landing
   schema      = var.adaptive_schema 
