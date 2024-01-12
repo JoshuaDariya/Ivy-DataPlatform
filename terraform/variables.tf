@@ -117,3 +117,9 @@ variable "raintree_stage"{
 
   default = "SNOWFLAKE_RAINTREE_STAGE"
 }
+
+variable "adaptive_schema"{
+  type = string
+
+  default = "ADAPTIVE"
+}
