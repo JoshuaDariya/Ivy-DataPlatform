@@ -123,3 +123,9 @@ variable "adaptive_schema"{
 
   default = "ADAPTIVE"
 }
+
+variable "adaptive_azure_int"{
+  type = string
+
+  default = "ADAPTIVE_AZURE_SNOWFLAKE_INT"
+}
