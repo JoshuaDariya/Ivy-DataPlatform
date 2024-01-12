@@ -9,7 +9,7 @@ resource "snowflake_file_format" "adaptive_parquet_file_format" {
 
 //Might need Loader Access (DONE)
 resource "snowflake_storage_integration" "azure_adaptive_integration" {
-  name    = var.raintree_s3_int
+  name    = var.adaptive_azure_int
   type    = "EXTERNAL_STAGE"
 
   enabled = true
@@ -24,7 +24,7 @@ resource "snowflake_storage_integration" "azure_adaptive_integration" {
 resource "snowflake_stage" "raintree_v2_stage" {
   name        = var.raintree_stage
   url         = var.aws_url_storage_allowed_locations
-  storage_integration = var.raintree_s3_int
+  storage_integration = var.adaptive_azure_int
   database    = var.landing
   schema      = var.adaptive_schema 
 
