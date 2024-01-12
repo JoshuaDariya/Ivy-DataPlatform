@@ -2,7 +2,7 @@
 resource "snowflake_file_format" "adaptive_parquet_file_format" {
   name        = "PARQUET_FORMAT"
   database    = var.landing
-  schema      = var.raintree_v2_schema
+  schema      = var.adaptive_schema
   format_type = "PARQUET"
   binary_as_text = true
 }
@@ -26,6 +26,6 @@ resource "snowflake_stage" "raintree_v2_stage" {
   url         = var.aws_url_storage_allowed_locations
   storage_integration = var.raintree_s3_int
   database    = var.landing
-  schema      = var.raintree_v2_schema 
+  schema      = var.adaptive_schema 
 
 }
