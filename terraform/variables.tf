@@ -22,10 +22,6 @@ variable "aws_url_storage_allowed_locations"{
   type = string
 }
 
-variable "storage_azure_role_arn"{
-  type = string
-}
-
 variable "azure_adaptive_url_storage_allowed_locations"{
   type = string
 }
