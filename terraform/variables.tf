@@ -22,6 +22,14 @@ variable "aws_url_storage_allowed_locations"{
   type = string
 }
 
+variable "azure_adaptive_url_storage_allowed_locations"{
+  type = string
+}
+
+variable "azure_tenant"{
+  type = string
+}
+
 variable "databases" {
   type = set(string)
 
@@ -116,4 +124,22 @@ variable "raintree_stage"{
   type = string
 
   default = "SNOWFLAKE_RAINTREE_STAGE"
+}
+
+variable "adaptive_stage"{
+  type = string
+
+  default = "ADAPTIVE_API_STAGE"
+}
+
+variable "adaptive_schema"{
+  type = string
+
+  default = "ADAPTIVE"
+}
+
+variable "adaptive_azure_int"{
+  type = string
+
+  default = "ADAPTIVE_AZURE_SNOWFLAKE_INT"
 }
