@@ -142,3 +142,237 @@ try {
 return result;
 EOT
 }
+
+resource "snowflake_procedure" "check_raintree_ingestion_log" {
+  name     = "CHECK_RAINTREE_INGESTION_LOG_AND_ALERT"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "JAVASCRIPT"
+
+  comment             = "Check the raintree ingestion"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+  try {
+    var failedTables = []; // Array to store failed tables information
+
+    // SQL query to select required columns from INGESTION_FAIL_LOG
+    var query = "SELECT FAIL_DATE, BATCHNUMBER, TABLENAME, FAILAREA, ERROR FROM INGESTION_FAIL_LOG";
+
+    // Execute the query
+    var statement1 = snowflake.createStatement({ sqlText: query });
+    var resultSet1 = statement1.execute();
+
+    // Loop through the result set and add each row to the array
+    while (resultSet1.next()) {
+        var failDate = resultSet1.getColumnValue(1);
+        var batchNumber = resultSet1.getColumnValue(2);
+        var tableName = resultSet1.getColumnValue(3);
+        var failArea = resultSet1.getColumnValue(4);
+        var error = resultSet1.getColumnValue(5);
+
+        // Add the row information to the array
+        failedTables.push({
+            tableName: tableName,
+            failDate: failDate,
+            batchNumber: batchNumber,
+            failArea: failArea,
+            error: error
+        });
+    }
+
+    // Send a single email if there are failed tables
+    if (failedTables.length > 0) {
+        var emailContent = "Alert: Data found in the following tables:\\n\\n";
+
+        for (var i = 0; i < failedTables.length; i++) {
+            var tableInfo = failedTables[i];
+            emailContent += "Table: " + tableInfo.tableName + ",\n Batch Number: " + tableInfo.batchNumber + ",\n Fail Date: " + tableInfo.failDate + ",\n Fail Area: " + tableInfo.failArea + ",\n Error: " + tableInfo.error + "\n\n";
+        }
+
+        // Add the advice to truncate the table after fixing or acknowledging errors
+        emailContent += "Please truncate the table after fixing or acknowledging errors.";
+
+        // Send an alert using the notification integration
+        var state2 = snowflake.createStatement({
+            sqlText: "CALL SYSTEM$SEND_EMAIL(''raintree_ingestion_failures'', ''2e36f225.ivyrehab.onmicrosoft.com@amer.teams.ms'', ''Ingestion Failures'', :1)",
+            binds: [emailContent]
+        });
+        var alertResult = state2.execute();
+
+        return "Alert: Data found in INGESTION_FAIL_LOG. Check email for details.";
+    } else {
+        return "No failed tables found in INGESTION_FAIL_LOG.";
+    }
+} catch (err) {
+    // Handle any errors that may occur
+    return "Error: " + err;
+}
+EOT
+}
+
+resource "snowflake_procedure" "create_audit_table_and_insert_data" {
+  name     = "CREATE_AUDIT_TABLE_AND_INSERT_DATA"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "JAVASCRIPT"
+
+  comment             = "Create Audit Table And Insert Data"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+  try {
+    // Set the default schema for the session
+    var setSchemaQuery = `USE SCHEMA LANDING.RAINTREE`;
+    snowflake.execute({ sqlText: setSchemaQuery });
+
+    var auditTableName = ''RAINTREE_COPY_HISTORY''
+    
+     // Get the list of file names
+    var getStageFilesSQL = `list @SNOWFLAKE_RAINTREE_STAGE PATTERN=''.*incremental\\/$${BATCH_NUMBER}/*.*\\.parquet''`;
+    var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
+
+    // Declare an array to store all file names
+    var allFileNames = [];
+
+    // Loop through the result set and extract all file names
+    while (fileListResultSet.next()) {
+        var fileName = fileListResultSet.getColumnValue(1);
+        allFileNames.push(fileName);
+    }
+    var processedTables = [];
+
+    // Iterate through the filtered parquetFileNames array
+    for (var i = 0; i < allFileNames.length; i++) {
+        var fullFileName = allFileNames[i];
+
+        // Extract the table name
+        var tableName = fullFileName.split(''/'')[6];
+
+
+
+        // Check if the table has already been processed
+        if (processedTables.includes(tableName)) {
+            // Skip processing if the table has been processed before
+            continue;
+        }
+        // Add the current table to the list of processed tables
+        processedTables.push(tableName);
+
+    }
+    
+
+    // Create the audit table with all columns from information_schema.copy_history
+   var createAuditTableSQL = `
+    CREATE TABLE IF NOT EXISTS $${auditTableName} (
+        ID number identity start 1 increment 1,
+        FILE_NAME VARCHAR(16777216),
+        STAGE_LOCATION VARCHAR(16777216),
+        LAST_LOAD_TIME TIMESTAMP_LTZ(3),
+        ROW_COUNT NUMBER(38,0),
+        ROW_PARSED NUMBER(38,0),
+        FILE_SIZE NUMBER(38,0),
+        FIRST_ERROR_MESSAGE VARCHAR(16777216),
+        FIRST_ERROR_LINE_NUMBER NUMBER(38,0),
+        FIRST_ERROR_CHARACTER_POS NUMBER(38,0),
+        FIRST_ERROR_COLUMN_NAME VARCHAR(16777216),
+        ERROR_COUNT NUMBER(38,0),
+        ERROR_LIMIT NUMBER(38,0),
+        STATUS VARCHAR(16777216),
+        TABLE_CATALOG_NAME VARCHAR(16777216),
+        TABLE_SCHEMA_NAME VARCHAR(16777216),
+        TABLE_NAME VARCHAR(16777216),
+        PIPE_CATALOG_NAME VARCHAR(16777216),
+        PIPE_SCHEMA_NAME VARCHAR(16777216),
+        PIPE_NAME VARCHAR(16777216),
+        PIPE_RECEIVED_TIME TIMESTAMP_LTZ(3),
+        FILE_LAST_MODIFIED TIMESTAMP_LTZ(3)
+    );
+`;
+    snowflake.execute({ sqlText: createAuditTableSQL });
+
+    for (var j = 0; j < processedTables.length; j++) {
+     var lowerTableName = processedTables[j].toLowerCase();
+     
+    
+
+
+    var listCommand = `ls @SNOWFLAKE_RAINTREE_STAGE PATTERN=''.*incremental\\/$${BATCH_NUMBER}\\/$${lowerTableName}.*\\.parquet''`;
+    snowflake.execute({ sqlText: listCommand});
+
+    // Fetch data using the provided pattern and insert into the newly created audit table
+var insertAuditTableSQL = `
+    INSERT INTO $${auditTableName} (
+        FILE_NAME,
+        STAGE_LOCATION,
+        LAST_LOAD_TIME,
+        ROW_COUNT,
+        ROW_PARSED,
+        FILE_SIZE,
+        FIRST_ERROR_MESSAGE,
+        FIRST_ERROR_LINE_NUMBER,
+        FIRST_ERROR_CHARACTER_POS,
+        FIRST_ERROR_COLUMN_NAME,
+        ERROR_COUNT,
+        ERROR_LIMIT,
+        STATUS,
+        TABLE_CATALOG_NAME,
+        TABLE_SCHEMA_NAME,
+        TABLE_NAME,
+        PIPE_CATALOG_NAME,
+        PIPE_SCHEMA_NAME,
+        PIPE_NAME,
+        PIPE_RECEIVED_TIME,
+        FILE_LAST_MODIFIED
+    )
+    WITH external_stage (file_name, file_last_modified) AS (
+        SELECT
+            REGEXP_SUBSTR("name", ''.*prd-rbi-datalake-extract-i00255\\/(.*)'', 1, 1, ''e''),
+            "last_modified"
+        FROM TABLE(RESULT_SCAN(LAST_QUERY_ID()))
+    )
+    SELECT
+        CH.*,
+        TO_TIMESTAMP(ES.FILE_LAST_MODIFIED, ''Dy, DD Mon YYYY HH24:MI:SS GMT'') AS FILE_LAST_MODIFIED
+    FROM TABLE(
+        INFORMATION_SCHEMA.COPY_HISTORY(
+            TABLE_NAME=>''$${lowerTableName}'',
+            START_TIME=> DATEADD(days, -14, CURRENT_TIMESTAMP())
+        )
+    ) CH
+    JOIN EXTERNAL_STAGE ES ON CH.FILE_NAME = ES.FILE_NAME
+    WHERE CH.FILE_NAME LIKE ''%incremental/$${BATCH_NUMBER}/$${lowerTableName}%parquet'';
+`;
+
+snowflake.execute({ sqlText: insertAuditTableSQL });
+}
+
+
+var cleanupDuplicatesSQL = `
+    DELETE FROM $${auditTableName}
+USING (
+    SELECT
+        FILE_NAME,
+        LAST_LOAD_TIME,
+        ID,
+        ROW_NUMBER() OVER (PARTITION BY FILE_NAME ORDER BY LAST_LOAD_TIME DESC) AS rnk
+    FROM $${auditTableName}
+) AS dupes
+WHERE $${auditTableName}.FILE_NAME = dupes.FILE_NAME
+    AND $${auditTableName}.LAST_LOAD_TIME = dupes.LAST_LOAD_TIME
+    AND rnk > 1;
+`;
+
+// Execute the cleanup duplicates statement
+snowflake.execute({ sqlText: cleanupDuplicatesSQL });
+
+
+
+    return ''Audit table created and data inserted successfully.'';
+} catch (err) {
+    return ''Error: '' + err;
+}
+EOF
+}
