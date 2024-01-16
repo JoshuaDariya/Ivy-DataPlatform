@@ -218,6 +218,11 @@ resource "snowflake_procedure" "create_audit_table_and_insert_data" {
   schema   = "RAINTREE"
   language = "JAVASCRIPT"
 
+  arguments {
+    name = "BATCH_NUMBER"
+    type = "varchar"
+  }
+
   comment             = "Create Audit Table And Insert Data"
   return_type         = "varchar"
   execute_as          = "CALLER"
@@ -375,4 +380,109 @@ snowflake.execute({ sqlText: cleanupDuplicatesSQL });
     return ''Error: '' + err;
 }
 EOF
+}
+
+resource "snowflake_procedure" "parent_ingest_raintree_v2_data" {
+  name     = "PARENT_INGEST_RAINTREE_V2_DATA"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "JAVASCRIPT"
+
+  arguments {
+    name = "RERUN"
+    type = "BOOLEAN"
+  }
+
+  comment             = "Create Audit Table And Insert Data"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+  try{
+
+
+// Set the default schema for the session
+var setSchemaQuery = `USE SCHEMA LANDING.RAINTREE`;
+snowflake.execute({ sqlText: setSchemaQuery });
+
+// Get the list of file names
+var getStageFilesSQL = `list @SNOWFLAKE_RAINTREE_STAGE`;
+var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
+
+// Declare an array to store all file names
+var allFileNames = [];
+
+// Loop through the result set and extract all file names
+while (fileListResultSet.next()) {
+    var fileName = fileListResultSet.getColumnValue(1);
+    allFileNames.push(fileName);
+}
+
+// Filter the array to include only file names that end with ".parquet"
+var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parquet"));
+
+// Find largest batch number in stage
+    var largestStageBatch = -1;
+    for (i = 0; i < parquetFilePaths.length; i++){
+        var fullFileName = parquetFilePaths[i];
+        var batchNumber = parseInt(fullFileName.split(''/'')[5]);
+        if (batchNumber > largestStageBatch){
+            largestStageBatch = batchNumber
+        }
+    }
+
+
+// Find largest batch number in audit
+    var largestAuditBatch = -1;
+    var setAuditQuery = `SELECT MAX(BATCH_NUMBER) as batch_number FROM EXECUTION_AUDIT WHERE STATUS = ''SUCCESS''`;
+    var largestAudit = snowflake.execute({ sqlText: setAuditQuery });
+    while (largestAudit.next()) {
+        var batchNum = largestAudit.getColumnValue(1);
+        if (batchNum > largestAuditBatch){
+            largestAuditBatch = batchNum
+        }
+  }
+
+// Loop through batch diff, call ingest procedure for each batch
+    //var tempTableQuery = `CREATE OR REPLACE TEMPORARY TABLE mytemptable (id VARCHAR, RERUN BOOLEAN)`;
+    //snowflake.execute({ sqlText: tempTableQuery });
+    
+    for (i = largestAuditBatch + 1; i <= 3; i++){
+            //Set batch num for use in error logs below
+            var failureBatchNum = i
+            // Call Ingestion Procedure
+            var callProcedureSQL = `CALL INGEST_RAINTREE_V2_DATA(''SNOWFLAKE_RAINTREE_STAGE'', ''$${i}'', ''$${RERUN}'');`;
+            snowflake.execute({ sqlText: callProcedureSQL });
+            
+            // Generate GUID & current timestamp for execution
+            var guid = generateGUID()
+            var curr_date = Date.now()
+            
+            // write success to execution audit table
+            var setSuccessQuery = `INSERT INTO EXECUTION_AUDIT VALUES (''$${guid}'', ''$${curr_date}'', ''$${curr_date}'', ''SUCCESS'', ''$${i}'')`;
+            snowflake.execute({ sqlText: setSuccessQuery });
+            
+            //var setTestResult = `INSERT INTO mytemptable VALUES (''$${i}'', ''$${RERUN}'')`
+            //snowflake.execute({ sqlText: setTestResult });
+        }
+}
+catch (err) {
+        // write failure to ingestion failure table table
+            var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${failureBatchNum}'',''Failure to ingest batch'', ''--'',''$${err}'')`;
+            var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+        // Write failure to execution audit table
+            var guid = generateGUID()
+            var curr_date = Date.now()
+            var setFailureQuery = `INSERT INTO EXECUTION_AUDIT VALUES (''$${guid}'', ''$${curr_date}'', ''$${curr_date}'', ''FAILURE'', ''$${failureBatchNum}'' )`;
+            snowflake.execute({ sqlText: setFailureQuery });
+}
+
+    function generateGUID() {
+    return ''xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx''.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c === ''x'' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+    }
+    EOF
 }
