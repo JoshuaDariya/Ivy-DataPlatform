@@ -11,7 +11,7 @@ resource "snowflake_storage_integration" "azure_adaptive_integration" {
   type    = "EXTERNAL_STAGE"
   enabled = true
   storage_allowed_locations = [var.azure_adaptive_url_storage_allowed_locations]
-  storage_provider         = "Azure"
+  storage_provider         = "AZURE"
   azure_tenant_id = var.azure_tenant
 }
 
