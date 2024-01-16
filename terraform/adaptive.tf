@@ -15,7 +15,7 @@ resource "snowflake_storage_integration" "azure_adaptive_integration" {
   azure_tenant_id = var.azure_tenant
 }
 
-resource "snowflake_stage" "raintree_v2_stage" {
+resource "snowflake_stage" "adaptive_stage" {
   name        = var.adaptive_stage
   url         = var.azure_adaptive_url_storage_allowed_locations
   storage_integration = var.adaptive_azure_int
