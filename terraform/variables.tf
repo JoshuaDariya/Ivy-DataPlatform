@@ -30,6 +30,10 @@ variable "azure_adaptive_url_storage_allowed_locations"{
   type = string
 }
 
+variable "azure_tenant"{
+  type = string
+}
+
 variable "databases" {
   type = set(string)
 
