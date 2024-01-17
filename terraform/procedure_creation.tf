@@ -666,3 +666,191 @@ resource "snowflake_procedure" "insert_ingestion_fail_log" {
 }
 EOF
 }
+
+resource "snowflake_procedure" "infer_schema_and_copy_data" {
+  name     = "INFER_SCHEMA_AND_COPY_DATA"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "JAVASCRIPT"
+
+  arguments {
+    name = "BATCH_ID"
+    type = "varchar"
+  }
+  arguments {
+    name = "INCREMENT_TABLE_NAME"
+    type = "varchar"
+  }
+    arguments {
+    name = "RE_RUN"
+    type = "BOOLEAN"
+  }
+
+
+  comment             = "Update Stage."
+  return_type         = "VARCHAR(16777216)"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+  try {
+
+    // Set the default schema for the session
+    var setSchemaQuery = `USE SCHEMA LANDING.RAINTREE`;
+    snowflake.execute({ sqlText: setSchemaQuery });
+
+
+    //Check if the table already exists
+    var uppercaseTableName = INCREMENT_TABLE_NAME.toUpperCase();
+    var tableCountSQL = `SELECT COUNT(*) from INFORMATION_SCHEMA.TABLES 
+                    WHERE TABLE_NAME = ''$${uppercaseTableName}''
+                    ;`;
+    var tableCountResult = snowflake.execute({ sqlText: tableCountSQL });
+    var tableCount = tableCountResult.next() ? tableCountResult.getColumnValue(1) : null;
+
+    //Values to return to Ingest Raintree V2 Stored Procedure
+    var dataInsertedCounter = 0;
+    var tableCreatedCounter = 0;
+
+    //if statement to check to see if the table exists
+
+        if (tableCount > 0) {
+           
+            if (RE_RUN == true) {
+                deleteDataIfExists(BATCH_ID,INCREMENT_TABLE_NAME);
+            }
+            
+            //Calls the "Copy Into" sql statement to ingest data into the table that already exists
+            try {
+                var result = insertDataToTable(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
+            } catch (err) {
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Failure to insert data to table'', ''$${INCREMENT_TABLE_NAME}'',''$${err}'')`;
+                var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+            }
+            
+
+            dataInsertedCounter++; 
+              
+        }
+        else
+        {
+           //Creates Table
+           try {
+                var createTableResult = inferTableSchema(BATCH_ID, INCREMENT_TABLE_NAME);
+            } catch (err) {
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Failure to create table'', ''$${INCREMENT_TABLE_NAME}'',''$${err}'')`;
+                var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+            }
+
+           grantPermissionToRole(INCREMENT_TABLE_NAME);
+           enableSchemaEvolution(INCREMENT_TABLE_NAME);
+           enableChangeTracking(INCREMENT_TABLE_NAME);
+           
+           //Insert Data into created Table
+           
+            try {
+                var result = insertDataToTable(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
+            } catch (err) {
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Failure to insert data to table'', ''$${INCREMENT_TABLE_NAME}'',''$${err}'')`;
+                var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+            }
+
+
+           dataInsertedCounter++; 
+           tableCreatedCounter++;
+        }
+        
+    return tableCreatedCounter;    
+  } catch (err) {
+    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Failure when running infer_schema_and_copy_data'', ''$${INCREMENT_TABLE_NAME}'',''${err}'')`;
+    var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+}
+
+function insertDataToTable(batchId, tableName, reRun) {
+
+    // Step 1: Load data into the table without BATCH_ID
+    var COPY_SQL = `
+        COPY INTO $${tableName}
+        FROM @snowflake_raintree_stage/i00255/incremental/$${batchId}/$${tableName}/
+        PATTERN = ''.*[.]parquet''
+        FILE_FORMAT = (TYPE = PARQUET)
+        FORCE = $${reRun ? ''TRUE'' : ''FALSE''}
+        MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE
+    `;
+
+    snowflake.execute({ sqlText: COPY_SQL });
+
+     // Step 2: Add the BATCH_ID column if it doesnt exist
+    var ADD_COLUMN_SQL = `
+              ALTER TABLE $${tableName}
+              ADD COLUMN IF NOT EXISTS BATCH_ID VARCHAR; 
+        `;      
+    snowflake.execute({ sqlText: ADD_COLUMN_SQL });
+
+    // Step 3: Set the BATCH_ID for newly inserted rows
+    var UPDATE_SQL = `
+              UPDATE $${tableName}
+              SET BATCH_ID = ''$${batchId}''
+              WHERE BATCH_ID IS NULL OR BATCH_ID = '''';
+        `;      
+    snowflake.execute({ sqlText: UPDATE_SQL });
+}
+
+function inferTableSchema(batchName, tableName) {
+    // Create the table with inferred schema
+    var CREATE_TABLE_SQL = `
+        CREATE OR REPLACE TABLE $${tableName}
+        USING TEMPLATE (
+            SELECT ARRAY_AGG(object_construct(*))
+            FROM TABLE(
+                INFER_SCHEMA(
+                    LOCATION => ''@snowflake_raintree_stage/i00255/incremental/$${batchName}/$${tableName}/'',
+                    FILE_FORMAT => ''PARQUET_FORMAT'',
+                    IGNORE_CASE => true
+                )
+            )
+        )
+    `;
+    
+    snowflake.execute({ sqlText: CREATE_TABLE_SQL });
+
+    // Add BATCH_ID column to the table
+    var ADD_BATCH_ID_SQL = `ALTER TABLE $${tableName} ADD COLUMN BATCH_ID VARCHAR;`;
+    snowflake.execute({ sqlText: ADD_BATCH_ID_SQL });
+}
+
+//Permission Granting to table needed for certain functions
+function grantPermissionToRole(tableName){
+    var GRANT_PERMISSION_SQL = `GRANT EVOLVE SCHEMA ON TABLE $${tableName} TO ROLE ACCOUNTADMIN;`;
+    return snowflake.execute({ sqlText: GRANT_PERMISSION_SQL });
+}
+
+function enableSchemaEvolution(tableName){
+    var ENABLE_SCHEMA_EVOLUTION_SQL = `ALTER TABLE $${tableName} SET ENABLE_SCHEMA_EVOLUTION = true;`;
+    return snowflake.execute({ sqlText: ENABLE_SCHEMA_EVOLUTION_SQL });
+}
+
+function enableChangeTracking(tableName){
+    var ENABLE_CHANGE_TRACKING_SQL = `ALTER TABLE $${tableName} SET CHANGE_TRACKING = TRUE;`;
+    return snowflake.execute({ sqlText: ENABLE_CHANGE_TRACKING_SQL });
+}
+
+function deleteDataIfExists(batchId, tableName) {
+
+   // Delete records if exists for re-run purpose
+    var DELETE_SQL = `
+        DELETE 
+        FROM $${tableName} RTT
+        WHERE RTT.BATCH_ID = ''$${batchId}''
+    `;
+    
+    
+     try {
+            snowflake.execute({ sqlText: DELETE_SQL });
+      } catch (err) {
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${batchId}'',''Failure to delete data if exists'', ''$${tableName}'',''$${err}'')`;
+                var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+     }
+
+}
+EOF
+}
