@@ -452,7 +452,13 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
             var failureBatchNum = i
             // Call Ingestion Procedure
             var callProcedureSQL = `CALL INGEST_RAINTREE_V2_DATA(''SNOWFLAKE_RAINTREE_STAGE'', ''$${i}'', ''$${RERUN}'');`;
+            try {
             snowflake.execute({ sqlText: callProcedureSQL });
+            }
+            catch(err){
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${failureBatchNum}'',''Failure in ingest_raintree_v2_data'', ''--'',''$${err}'')`;
+                var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+            }
             
             // Generate GUID & current timestamp for execution
             var guid = generateGUID()
@@ -460,8 +466,23 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
             
             // write success to execution audit table
             var setSuccessQuery = `INSERT INTO EXECUTION_AUDIT VALUES (''$${guid}'', ''$${curr_date}'', ''$${curr_date}'', ''SUCCESS'', ''$${i}'')`;
-            snowflake.execute({ sqlText: setSuccessQuery });
-            
+            try {
+                snowflake.execute({ sqlText: setSuccessQuery });
+            }
+            catch(err){
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${failureBatchNum}'',''Failure to add values to execution audit'', ''--'',''$${err}'')`;
+                var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+            }
+
+            var ingestionCopyHistory = `CREATE_AUDIT_TABLE_AND_INSERT_DATA(''$${i}'')`
+            try{
+                snowflake.execute({ sqlText: ingestionCopyHistory });
+            }
+            catch(err){
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${failureBatchNum}'',''Failure to call ingestion audit'', ''--'',''$${err}'')`;
+                var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+            }
+
             var alertingResult = `CALL CHECK_RAINTREE_INGESTION_LOG_AND_ALERT();`
             snowflake.execute({ sqlText: alertingResult });
         }
