@@ -196,7 +196,7 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: "CALL SYSTEM$SEND_EMAIL(''raintree_ingestion_failures'', ''2e36f225.ivyrehab.onmicrosoft.com@amer.teams.ms'', ''Ingestion Failures'', :1)",
+            sqlText: "CALL SYSTEM$SEND_EMAIL(''raintree_ingestion_failures'', ''735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms'', ''Ingestion Failures'', :1)",
             binds: [emailContent]
         });
         var alertResult = state2.execute();
