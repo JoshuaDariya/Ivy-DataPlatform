@@ -393,7 +393,7 @@ resource "snowflake_procedure" "parent_ingest_raintree_v2_data" {
     type = "BOOLEAN"
   }
 
-  comment             = "Create Audit Table And Insert Data"
+  comment             = "Kickoff Ingest Raintree v2 data."
   return_type         = "varchar"
   execute_as          = "CALLER"
   return_behavior     = "IMMUTABLE"
