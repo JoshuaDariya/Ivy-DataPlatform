@@ -474,7 +474,7 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
 
-            var ingestionCopyHistory = `CREATE_AUDIT_TABLE_AND_INSERT_DATA('$${i}')`
+            var ingestionCopyHistory = `CALL CREATE_AUDIT_TABLE_AND_INSERT_DATA('$${i}')`;
             try{
                 snowflake.execute({ sqlText: ingestionCopyHistory });
             }
