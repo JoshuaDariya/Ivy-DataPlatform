@@ -641,22 +641,22 @@ resource "snowflake_procedure" "insert_ingestion_fail_log" {
     var tableName = ''INGESTION_FAIL_LOG'';
 
     // Check if the table exists
-    var tableExistsQuery = `SELECT COUNT(*) AS TABLE_COUNT FROM information_schema.tables WHERE table_schema = ''${schemaName}'' AND table_name = ''${tableName}''`;
+    var tableExistsQuery = `SELECT COUNT(*) AS TABLE_COUNT FROM information_schema.tables WHERE table_schema = ''$${schemaName}'' AND table_name = ''$${tableName}''`;
     var tableExistsResult = snowflake.execute({sqlText: tableExistsQuery});
     
     if (tableExistsResult.next() && tableExistsResult.getColumnValue(''TABLE_COUNT'') > 0) {
         // Table exists, insert data
-        var insertQuery = `INSERT INTO ${tableName} (fail_date, batchNumber, tableName, failArea, error) VALUES (CURRENT_DATE(), :1, :2, :3, :4)`;
+        var insertQuery = `INSERT INTO $${tableName} (fail_date, batchNumber, tableName, failArea, error) VALUES (CURRENT_DATE(), :1, :2, :3, :4)`;
         snowflake.execute({sqlText: insertQuery, binds: [BATCH_NUMBER, TABLE_NAME, FAIL_AREA, ERROR]});
         
         return ''Data inserted into '' + tableName + '' successfully.'';
     } else {
         // Table does not exist, create it
-        var createTableQuery = `CREATE TABLE ${tableName} (fail_date DATE, batchNumber VARCHAR, tableName VARCHAR, failArea VARCHAR, error VARCHAR)`;
+        var createTableQuery = `CREATE TABLE $${tableName} (fail_date DATE, batchNumber VARCHAR, tableName VARCHAR, failArea VARCHAR, error VARCHAR)`;
         snowflake.execute({sqlText: createTableQuery});
 
         // Insert data into the newly created table
-        var insertQuery = `INSERT INTO ${tableName} (fail_date, batchNumber, tableName, failArea, error) VALUES (CURRENT_DATE(), :1, :2, :3, :4)`;
+        var insertQuery = `INSERT INTO $${tableName} (fail_date, batchNumber, tableName, failArea, error) VALUES (CURRENT_DATE(), :1, :2, :3, :4)`;
         snowflake.execute({sqlText: insertQuery, binds: [BATCH_NUMBER, TABLE_NAME, FAIL_AREA, ERROR]});
 
         return ''Table '' + tableName + '' created and data inserted successfully.'';
