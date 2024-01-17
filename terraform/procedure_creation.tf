@@ -462,7 +462,7 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
             var setSuccessQuery = `INSERT INTO EXECUTION_AUDIT VALUES (''$${guid}'', ''$${curr_date}'', ''$${curr_date}'', ''SUCCESS'', ''$${i}'')`;
             snowflake.execute({ sqlText: setSuccessQuery });
             
-            var alertingResult = `CALL check_raintree_ingestion_log_and_alert();`
+            var alertingResult = `CALL CHECK_RAINTREE_INGESTION_LOG_AND_ALERT();`
             snowflake.execute({ sqlText: alertingResult });
         }
 }
