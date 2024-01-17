@@ -150,9 +150,9 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
   language = "JAVASCRIPT"
 
   comment             = "Check the raintree ingestion"
-  return_type         = "varchar"
+  return_type         = "VARCHAR(16777216)"
   execute_as          = "CALLER"
-  return_behavior     = "IMMUTABLE"
+  return_behavior     = "VOLATILE"
   statement           = <<EOT
   try {
     var failedTables = []; // Array to store failed tables information
@@ -224,7 +224,7 @@ resource "snowflake_procedure" "create_audit_table_and_insert_data" {
   }
 
   comment             = "Create Audit Table And Insert Data"
-  return_type         = "varchar"
+  return_type         = "VARCHAR(16777216)"
   execute_as          = "CALLER"
   return_behavior     = "IMMUTABLE"
   statement           = <<EOF
@@ -394,7 +394,7 @@ resource "snowflake_procedure" "parent_ingest_raintree_v2_data" {
   }
 
   comment             = "Kickoff Ingest Raintree v2 data."
-  return_type         = "varchar"
+  return_type         = "VARCHAR(16777216)"
   execute_as          = "CALLER"
   return_behavior     = "IMMUTABLE"
   statement           = <<EOF
@@ -507,7 +507,7 @@ resource "snowflake_procedure" "child_ingest_raintree_v2_data" {
   }
 
   comment             = "Ingest Raintree v2 data."
-  return_type         = "varchar"
+  return_type         = "VARCHAR(16777216)"
   execute_as          = "CALLER"
   return_behavior     = "IMMUTABLE"
   statement           = <<EOF
