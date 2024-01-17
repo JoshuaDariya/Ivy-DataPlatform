@@ -486,3 +486,101 @@ catch (err) {
     }
     EOF
 }
+
+resource "snowflake_procedure" "child_ingest_raintree_v2_data" {
+  name     = "INGEST_RAINTREE_V2_DATA"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "JAVASCRIPT"
+
+  arguments {
+    name = "STAGE_NAME"
+    type = "varchar"
+  }
+  arguments {
+    name = "BATCH_ID"
+    type = "varchar"
+  }
+    arguments {
+    name = "RE_RUN"
+    type = "BOOLEAN"
+  }
+
+  comment             = "Ingest Raintree v2 data."
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+  try {
+
+// Set the default schema for the session
+    var setSchemaQuery = `USE SCHEMA LANDING.RAINTREE`;
+    snowflake.execute({ sqlText: setSchemaQuery });
+
+// Get the list of file names
+    var getStageFilesSQL = `list @$${STAGE_NAME}`;
+    
+    var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
+
+// Declare an array to store all file names
+    var allFileNames = [];
+
+    // Loop through the result set and extract all file names
+    while (fileListResultSet.next()) {
+        var fileName = fileListResultSet.getColumnValue(1);
+        allFileNames.push(fileName);
+    }
+
+    // Filter the array to include only file names that end with ".parquet"
+    var parquetFilePathes = allFileNames.filter(fileName => fileName.endsWith(".parquet"));
+    
+    var filteredFilesPathes  = parquetFilePathes.filter(file => file.includes("/"+BATCH_ID+"/"));
+
+    // Declare an array to store all table names
+    var allTableNames = [];
+
+    var dataInsertedCounter = 0;
+    var tableCreatedCounter = 0;
+    // Iterate through the filtered filteredFilesPathes array
+    for (var i = 0; i < filteredFilesPathes.length; i++) {
+        var fullFileName = filteredFilesPathes[i];
+
+        // Extract the table name
+        var extractedtableName = fullFileName.split(''/'')[6];   
+        allTableNames.push(extractedtableName);
+    }
+
+    var uniqueTableNames = [...new Set(allTableNames)];
+
+     for (var i = 0; i < uniqueTableNames.length; i++) {
+        // Check conditions before calling the procedure
+        var tableName = uniqueTableNames[i];
+        if (tableName !== null) {    
+
+            var callProcedureSQL = `CALL INFER_SCHEMA_AND_COPY_DATA(''$${BATCH_ID}'', ''$${tableName}'', ''$${RE_RUN}'');`;
+    
+               try {
+                var result = snowflake.execute({ sqlText: callProcedureSQL });
+                dataInsertedCounter++;
+
+                if (result.next()) {
+                    // Extract the return message from the procedure
+                    tableCreatedCounter += parseInt(result.getColumnValue(1));
+                }
+            } catch (error) {
+                // Handle the error here (send alert, log into a table, etc.)
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Attempt to call Infer_Schema_and_Copy_Data'', ''$${tableName}'',''$${error}'')`;
+    var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+
+            }
+        }
+    }
+    
+    return dataInsertedCounter + " table(s) were processed in batch " + BATCH_ID + " and " + tableCreatedCounter + " tables were created";
+}
+catch (err) {
+    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''--'',''Failure in Ingest_Raintree_v2'', ''--'',''$${err}'')`;
+    var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+}
+EOF
+}
