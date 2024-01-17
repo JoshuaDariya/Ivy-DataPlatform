@@ -196,7 +196,7 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: "CALL SYSTEM$SEND_EMAIL(''raintree_ingestion_failures'', ''735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms'', ''Ingestion Failures'', :1)",
+            sqlText: "CALL SYSTEM$SEND_EMAIL('raintree_ingestion_failures', '735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Ingestion Failures', :1)",
             binds: [emailContent]
         });
         var alertResult = state2.execute();
@@ -233,10 +233,10 @@ resource "snowflake_procedure" "create_audit_table_and_insert_data" {
     var setSchemaQuery = `USE SCHEMA LANDING.RAINTREE`;
     snowflake.execute({ sqlText: setSchemaQuery });
 
-    var auditTableName = ''RAINTREE_COPY_HISTORY''
+    var auditTableName = 'RAINTREE_COPY_HISTORY'
     
      // Get the list of file names
-    var getStageFilesSQL = `list @SNOWFLAKE_RAINTREE_STAGE PATTERN=''.*incremental\\/$${BATCH_NUMBER}/*.*\\.parquet''`;
+    var getStageFilesSQL = `list @SNOWFLAKE_RAINTREE_STAGE PATTERN='.*incremental\\/$${BATCH_NUMBER}/*.*\\.parquet'`;
     var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
 
     // Declare an array to store all file names
@@ -254,7 +254,7 @@ resource "snowflake_procedure" "create_audit_table_and_insert_data" {
         var fullFileName = allFileNames[i];
 
         // Extract the table name
-        var tableName = fullFileName.split(''/'')[6];
+        var tableName = fullFileName.split('/')[6];
 
 
 
@@ -304,7 +304,7 @@ resource "snowflake_procedure" "create_audit_table_and_insert_data" {
     
 
 
-    var listCommand = `ls @SNOWFLAKE_RAINTREE_STAGE PATTERN=''.*incremental\\/$${BATCH_NUMBER}\\/$${lowerTableName}.*\\.parquet''`;
+    var listCommand = `ls @SNOWFLAKE_RAINTREE_STAGE PATTERN='.*incremental\\/$${BATCH_NUMBER}\\/$${lowerTableName}.*\\.parquet'`;
     snowflake.execute({ sqlText: listCommand});
 
     // Fetch data using the provided pattern and insert into the newly created audit table
@@ -334,21 +334,21 @@ var insertAuditTableSQL = `
     )
     WITH external_stage (file_name, file_last_modified) AS (
         SELECT
-            REGEXP_SUBSTR("name", ''.*prd-rbi-datalake-extract-i00255\\/(.*)'', 1, 1, ''e''),
+            REGEXP_SUBSTR("name", '.*prd-rbi-datalake-extract-i00255\\/(.*)', 1, 1, 'e'),
             "last_modified"
         FROM TABLE(RESULT_SCAN(LAST_QUERY_ID()))
     )
     SELECT
         CH.*,
-        TO_TIMESTAMP(ES.FILE_LAST_MODIFIED, ''Dy, DD Mon YYYY HH24:MI:SS GMT'') AS FILE_LAST_MODIFIED
+        TO_TIMESTAMP(ES.FILE_LAST_MODIFIED, 'Dy, DD Mon YYYY HH24:MI:SS GMT') AS FILE_LAST_MODIFIED
     FROM TABLE(
         INFORMATION_SCHEMA.COPY_HISTORY(
-            TABLE_NAME=>''$${lowerTableName}'',
+            TABLE_NAME=>'$${lowerTableName}',
             START_TIME=> DATEADD(days, -14, CURRENT_TIMESTAMP())
         )
     ) CH
     JOIN EXTERNAL_STAGE ES ON CH.FILE_NAME = ES.FILE_NAME
-    WHERE CH.FILE_NAME LIKE ''%incremental/$${BATCH_NUMBER}/$${lowerTableName}%parquet'';
+    WHERE CH.FILE_NAME LIKE '%incremental/$${BATCH_NUMBER}/$${lowerTableName}%parquet';
 `;
 
 snowflake.execute({ sqlText: insertAuditTableSQL });
@@ -375,9 +375,9 @@ snowflake.execute({ sqlText: cleanupDuplicatesSQL });
 
 
 
-    return ''Audit table created and data inserted successfully.'';
+    return 'Audit table created and data inserted successfully.';
 } catch (err) {
-    return ''Error: '' + err;
+    return 'Error: ' + err;
 }
 EOF
 }
@@ -425,7 +425,7 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
     var largestStageBatch = -1;
     for (i = 0; i < parquetFilePaths.length; i++){
         var fullFileName = parquetFilePaths[i];
-        var batchNumber = parseInt(fullFileName.split(''/'')[5]);
+        var batchNumber = parseInt(fullFileName.split('/')[5]);
         if (batchNumber > largestStageBatch){
             largestStageBatch = batchNumber
         }
@@ -434,7 +434,7 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
 
 // Find largest batch number in audit
     var largestAuditBatch = -1;
-    var setAuditQuery = `SELECT MAX(BATCH_NUMBER) as batch_number FROM EXECUTION_AUDIT WHERE STATUS = ''SUCCESS''`;
+    var setAuditQuery = `SELECT MAX(BATCH_NUMBER) as batch_number FROM EXECUTION_AUDIT WHERE STATUS = 'SUCCESS'`;
     var largestAudit = snowflake.execute({ sqlText: setAuditQuery });
     while (largestAudit.next()) {
         var batchNum = largestAudit.getColumnValue(1);
@@ -451,12 +451,12 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
             //Set batch num for use in error logs below
             var failureBatchNum = i
             // Call Ingestion Procedure
-            var callProcedureSQL = `CALL INGEST_RAINTREE_V2_DATA(''SNOWFLAKE_RAINTREE_STAGE'', ''$${i}'', ''$${RERUN}'');`;
+            var callProcedureSQL = `CALL INGEST_RAINTREE_V2_DATA('SNOWFLAKE_RAINTREE_STAGE', '$${i}', '$${RERUN}');`;
             try {
             snowflake.execute({ sqlText: callProcedureSQL });
             }
             catch(err){
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${failureBatchNum}'',''Failure in ingest_raintree_v2_data'', ''--'',''$${err}'')`;
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure in ingest_raintree_v2_data', '--','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
             
@@ -465,21 +465,21 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
             var curr_date = Date.now()
             
             // write success to execution audit table
-            var setSuccessQuery = `INSERT INTO EXECUTION_AUDIT VALUES (''$${guid}'', ''$${curr_date}'', ''$${curr_date}'', ''SUCCESS'', ''$${i}'')`;
+            var setSuccessQuery = `INSERT INTO EXECUTION_AUDIT VALUES ('$${guid}', '$${curr_date}', '$${curr_date}', 'SUCCESS', '$${i}')`;
             try {
                 snowflake.execute({ sqlText: setSuccessQuery });
             }
             catch(err){
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${failureBatchNum}'',''Failure to add values to execution audit'', ''--'',''$${err}'')`;
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to add values to execution audit', '--','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
 
-            var ingestionCopyHistory = `CREATE_AUDIT_TABLE_AND_INSERT_DATA(''$${i}'')`
+            var ingestionCopyHistory = `CREATE_AUDIT_TABLE_AND_INSERT_DATA('$${i}')`
             try{
                 snowflake.execute({ sqlText: ingestionCopyHistory });
             }
             catch(err){
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${failureBatchNum}'',''Failure to call ingestion audit'', ''--'',''$${err}'')`;
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to call ingestion audit', '--','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
 
@@ -489,19 +489,19 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
 }
 catch (err) {
         // write failure to ingestion failure table table
-            var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${failureBatchNum}'',''Failure to ingest batch'', ''--'',''$${err}'')`;
+            var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to ingest batch', '--','$${err}')`;
             var logFail = snowflake.execute({ sqlText: callFailLogSQL });
         // Write failure to execution audit table
             var guid = generateGUID()
             var curr_date = Date.now()
-            var setFailureQuery = `INSERT INTO EXECUTION_AUDIT VALUES (''$${guid}'', ''$${curr_date}'', ''$${curr_date}'', ''FAILURE'', ''$${failureBatchNum}'' )`;
+            var setFailureQuery = `INSERT INTO EXECUTION_AUDIT VALUES ('$${guid}', '$${curr_date}', '$${curr_date}', 'FAILURE', '$${failureBatchNum}' )`;
             snowflake.execute({ sqlText: setFailureQuery });
 }
 
     function generateGUID() {
-    return ''xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx''.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random() * 16 | 0,
-            v = c === ''x'' ? r : (r & 0x3 | 0x8);
+            v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
     }
@@ -567,7 +567,7 @@ resource "snowflake_procedure" "child_ingest_raintree_v2_data" {
         var fullFileName = filteredFilesPathes[i];
 
         // Extract the table name
-        var extractedtableName = fullFileName.split(''/'')[6];   
+        var extractedtableName = fullFileName.split('/')[6];   
         allTableNames.push(extractedtableName);
     }
 
@@ -578,7 +578,7 @@ resource "snowflake_procedure" "child_ingest_raintree_v2_data" {
         var tableName = uniqueTableNames[i];
         if (tableName !== null) {    
 
-            var callProcedureSQL = `CALL INFER_SCHEMA_AND_COPY_DATA(''$${BATCH_ID}'', ''$${tableName}'', ''$${RE_RUN}'');`;
+            var callProcedureSQL = `CALL INFER_SCHEMA_AND_COPY_DATA('$${BATCH_ID}', '$${tableName}', '$${RE_RUN}');`;
     
                try {
                 var result = snowflake.execute({ sqlText: callProcedureSQL });
@@ -590,7 +590,7 @@ resource "snowflake_procedure" "child_ingest_raintree_v2_data" {
                 }
             } catch (error) {
                 // Handle the error here (send alert, log into a table, etc.)
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Attempt to call Infer_Schema_and_Copy_Data'', ''$${tableName}'',''$${error}'')`;
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Attempt to call Infer_Schema_and_Copy_Data', '$${tableName}','$${error}')`;
     var logFail = snowflake.execute({ sqlText: callFailLogSQL });
 
             }
@@ -600,7 +600,7 @@ resource "snowflake_procedure" "child_ingest_raintree_v2_data" {
     return dataInsertedCounter + " table(s) were processed in batch " + BATCH_ID + " and " + tableCreatedCounter + " tables were created";
 }
 catch (err) {
-    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''--'',''Failure in Ingest_Raintree_v2'', ''--'',''$${err}'')`;
+    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('--','Failure in Ingest_Raintree_v2', '--','$${err}')`;
     var logFail = snowflake.execute({ sqlText: callFailLogSQL });
 }
 EOF
@@ -637,19 +637,19 @@ resource "snowflake_procedure" "insert_ingestion_fail_log" {
   statement           = <<EOF
   try {
     // Set the schema and table names
-    var schemaName = ''RAINTREE'';
-    var tableName = ''INGESTION_FAIL_LOG'';
+    var schemaName = 'RAINTREE';
+    var tableName = 'INGESTION_FAIL_LOG';
 
     // Check if the table exists
-    var tableExistsQuery = `SELECT COUNT(*) AS TABLE_COUNT FROM information_schema.tables WHERE table_schema = ''$${schemaName}'' AND table_name = ''$${tableName}''`;
+    var tableExistsQuery = `SELECT COUNT(*) AS TABLE_COUNT FROM information_schema.tables WHERE table_schema = '$${schemaName}' AND table_name = '$${tableName}'`;
     var tableExistsResult = snowflake.execute({sqlText: tableExistsQuery});
     
-    if (tableExistsResult.next() && tableExistsResult.getColumnValue(''TABLE_COUNT'') > 0) {
+    if (tableExistsResult.next() && tableExistsResult.getColumnValue('TABLE_COUNT') > 0) {
         // Table exists, insert data
         var insertQuery = `INSERT INTO $${tableName} (fail_date, batchNumber, tableName, failArea, error) VALUES (CURRENT_DATE(), :1, :2, :3, :4)`;
         snowflake.execute({sqlText: insertQuery, binds: [BATCH_NUMBER, TABLE_NAME, FAIL_AREA, ERROR]});
         
-        return ''Data inserted into '' + tableName + '' successfully.'';
+        return 'Data inserted into ' + tableName + ' successfully.';
     } else {
         // Table does not exist, create it
         var createTableQuery = `CREATE TABLE $${tableName} (fail_date DATE, batchNumber VARCHAR, tableName VARCHAR, failArea VARCHAR, error VARCHAR)`;
@@ -659,10 +659,10 @@ resource "snowflake_procedure" "insert_ingestion_fail_log" {
         var insertQuery = `INSERT INTO $${tableName} (fail_date, batchNumber, tableName, failArea, error) VALUES (CURRENT_DATE(), :1, :2, :3, :4)`;
         snowflake.execute({sqlText: insertQuery, binds: [BATCH_NUMBER, TABLE_NAME, FAIL_AREA, ERROR]});
 
-        return ''Table '' + tableName + '' created and data inserted successfully.'';
+        return 'Table ' + tableName + ' created and data inserted successfully.';
     }
 } catch (err) {
-    return ''Error: '' + err;
+    return 'Error: ' + err;
 }
 EOF
 }
@@ -702,7 +702,7 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
     //Check if the table already exists
     var uppercaseTableName = INCREMENT_TABLE_NAME.toUpperCase();
     var tableCountSQL = `SELECT COUNT(*) from INFORMATION_SCHEMA.TABLES 
-                    WHERE TABLE_NAME = ''$${uppercaseTableName}''
+                    WHERE TABLE_NAME = '$${uppercaseTableName}'
                     ;`;
     var tableCountResult = snowflake.execute({ sqlText: tableCountSQL });
     var tableCount = tableCountResult.next() ? tableCountResult.getColumnValue(1) : null;
@@ -723,7 +723,7 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
             try {
                 var result = insertDataToTable(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
             } catch (err) {
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Failure to insert data to table'', ''$${INCREMENT_TABLE_NAME}'',''$${err}'')`;
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
             
@@ -737,7 +737,7 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
            try {
                 var createTableResult = inferTableSchema(BATCH_ID, INCREMENT_TABLE_NAME);
             } catch (err) {
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Failure to create table'', ''$${INCREMENT_TABLE_NAME}'',''$${err}'')`;
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to create table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
 
@@ -750,7 +750,7 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
             try {
                 var result = insertDataToTable(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
             } catch (err) {
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Failure to insert data to table'', ''$${INCREMENT_TABLE_NAME}'',''$${err}'')`;
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
 
@@ -761,7 +761,7 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
         
     return tableCreatedCounter;    
   } catch (err) {
-    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${BATCH_ID}'',''Failure when running infer_schema_and_copy_data'', ''$${INCREMENT_TABLE_NAME}'',''$${err}'')`;
+    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure when running infer_schema_and_copy_data', '$${INCREMENT_TABLE_NAME}','$${err}')`;
     var logFail = snowflake.execute({ sqlText: callFailLogSQL });
 }
 
@@ -771,9 +771,9 @@ function insertDataToTable(batchId, tableName, reRun) {
     var COPY_SQL = `
         COPY INTO $${tableName}
         FROM @snowflake_raintree_stage/i00255/incremental/$${batchId}/$${tableName}/
-        PATTERN = ''.*[.]parquet''
+        PATTERN = '.*[.]parquet'
         FILE_FORMAT = (TYPE = PARQUET)
-        FORCE = $${reRun ? ''TRUE'' : ''FALSE''}
+        FORCE = $${reRun ? 'TRUE' : 'FALSE'}
         MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE
     `;
 
@@ -789,8 +789,8 @@ function insertDataToTable(batchId, tableName, reRun) {
     // Step 3: Set the BATCH_ID for newly inserted rows
     var UPDATE_SQL = `
               UPDATE $${tableName}
-              SET BATCH_ID = ''$${batchId}''
-              WHERE BATCH_ID IS NULL OR BATCH_ID = '''';
+              SET BATCH_ID = '$${batchId}'
+              WHERE BATCH_ID IS NULL OR BATCH_ID = '';
         `;      
     snowflake.execute({ sqlText: UPDATE_SQL });
 }
@@ -803,8 +803,8 @@ function inferTableSchema(batchName, tableName) {
             SELECT ARRAY_AGG(object_construct(*))
             FROM TABLE(
                 INFER_SCHEMA(
-                    LOCATION => ''@snowflake_raintree_stage/i00255/incremental/$${batchName}/$${tableName}/'',
-                    FILE_FORMAT => ''PARQUET_FORMAT'',
+                    LOCATION => '@snowflake_raintree_stage/i00255/incremental/$${batchName}/$${tableName}/',
+                    FILE_FORMAT => 'PARQUET_FORMAT',
                     IGNORE_CASE => true
                 )
             )
@@ -840,14 +840,14 @@ function deleteDataIfExists(batchId, tableName) {
     var DELETE_SQL = `
         DELETE 
         FROM $${tableName} RTT
-        WHERE RTT.BATCH_ID = ''$${batchId}''
+        WHERE RTT.BATCH_ID = '$${batchId}'
     `;
     
     
      try {
             snowflake.execute({ sqlText: DELETE_SQL });
       } catch (err) {
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${batchId}'',''Failure to delete data if exists'', ''$${tableName}'',''$${err}'')`;
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${batchId}','Failure to delete data if exists', '$${tableName}','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
      }
 
