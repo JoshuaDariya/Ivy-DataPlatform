@@ -447,7 +447,7 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
     //var tempTableQuery = `CREATE OR REPLACE TEMPORARY TABLE mytemptable (id VARCHAR, RERUN BOOLEAN)`;
     //snowflake.execute({ sqlText: tempTableQuery });
     
-    for (i = largestAuditBatch + 1; i <= 3; i++){
+    for (i = largestAuditBatch + 1; i <= largestStageBatch; i++){
             //Set batch num for use in error logs below
             var failureBatchNum = i
             // Call Ingestion Procedure
