@@ -273,6 +273,7 @@ resource "snowflake_procedure" "create_audit_table_and_insert_data" {
    var createAuditTableSQL = `
     CREATE TABLE IF NOT EXISTS $${auditTableName} (
         ID number identity start 1 increment 1,
+        BATCH_NUMBER VARCHAR(16777216) DEFAULT $${BATCH_NUMBER},
         FILE_NAME VARCHAR(16777216),
         STAGE_LOCATION VARCHAR(16777216),
         LAST_LOAD_TIME TIMESTAMP_LTZ(3),
@@ -578,7 +579,7 @@ resource "snowflake_procedure" "child_ingest_raintree_v2_data" {
         var tableName = uniqueTableNames[i];
         if (tableName !== null) {    
 
-            var callProcedureSQL = `CALL INFER_SCHEMA_AND_COPY_DATA('$${BATCH_ID}', '$${tableName}', '$${RE_RUN}');`;
+            var callProcedureSQL = `CALL INFER_SCHEMA_AND_COPY_DATA('$${BATCH_ID}', '$${tableName}', '$${RE_RUN}', 'no');`;
     
                try {
                 var result = snowflake.execute({ sqlText: callProcedureSQL });
@@ -688,7 +689,7 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
 
   arguments {
     name = "SCHEMA_RETRY"
-    type = "STRING DEFAULT 'no'"
+    type = "STRING"
   }
 
 
@@ -734,7 +735,7 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
                 var retryCount = 0;
                 while (retryCount < 1) {
                     try {
-                        if (err.message.includes("Schema evolution is incomplete. The data was not loaded. The table schema was updated as per new schema.") && SCHEMA_RETRY === 'yes') {
+                        if (err.message.includes("Schema evolution is incomplete. The data was not loaded. The table schema was updated as per new schema.") && SCHEMA_RETRY === 'no') {
                             var tableRetrySQL = CALL INFER_SCHEMA_AND_COPY_DATA(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN, 'yes');
                             var tableRetry = snowflake.execute({ sqlText: tableRetrySQL });
                             callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Successful')`;
