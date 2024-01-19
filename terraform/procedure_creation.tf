@@ -273,7 +273,7 @@ resource "snowflake_procedure" "create_audit_table_and_insert_data" {
    var createAuditTableSQL = `
     CREATE TABLE IF NOT EXISTS $${auditTableName} (
         AUTO_ID number identity start 1 increment 1,
-        BATCH_ID number DEFAULT $${BATCH_NUMBER},
+        BATCH_ID number,
         FILE_NAME VARCHAR(16777216),
         STAGE_LOCATION VARCHAR(16777216),
         LAST_LOAD_TIME TIMESTAMP_LTZ(3),
@@ -311,6 +311,7 @@ resource "snowflake_procedure" "create_audit_table_and_insert_data" {
     // Fetch data using the provided pattern and insert into the newly created audit table
 var insertAuditTableSQL = `
     INSERT INTO $${auditTableName} (
+        BATCH_ID,
         FILE_NAME,
         STAGE_LOCATION,
         LAST_LOAD_TIME,
@@ -340,6 +341,7 @@ var insertAuditTableSQL = `
         FROM TABLE(RESULT_SCAN(LAST_QUERY_ID()))
     )
     SELECT
+        $${BATCH_NUMBER} AS BATCH_ID,
         CH.*,
         TO_TIMESTAMP(ES.FILE_LAST_MODIFIED, 'Dy, DD Mon YYYY HH24:MI:SS GMT') AS FILE_LAST_MODIFIED
     FROM TABLE(
@@ -362,7 +364,7 @@ USING (
     SELECT
         FILE_NAME,
         LAST_LOAD_TIME,
-        ID,
+        AUTO_ID,
         ROW_NUMBER() OVER (PARTITION BY FILE_NAME ORDER BY LAST_LOAD_TIME DESC) AS rnk
     FROM $${auditTableName}
 ) AS dupes
