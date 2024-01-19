@@ -723,7 +723,30 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
             try {
                 var result = insertDataToTable(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
             } catch (err) {
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
+                var callFailLogSQL;
+
+                // Retry logic for schema evolution error
+                var retryCount = 0;
+                while (retryCount < 1) {
+                    try {
+                        if (err.includes("Schema evolution is incomplete. The data was not loaded. The table schema was updated as per new schema.")) {
+                            var tableRetrySQL = CALL INFER_SCHEMA_AND_COPY_DATA(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
+                            var tableRetry = snowflake.execute({ sqlText: tableRetrySQL });
+                            callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Successful')`;
+                            break; // Break the loop on successful retry
+                        }
+                    } catch (retryErr) {
+                        // Log retry failure
+                        callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Failed')`;
+                    }
+                    retryCount++;
+                }
+
+                // If retry was not successful, log the original error
+                if (!callFailLogSQL) {
+                    callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
+                }
+
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
             
@@ -746,11 +769,33 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
            enableChangeTracking(INCREMENT_TABLE_NAME);
            
            //Insert Data into created Table
-           
             try {
                 var result = insertDataToTable(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
             } catch (err) {
-                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
+                var callFailLogSQL;
+
+                // Retry logic for schema evolution error
+                var retryCount = 0;
+                while (retryCount < 1) {
+                    try {
+                        if (err.includes("Schema evolution is incomplete. The data was not loaded. The table schema was updated as per new schema.")) {
+                            var tableRetrySQL = CALL INFER_SCHEMA_AND_COPY_DATA(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
+                            var tableRetry = snowflake.execute({ sqlText: tableRetrySQL });
+                            callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Successful')`;
+                            break; // Break the loop on successful retry
+                        }
+                    } catch (retryErr) {
+                        // Log retry failure
+                        callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Failed')`;
+                    }
+                    retryCount++;
+                }
+
+                // If retry was not successful, log the original error
+                if (!callFailLogSQL) {
+                    callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
+                }
+
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
 
