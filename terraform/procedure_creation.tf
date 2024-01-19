@@ -272,8 +272,8 @@ resource "snowflake_procedure" "create_audit_table_and_insert_data" {
     // Create the audit table with all columns from information_schema.copy_history
    var createAuditTableSQL = `
     CREATE TABLE IF NOT EXISTS $${auditTableName} (
-        ID number identity start 1 increment 1,
-        BATCH_NUMBER VARCHAR(16777216) DEFAULT $${BATCH_NUMBER},
+        AUTO_ID number identity start 1 increment 1,
+        BATCH_ID VARCHAR(16777216) DEFAULT $${BATCH_NUMBER},
         FILE_NAME VARCHAR(16777216),
         STAGE_LOCATION VARCHAR(16777216),
         LAST_LOAD_TIME TIMESTAMP_LTZ(3),
