@@ -681,9 +681,14 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
     name = "INCREMENT_TABLE_NAME"
     type = "varchar"
   }
-    arguments {
+  arguments {
     name = "RE_RUN"
     type = "BOOLEAN"
+  }
+
+  arguments {
+    name = "SCHEMA_RETRY"
+    type = "STRING DEFAULT 'no'"
   }
 
 
@@ -729,8 +734,8 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
                 var retryCount = 0;
                 while (retryCount < 1) {
                     try {
-                        if (err.message.includes("Schema evolution is incomplete. The data was not loaded. The table schema was updated as per new schema.")) {
-                            var tableRetrySQL = CALL INFER_SCHEMA_AND_COPY_DATA(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
+                        if (err.message.includes("Schema evolution is incomplete. The data was not loaded. The table schema was updated as per new schema.") && SCHEMA_RETRY === 'yes') {
+                            var tableRetrySQL = CALL INFER_SCHEMA_AND_COPY_DATA(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN, 'yes');
                             var tableRetry = snowflake.execute({ sqlText: tableRetrySQL });
                             callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Successful')`;
                             break; // Break the loop on successful retry
@@ -778,8 +783,8 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
                 var retryCount = 0;
                 while (retryCount < 1) {
                     try {
-                        if (err.message.includes("Schema evolution is incomplete. The data was not loaded. The table schema was updated as per new schema.")) {
-                            var tableRetrySQL = CALL INFER_SCHEMA_AND_COPY_DATA(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
+                        if (err.message.includes("Schema evolution is incomplete. The data was not loaded. The table schema was updated as per new schema.") && SCHEMA_RETRY === 'yes') {
+                            var tableRetrySQL = CALL INFER_SCHEMA_AND_COPY_DATA(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN,'yes');
                             var tableRetry = snowflake.execute({ sqlText: tableRetrySQL });
                             callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Successful')`;
                             break; // Break the loop on successful retry
