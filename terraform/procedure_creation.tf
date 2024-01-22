@@ -184,7 +184,7 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
 
     // Send a single email if there are failed tables
     if (failedTables.length > 0) {
-        var emailContent = "Alert: Data found in the following tables:\\n\\n";
+        var emailContent = "Alert: Data found in the following tables:\n\n";
 
         for (var i = 0; i < failedTables.length; i++) {
             var tableInfo = failedTables[i];
