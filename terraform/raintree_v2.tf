@@ -39,8 +39,10 @@ resource "snowflake_task" "ingest_raintree_v2_data_from_s3" {
 
   name          = "SERVERLESS_INGEST_RAINTREEV2"
   schedule      = "USING CRON 0 15 * * * America/New_York"
-  sql_statement = "CALL PARENT_INGEST_RAINTREE_V2_DATA(true);"
+  sql_statement = "CALL PARENT_INGEST_RAINTREE_V2_DATA(true)"
 
   user_task_timeout_ms                     = 86400000
   user_task_managed_initial_warehouse_size = "LARGE"
+  enabled = true
 }
+
