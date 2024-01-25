@@ -81,7 +81,7 @@ try {
 EOT
 }
 
-resource "snowflake_procedure" "dbttests_alerts" {
+resource "snowflake_procedure" "prod_dbttests_alerts" {
   name     = "CHECK_DBT_TESTS_DATA_AND_ALERT"
   database = var.prod
   schema   = "DBT_TESTS"
@@ -127,7 +127,131 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', '2e36f225.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', '735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      binds: [emailContent]
+    });
+    var alertResult = state2.execute();
+    result = "Alert: Data found in DBT_TESTS. Check email for details.";
+  }
+} catch (e) {
+  // Handle any errors that occur during the execution of the procedure
+  console.error("Error occurred while checking DBT test data:", e);
+  result = "Error checking DBT test data: " + e.message;
+}
+ 
+return result;
+EOT
+}
+
+resource "snowflake_procedure" "qa_dbttests_alerts" {
+  name     = "CHECK_DBT_TESTS_DATA_AND_ALERT"
+  database = var.qa
+  schema   = "DBT_TESTS"
+  language = "JAVASCRIPT"
+
+  comment             = "Read the dbt_tests schema and alert back which tests have rows which means fails"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+try {
+  var result = "No data in DBT_TESTS";
+  var failedTables = [];
+ 
+  // Check for the existence of tables in the DBT_TESTS schema
+  var state1 = snowflake.createStatement({
+    sqlText: "SHOW TABLES IN SCHEMA DBT_TESTS;"
+  });
+ 
+  var tables = state1.execute();
+  while (tables.next()) {
+    var tableName = tables.getColumnValue(2);
+    var rowCount = tables.getColumnValue("rows");
+    // Check if the table has at least one row of data
+    if (rowCount > 0) {
+      var script = "SELECT * FROM " + tables.getColumnValue(3) + ".DBT_TESTS." + tableName;
+      failedTables.push({
+        tableName: tableName,
+        rowCount: rowCount,
+        script: script
+      });
+    }
+  }
+ 
+  // Send a single email if there are failed tables
+  if (failedTables.length > 0) {
+    var emailContent = "Alert: Data found in the following DBT_TESTS tables:\n\n";
+ 
+    for (var i = 0; i < failedTables.length; i++) {
+      var tableInfo = failedTables[i];
+      emailContent += "Table: " + tableInfo.tableName + ", Row Count: "+ tableInfo.rowCount + "\nScript: "+ tableInfo.script + "\n\n";
+    }
+ 
+    // Send an alert using the notification integration
+    var state2 = snowflake.createStatement({
+      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', '735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      binds: [emailContent]
+    });
+    var alertResult = state2.execute();
+    result = "Alert: Data found in DBT_TESTS. Check email for details.";
+  }
+} catch (e) {
+  // Handle any errors that occur during the execution of the procedure
+  console.error("Error occurred while checking DBT test data:", e);
+  result = "Error checking DBT test data: " + e.message;
+}
+ 
+return result;
+EOT
+}
+
+resource "snowflake_procedure" "qa_dbttests_alerts" {
+  name     = "CHECK_DBT_TESTS_DATA_AND_ALERT"
+  database = var.dev
+  schema   = "DBT_TESTS"
+  language = "JAVASCRIPT"
+
+  comment             = "Read the dbt_tests schema and alert back which tests have rows which means fails"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+try {
+  var result = "No data in DBT_TESTS";
+  var failedTables = [];
+ 
+  // Check for the existence of tables in the DBT_TESTS schema
+  var state1 = snowflake.createStatement({
+    sqlText: "SHOW TABLES IN SCHEMA DBT_TESTS;"
+  });
+ 
+  var tables = state1.execute();
+  while (tables.next()) {
+    var tableName = tables.getColumnValue(2);
+    var rowCount = tables.getColumnValue("rows");
+    // Check if the table has at least one row of data
+    if (rowCount > 0) {
+      var script = "SELECT * FROM " + tables.getColumnValue(3) + ".DBT_TESTS." + tableName;
+      failedTables.push({
+        tableName: tableName,
+        rowCount: rowCount,
+        script: script
+      });
+    }
+  }
+ 
+  // Send a single email if there are failed tables
+  if (failedTables.length > 0) {
+    var emailContent = "Alert: Data found in the following DBT_TESTS tables:\n\n";
+ 
+    for (var i = 0; i < failedTables.length; i++) {
+      var tableInfo = failedTables[i];
+      emailContent += "Table: " + tableInfo.tableName + ", Row Count: "+ tableInfo.rowCount + "\nScript: "+ tableInfo.script + "\n\n";
+    }
+ 
+    // Send an alert using the notification integration
+    var state2 = snowflake.createStatement({
+      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', '735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
       binds: [emailContent]
     });
     var alertResult = state2.execute();
