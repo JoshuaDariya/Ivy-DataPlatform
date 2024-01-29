@@ -64,5 +64,5 @@ resource "snowflake_email_notification_integration" "raintree_ingestion_failures
   name    = "raintree_ingestion_failures"  
   comment = "A notification integration for raintree ingestion."
   enabled = true  
-  allowed_recipients = ["d5924730.ivyrehab.onmicrosoft.com@amer.teams.ms"]
+  allowed_recipients = [var.alerts_email]
 }
