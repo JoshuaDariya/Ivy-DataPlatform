@@ -1,8 +1,8 @@
-resource "snowflake_file_format" "adaptive_parquet_file_format" {
-  name        = "PARQUET_FORMAT"
+resource "snowflake_file_format" "adaptive_csv_file_format" {
+  name        = "ADAPTIVE_CSV_FORMAT"
   database    = var.landing
   schema      = var.adaptive_schema
-  format_type = "PARQUET"
+  format_type = "CSV"
   binary_as_text = true
 }
 
