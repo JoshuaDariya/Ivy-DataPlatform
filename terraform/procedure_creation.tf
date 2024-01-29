@@ -127,7 +127,8 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1);
+        `,
       binds: [emailContent]
     });
     var alertResult = state2.execute();
@@ -189,7 +190,8 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1);
+        `,
       binds: [emailContent]
     });
     var alertResult = state2.execute();
@@ -251,7 +253,8 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1);
+        `,
       binds: [emailContent]
     });
     var alertResult = state2.execute();
