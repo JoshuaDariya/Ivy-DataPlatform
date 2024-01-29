@@ -143,3 +143,7 @@ variable "adaptive_azure_int"{
 
   default = "ADAPTIVE_AZURE_SNOWFLAKE_INT"
 }
+
+variable "alerts_email"{
+  type = string
+}

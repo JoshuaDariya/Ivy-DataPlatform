@@ -81,7 +81,7 @@ try {
 EOT
 }
 
-resource "snowflake_procedure" "dbttests_alerts" {
+resource "snowflake_procedure" "prod_dbttests_alerts" {
   name     = "CHECK_DBT_TESTS_DATA_AND_ALERT"
   database = var.prod
   schema   = "DBT_TESTS"
@@ -98,7 +98,7 @@ try {
  
   // Check for the existence of tables in the DBT_TESTS schema
   var state1 = snowflake.createStatement({
-    sqlText: "SHOW TABLES IN SCHEMA DBT_TESTS;"
+    sqlText: "SHOW TABLES IN SCHEMA PROD.DBT_TESTS;"
   });
  
   var tables = state1.execute();
@@ -127,7 +127,134 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', '2e36f225.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'PROD dbt Testing Failures', :1);
+        `,
+      binds: [emailContent]
+    });
+    var alertResult = state2.execute();
+    result = "Alert: Data found in DBT_TESTS. Check email for details.";
+  }
+} catch (e) {
+  // Handle any errors that occur during the execution of the procedure
+  console.error("Error occurred while checking DBT test data:", e);
+  result = "Error checking DBT test data: " + e.message;
+}
+ 
+return result;
+EOT
+}
+
+resource "snowflake_procedure" "qa_dbttests_alerts" {
+  name     = "CHECK_DBT_TESTS_DATA_AND_ALERT"
+  database = var.qa
+  schema   = "DBT_TESTS"
+  language = "JAVASCRIPT"
+
+  comment             = "Read the dbt_tests schema and alert back which tests have rows which means fails"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+try {
+  var result = "No data in DBT_TESTS";
+  var failedTables = [];
+ 
+  // Check for the existence of tables in the DBT_TESTS schema
+  var state1 = snowflake.createStatement({
+    sqlText: "SHOW TABLES IN SCHEMA QA.DBT_TESTS;"
+  });
+ 
+  var tables = state1.execute();
+  while (tables.next()) {
+    var tableName = tables.getColumnValue(2);
+    var rowCount = tables.getColumnValue("rows");
+    // Check if the table has at least one row of data
+    if (rowCount > 0) {
+      var script = "SELECT * FROM " + tables.getColumnValue(3) + ".DBT_TESTS." + tableName;
+      failedTables.push({
+        tableName: tableName,
+        rowCount: rowCount,
+        script: script
+      });
+    }
+  }
+ 
+  // Send a single email if there are failed tables
+  if (failedTables.length > 0) {
+    var emailContent = "Alert: Data found in the following DBT_TESTS tables:\n\n";
+ 
+    for (var i = 0; i < failedTables.length; i++) {
+      var tableInfo = failedTables[i];
+      emailContent += "Table: " + tableInfo.tableName + ", Row Count: "+ tableInfo.rowCount + "\nScript: "+ tableInfo.script + "\n\n";
+    }
+ 
+    // Send an alert using the notification integration
+    var state2 = snowflake.createStatement({
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'QA dbt Testing Failures', :1);
+        `,
+      binds: [emailContent]
+    });
+    var alertResult = state2.execute();
+    result = "Alert: Data found in DBT_TESTS. Check email for details.";
+  }
+} catch (e) {
+  // Handle any errors that occur during the execution of the procedure
+  console.error("Error occurred while checking DBT test data:", e);
+  result = "Error checking DBT test data: " + e.message;
+}
+ 
+return result;
+EOT
+}
+
+resource "snowflake_procedure" "dev_dbttests_alerts" {
+  name     = "CHECK_DBT_TESTS_DATA_AND_ALERT"
+  database = var.dev
+  schema   = "DBT_TESTS"
+  language = "JAVASCRIPT"
+
+  comment             = "Read the dbt_tests schema and alert back which tests have rows which means fails"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+try {
+  var result = "No data in DBT_TESTS";
+  var failedTables = [];
+ 
+  // Check for the existence of tables in the DBT_TESTS schema
+  var state1 = snowflake.createStatement({
+    sqlText: "SHOW TABLES IN SCHEMA DEV.DBT_TESTS;"
+  });
+ 
+  var tables = state1.execute();
+  while (tables.next()) {
+    var tableName = tables.getColumnValue(2);
+    var rowCount = tables.getColumnValue("rows");
+    // Check if the table has at least one row of data
+    if (rowCount > 0) {
+      var script = "SELECT * FROM " + tables.getColumnValue(3) + ".DBT_TESTS." + tableName;
+      failedTables.push({
+        tableName: tableName,
+        rowCount: rowCount,
+        script: script
+      });
+    }
+  }
+ 
+  // Send a single email if there are failed tables
+  if (failedTables.length > 0) {
+    var emailContent = "Alert: Data found in the following DBT_TESTS tables:\n\n";
+ 
+    for (var i = 0; i < failedTables.length; i++) {
+      var tableInfo = failedTables[i];
+      emailContent += "Table: " + tableInfo.tableName + ", Row Count: "+ tableInfo.rowCount + "\nScript: "+ tableInfo.script + "\n\n";
+    }
+ 
+    // Send an alert using the notification integration
+    var state2 = snowflake.createStatement({
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'DEV dbt Testing Failures', :1);
+        `,
       binds: [emailContent]
     });
     var alertResult = state2.execute();
@@ -196,7 +323,7 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: "CALL SYSTEM$SEND_EMAIL('raintree_ingestion_failures', '735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Ingestion Failures', :1)",
+            sqlText: "CALL SYSTEM$SEND_EMAIL('"raintree_ingestion_failures"', '${var.alerts_email}', 'Ingestion Failures', :1)",
             binds: [emailContent]
         });
         var alertResult = state2.execute();
@@ -904,6 +1031,272 @@ function deleteDataIfExists(batchId, tableName) {
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
      }
 
+}
+EOF
+}
+
+resource "snowflake_procedure" "create_batch_process_results_table" {
+  name     = "CREATE_BATCH_PROCESS_RESULTS_TABLE"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "JAVASCRIPT"
+
+
+  return_type         = "VARCHAR(16777216)"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+  try {
+        // Create Batch_Process_Results table if it doesn't exist
+      var createTableQuery = `
+          CREATE TABLE IF NOT EXISTS Testing_Batch_Process_Results (
+              Table_Name VARCHAR,
+              Batch_Number VARCHAR,
+              no_of_files_match BOOLEAN,
+              no_of_row_count_match BOOLEAN,
+              all_file_names_match BOOLEAN
+          )
+      `;
+      var createTableStmt = snowflake.createStatement({ sqlText: createTableQuery });
+      createTableStmt.execute();
+      
+      // Get the largest batch number from execution_audit
+      var getMaxBatchExecutionAuditQuery = "SELECT COALESCE(MAX(CAST(Batch_Number AS NUMBER)), 0) FROM execution_audit";
+      var getMaxBatchExecutionAuditStmt = snowflake.createStatement({ sqlText: getMaxBatchExecutionAuditQuery });
+      var getMaxBatchExecutionAuditResult = getMaxBatchExecutionAuditStmt.execute();
+      var largestBatchLimit = getMaxBatchExecutionAuditResult.next() ? getMaxBatchExecutionAuditResult.getColumnValue(1) : 0;
+
+      // Get the largest batch number from Batch_Process_Results
+      var getMaxBatchProcessResultsQuery = "SELECT COALESCE(MAX(CAST(Batch_Number AS NUMBER)), 0) FROM Testing_Batch_Process_Results";
+      var getMaxBatchProcessResultsStmt = snowflake.createStatement({ sqlText: getMaxBatchProcessResultsQuery });
+      var getMaxBatchProcessResultsResult = getMaxBatchProcessResultsStmt.execute();
+      var startingBatch = getMaxBatchProcessResultsResult.next() ? getMaxBatchProcessResultsResult.getColumnValue(1) : 0;
+
+   
+    // Loop from startingBatch to largestBatchLimit and return each number in a list
+    var batchNumbersList = [];
+    for (var batchNum = startingBatch + 1; batchNum <= largestBatchLimit; batchNum++) {
+        // Perform operations for each batch number
+        var getStageFilesSQL = `LIST @SNOWFLAKE_RAINTREE_STAGE PATTERN='.*incremental\/$${batchNum}\/*.*\.parquet'`;
+        var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
+
+        // Declare an array to store all file names
+        var allFileNames = [];
+
+        // Loop through the result set and extract all file names
+        while (fileListResultSet.next()) {
+            var fileName = fileListResultSet.getColumnValue(1);
+            allFileNames.push(fileName);
+        }
+
+        var processedTables = [];
+
+        // Iterate through the filtered parquetFileNames array
+        for (var i = 0; i < allFileNames.length; i++) {
+            var fullFileName = allFileNames[i];
+
+            // Extract the table name
+            var tableName = fullFileName.split('/')[6];
+
+            // Check if the table has already been processed
+            if (processedTables.includes(tableName)) {
+                // Skip processing if the table has been processed before
+                continue;
+            }
+
+            // Add the current table to the list of processed tables
+            processedTables.push(tableName);
+        }
+
+        for (var i = 0; i < processedTables.length; i++) {
+            var tableName = processedTables[i];
+            try{
+            var upperTableName = tableName.toUpperCase();}
+            catch(err){
+            return 'uppercase'
+            }
+
+
+
+            //Get count of raintree_copy_history
+            var countSourceTableQuery = `
+            SELECT COUNT(*) 
+            FROM landing.raintree.raintree_copy_history 
+            WHERE BATCH_ID = $${batchNum} 
+                AND TABLE_NAME = '$${upperTableName}'`;
+            var countSourceTableStmt = snowflake.createStatement({ sqlText: countSourceTableQuery });
+            try{
+
+            var countSourceTableResult = countSourceTableStmt.execute();}
+            catch(err){
+            return 'raintree_copy_history '+ err
+            }
+            var countSourceTable = countSourceTableResult.next() ? countSourceTableResult.getColumnValue(1) : 0;
+
+            var listCommand = `ls @SNOWFLAKE_RAINTREE_STAGE PATTERN='.*incremental\/$${batchNum}\/$${tableName}\/.*\.parquet';`;
+            try{
+            snowflake.execute({ sqlText: listCommand});}
+            catch(err){
+                return 'list broke'
+            }
+            
+            var countStagedFilesQuery = `
+            SELECT COUNT(*) 
+            FROM TABLE(RESULT_SCAN(LAST_QUERY_ID()))
+            `;
+            var countStagedFilesStmt = snowflake.createStatement({ sqlText: countStagedFilesQuery });
+            var countStagedFilesResult = countStagedFilesStmt.execute();
+            var countStagedFiles = countStagedFilesResult.next() ? countStagedFilesResult.getColumnValue(1) : 0;
+    
+            //BEGINNING OF ROW COUNT MATCH
+             // Get sum of ROW_COUNT from raintree_copy_history
+            var getRowCountHistoryQuery = `
+                SELECT SUM(ROW_COUNT) AS total_rows
+                FROM landing.raintree.raintree_copy_history 
+                WHERE BATCH_ID = $${batchNum}
+                    AND TABLE_NAME = '$${upperTableName}'
+            `;
+            var rowCountHistoryStmt = snowflake.createStatement({ sqlText: getRowCountHistoryQuery });
+            var rowCountHistoryResult = rowCountHistoryStmt.execute();
+            var rowCountHistory = rowCountHistoryResult.next() ? rowCountHistoryResult.getColumnValue(1) : 0;
+        
+            // Get row count from equivalent table in the database
+            var getRowCountDatabaseQuery = `
+                SELECT COUNT(*) AS row_count
+                FROM $${upperTableName}
+                WHERE BATCH_ID = $${batchNum};
+            `;
+            var rowCountDatabaseStmt = snowflake.createStatement({ sqlText: getRowCountDatabaseQuery });
+            var rowCountDatabaseResult = rowCountDatabaseStmt.execute();
+            var rowCountDatabase = rowCountDatabaseResult.next() ? rowCountDatabaseResult.getColumnValue(1) : 0;
+            
+
+            rowCountHistory = rowCountHistory === null ? 0 : rowCountHistory;
+            rowCountDatabase = rowCountDatabase === null ? 0 : rowCountDatabase;
+
+            // Compare row counts
+            var rowCountMatch = rowCountHistory === rowCountDatabase;
+
+
+
+            //BEGINNING OF ALL FILE_NAMES_MATCH
+            var getHistoryFilesQuery = `
+                SELECT stage_location || file_name AS history_file
+                FROM landing.raintree.raintree_copy_history 
+                WHERE BATCH_ID = $${batchNum}
+                    AND TABLE_NAME = '$${upperTableName}'
+            `;
+            var historyFilesStmt = snowflake.createStatement({ sqlText: getHistoryFilesQuery });
+            var historyFilesResult = historyFilesStmt.execute();
+            
+            // Array to store history files
+            var historyFiles = [];
+            
+            while (historyFilesResult.next()) {
+                historyFiles.push(historyFilesResult.getColumnValue('HISTORY_FILE'));
+            }
+            
+            var listCommand = `ls @SNOWFLAKE_RAINTREE_STAGE PATTERN='.*incremental\/$${batchNum}\/$${tableName}\/.*\.parquet';`;
+            try{
+            snowflake.execute({ sqlText: listCommand});}
+            catch(err){
+                return 'list broke'
+            }
+
+            var getStageFilesQuery = `
+                SELECT *
+            FROM TABLE(RESULT_SCAN(LAST_QUERY_ID()))
+            `;
+            var stageFilesStmt = snowflake.createStatement({ sqlText: getStageFilesQuery });
+            var stageFilesResult = stageFilesStmt.execute();
+            
+            // Array to store stage files
+            var stageFiles = [];
+            
+            while (stageFilesResult.next()) {
+                stageFiles.push(stageFilesResult.getColumnValue('name'));
+            }
+
+
+            var filesMatch = JSON.stringify(historyFiles.sort()) === JSON.stringify(stageFiles.sort());
+    
+
+            // Update the processed table and batch number in Batch_Process_Results
+            var updateResultsQuery = `
+                UPDATE Testing_Batch_Process_Results
+                SET no_of_files_match = $${countSourceTable === countStagedFiles},
+                    no_of_row_count_match = $${rowCountMatch},
+                    all_file_names_match = $${filesMatch}
+                WHERE Table_Name = '$${tableName}' AND Batch_Number = '$${batchNum}'
+            `;
+            var updateResultsStmt = snowflake.createStatement({ sqlText: updateResultsQuery });
+            try {
+                updateResultsStmt.execute();
+            } catch (err) {
+                return 'update broke ' + err;
+            }
+        }
+    }
+        // Select rows where no_of_files_match = false or no_of_row_count_match = false or all_file_names_match = false
+        var selectMismatchedRowsQuery = `
+            SELECT *
+            FROM Testing_Batch_Process_Results
+            WHERE no_of_files_match = FALSE OR no_of_row_count_match = FALSE OR all_file_names_match = FALSE
+        `;
+        var selectMismatchedRowsStmt = snowflake.createStatement({ sqlText: selectMismatchedRowsQuery });
+        var selectMismatchedRowsResult = selectMismatchedRowsStmt.execute();
+
+        // Initialize array to store information about mismatched rows
+        var mismatchedRows = [];
+
+        // Loop through mismatched rows and add each row to the array
+        while (selectMismatchedRowsResult.next()) {
+            var tableName = selectMismatchedRowsResult.getColumnValue(1);
+            var batchNumber = selectMismatchedRowsResult.getColumnValue(2);
+            var noOfFileMatch = selectMismatchedRowsResult.getColumnValue(3);
+            var noOfRowCountMatch = selectMismatchedRowsResult.getColumnValue(4);
+            var allFileNamesMatch = selectMismatchedRowsResult.getColumnValue(5);
+
+            // Add the row information to the array
+            mismatchedRows.push({
+                tableName: tableName,
+                batchNumber: batchNumber,
+                noOfFileMatch: noOfFileMatch,
+                noOfRowCountMatch: noOfRowCountMatch,
+                allFileNamesMatch: allFileNamesMatch
+            });
+        }
+
+        // Check if there are mismatched rows
+        if (mismatchedRows.length > 0) {
+            // Initialize variables for email content
+            var emailSubject = "Raintree Stage to Landing Failure";
+            var emailRecipient = "${var.alerts_email}";
+            var emailContent = "The following tables need to be investigated as to why they failed their category:\n\n";
+
+            // Loop through mismatched rows and append information to email content
+            for (var i = 0; i < mismatchedRows.length; i++) {
+                var rowInfo = mismatchedRows[i];
+                emailContent += "Table: " + rowInfo.tableName + ", Batch Number: " + rowInfo.batchNumber + "\n";
+                emailContent += "Number of Files Match: " + rowInfo.noOfFileMatch + ",\n Row Count Match: " + rowInfo.noOfRowCountMatch + ",\n All File Names Match: " + rowInfo.allFileNamesMatch + "\n\n";
+            }
+
+            // Add advice to truncate the table after fixing or acknowledging errors
+            emailContent += "Please investigate and update values once fixed.";
+
+            // Send email with the collected information
+            var emailQuery = `
+                CALL SYSTEM$SEND_EMAIL('"raintree_ingestion_failures"','$${emailRecipient}','$${emailSubject}',:1);
+            `;
+            var emailStmt = snowflake.createStatement({ sqlText: emailQuery, binds: [emailContent] });
+            var emailResult = emailStmt.execute();
+        }
+
+
+
+     return "Batch_Process_Results table created or already exists.";
+} catch (err) {
+    return "Error: " + err.message;
 }
 EOF
 }
