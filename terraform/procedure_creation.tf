@@ -98,7 +98,7 @@ try {
  
   // Check for the existence of tables in the DBT_TESTS schema
   var state1 = snowflake.createStatement({
-    sqlText: "SHOW TABLES IN SCHEMA DBT_TESTS;"
+    sqlText: "SHOW TABLES IN SCHEMA PROD.DBT_TESTS;"
   });
  
   var tables = state1.execute();
@@ -161,7 +161,7 @@ try {
  
   // Check for the existence of tables in the DBT_TESTS schema
   var state1 = snowflake.createStatement({
-    sqlText: "SHOW TABLES IN SCHEMA DBT_TESTS;"
+    sqlText: "SHOW TABLES IN SCHEMA QA.DBT_TESTS;"
   });
  
   var tables = state1.execute();
@@ -224,7 +224,7 @@ try {
  
   // Check for the existence of tables in the DBT_TESTS schema
   var state1 = snowflake.createStatement({
-    sqlText: "SHOW TABLES IN SCHEMA DBT_TESTS;"
+    sqlText: "SHOW TABLES IN SCHEMA DEV.DBT_TESTS;"
   });
  
   var tables = state1.execute();
