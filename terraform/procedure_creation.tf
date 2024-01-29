@@ -127,7 +127,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: "CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
       binds: [emailContent]
     });
     var alertResult = state2.execute();
@@ -189,7 +189,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: "CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
       binds: [emailContent]
     });
     var alertResult = state2.execute();
@@ -251,7 +251,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: "CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
       binds: [emailContent]
     });
     var alertResult = state2.execute();
@@ -320,7 +320,7 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: "CALL SYSTEM$SEND_EMAIL('raintree_ingestion_failures', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Ingestion Failures', :1)",
+            sqlText: "CALL SYSTEM$SEND_EMAIL('"raintree_ingestion_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Ingestion Failures', :1)",
             binds: [emailContent]
         });
         var alertResult = state2.execute();
@@ -1258,7 +1258,7 @@ resource "snowflake_procedure" "create_batch_process_results_table_given_batch" 
 
             // Send email with the collected information
             var emailQuery = `
-                CALL SYSTEM$SEND_EMAIL('raintree_ingestion_failures','$${emailRecipient}','$${emailSubject}',:1);
+                CALL SYSTEM$SEND_EMAIL('"raintree_ingestion_failures"','$${emailRecipient}','$${emailSubject}',:1);
             `;
             var emailStmt = snowflake.createStatement({ sqlText: emailQuery, binds: [emailContent] });
             var emailResult = emailStmt.execute();
