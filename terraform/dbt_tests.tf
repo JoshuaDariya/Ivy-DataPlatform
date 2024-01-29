@@ -3,7 +3,7 @@ resource "snowflake_email_notification_integration" "dbt_tests_emailing" {
   name    = "dbt_test_failures"  
   comment = "A notification integration for dbt tests."
   enabled = true  
-  allowed_recipients = ["d5924730.ivyrehab.onmicrosoft.com@amer.teams.ms"]
+  allowed_recipients = [var.alerts_email]
 }
 
 resource "snowflake_task" "prod_dbt_tests_task" {

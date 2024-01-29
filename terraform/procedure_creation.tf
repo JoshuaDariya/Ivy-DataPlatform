@@ -127,7 +127,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'PROD dbt Testing Failures', :1);
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'PROD dbt Testing Failures', :1);
         `,
       binds: [emailContent]
     });
@@ -190,7 +190,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'QA dbt Testing Failures', :1);
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'QA dbt Testing Failures', :1);
         `,
       binds: [emailContent]
     });
@@ -253,7 +253,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'DEV dbt Testing Failures', :1);
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'DEV dbt Testing Failures', :1);
         `,
       binds: [emailContent]
     });
@@ -323,7 +323,7 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: "CALL SYSTEM$SEND_EMAIL('"raintree_ingestion_failures"', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Ingestion Failures', :1)",
+            sqlText: "CALL SYSTEM$SEND_EMAIL('"raintree_ingestion_failures"', '${var.alerts_email}', 'Ingestion Failures', :1)",
             binds: [emailContent]
         });
         var alertResult = state2.execute();
@@ -1271,7 +1271,7 @@ resource "snowflake_procedure" "create_batch_process_results_table" {
         if (mismatchedRows.length > 0) {
             // Initialize variables for email content
             var emailSubject = "Raintree Stage to Landing Failure";
-            var emailRecipient = "d5924730.ivyrehab.onmicrosoft.com@amer.teams.ms";
+            var emailRecipient = "${var.alerts_email}";
             var emailContent = "The following tables need to be investigated as to why they failed their category:\n\n";
 
             // Loop through mismatched rows and append information to email content
