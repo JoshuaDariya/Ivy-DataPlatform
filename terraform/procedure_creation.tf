@@ -1032,8 +1032,8 @@ function deleteDataIfExists(batchId, tableName) {
 EOF
 }
 
-resource "snowflake_procedure" "create_batch_process_results_table_given_batch" {
-  name     = "CREATE_BATCH_PROCESS_RESULTS_TABLE_GIVEN_BATCH"
+resource "snowflake_procedure" "create_batch_process_results_table" {
+  name     = "CREATE_BATCH_PROCESS_RESULTS_TABLE"
   database = var.landing
   schema   = "RAINTREE"
   language = "JAVASCRIPT"
@@ -1044,10 +1044,35 @@ resource "snowflake_procedure" "create_batch_process_results_table_given_batch" 
   return_behavior     = "IMMUTABLE"
   statement           = <<EOF
   try {
+        // Create Batch_Process_Results table if it doesn't exist
+      var createTableQuery = `
+          CREATE TABLE IF NOT EXISTS Testing_Batch_Process_Results (
+              Table_Name VARCHAR,
+              Batch_Number VARCHAR,
+              no_of_files_match BOOLEAN,
+              no_of_row_count_match BOOLEAN,
+              all_file_names_match BOOLEAN
+          )
+      `;
+      var createTableStmt = snowflake.createStatement({ sqlText: createTableQuery });
+      createTableStmt.execute();
+      
+      // Get the largest batch number from execution_audit
+      var getMaxBatchExecutionAuditQuery = "SELECT COALESCE(MAX(CAST(Batch_Number AS NUMBER)), 0) FROM execution_audit";
+      var getMaxBatchExecutionAuditStmt = snowflake.createStatement({ sqlText: getMaxBatchExecutionAuditQuery });
+      var getMaxBatchExecutionAuditResult = getMaxBatchExecutionAuditStmt.execute();
+      var largestBatchLimit = getMaxBatchExecutionAuditResult.next() ? getMaxBatchExecutionAuditResult.getColumnValue(1) : 0;
+
+      // Get the largest batch number from Batch_Process_Results
+      var getMaxBatchProcessResultsQuery = "SELECT COALESCE(MAX(CAST(Batch_Number AS NUMBER)), 0) FROM Testing_Batch_Process_Results";
+      var getMaxBatchProcessResultsStmt = snowflake.createStatement({ sqlText: getMaxBatchProcessResultsQuery });
+      var getMaxBatchProcessResultsResult = getMaxBatchProcessResultsStmt.execute();
+      var startingBatch = getMaxBatchProcessResultsResult.next() ? getMaxBatchProcessResultsResult.getColumnValue(1) : 0;
+
    
     // Loop from startingBatch to largestBatchLimit and return each number in a list
     var batchNumbersList = [];
-    for (var batchNum = 2; batchNum <= 2; batchNum++) {
+    for (var batchNum = startingBatch + 1; batchNum <= largestBatchLimit; batchNum++) {
         // Perform operations for each batch number
         var getStageFilesSQL = `LIST @SNOWFLAKE_RAINTREE_STAGE PATTERN='.*incremental\/$${batchNum}\/*.*\.parquet'`;
         var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
