@@ -127,7 +127,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', '735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
       binds: [emailContent]
     });
     var alertResult = state2.execute();
@@ -189,7 +189,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', '735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
       binds: [emailContent]
     });
     var alertResult = state2.execute();
@@ -205,7 +205,7 @@ return result;
 EOT
 }
 
-resource "snowflake_procedure" "qa_dbttests_alerts" {
+resource "snowflake_procedure" "dev_dbttests_alerts" {
   name     = "CHECK_DBT_TESTS_DATA_AND_ALERT"
   database = var.dev
   schema   = "DBT_TESTS"
@@ -251,7 +251,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', '735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
+      sqlText: "CALL SYSTEM$SEND_EMAIL('dbt_test_failures', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'dbt Testing Failures', :1)",
       binds: [emailContent]
     });
     var alertResult = state2.execute();
@@ -320,7 +320,7 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: "CALL SYSTEM$SEND_EMAIL('raintree_ingestion_failures', '735b3d11.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Ingestion Failures', :1)",
+            sqlText: "CALL SYSTEM$SEND_EMAIL('raintree_ingestion_failures', 'd5924730.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Ingestion Failures', :1)",
             binds: [emailContent]
         });
         var alertResult = state2.execute();
@@ -1209,6 +1209,60 @@ resource "snowflake_procedure" "create_batch_process_results_table_given_batch" 
             }
         }
     }
+        // Select rows where no_of_files_match = false or no_of_row_count_match = false or all_file_names_match = false
+        var selectMismatchedRowsQuery = `
+            SELECT *
+            FROM Testing_Batch_Process_Results
+            WHERE no_of_files_match = FALSE OR no_of_row_count_match = FALSE OR all_file_names_match = FALSE
+        `;
+        var selectMismatchedRowsStmt = snowflake.createStatement({ sqlText: selectMismatchedRowsQuery });
+        var selectMismatchedRowsResult = selectMismatchedRowsStmt.execute();
+
+        // Initialize array to store information about mismatched rows
+        var mismatchedRows = [];
+
+        // Loop through mismatched rows and add each row to the array
+        while (selectMismatchedRowsResult.next()) {
+            var tableName = selectMismatchedRowsResult.getColumnValue(1);
+            var batchNumber = selectMismatchedRowsResult.getColumnValue(2);
+            var noOfFileMatch = selectMismatchedRowsResult.getColumnValue(3);
+            var noOfRowCountMatch = selectMismatchedRowsResult.getColumnValue(4);
+            var allFileNamesMatch = selectMismatchedRowsResult.getColumnValue(5);
+
+            // Add the row information to the array
+            mismatchedRows.push({
+                tableName: tableName,
+                batchNumber: batchNumber,
+                noOfFileMatch: noOfFileMatch,
+                noOfRowCountMatch: noOfRowCountMatch,
+                allFileNamesMatch: allFileNamesMatch
+            });
+        }
+
+        // Check if there are mismatched rows
+        if (mismatchedRows.length > 0) {
+            // Initialize variables for email content
+            var emailSubject = "Raintree Stage to Landing Failure";
+            var emailRecipient = "d5924730.ivyrehab.onmicrosoft.com@amer.teams.ms";
+            var emailContent = "The following tables need to be investigated as to why they failed their category:\n\n";
+
+            // Loop through mismatched rows and append information to email content
+            for (var i = 0; i < mismatchedRows.length; i++) {
+                var rowInfo = mismatchedRows[i];
+                emailContent += "Table: " + rowInfo.tableName + ", Batch Number: " + rowInfo.batchNumber + "\n";
+                emailContent += "Number of Files Match: " + rowInfo.noOfFileMatch + ",\n Row Count Match: " + rowInfo.noOfRowCountMatch + ",\n All File Names Match: " + rowInfo.allFileNamesMatch + "\n\n";
+            }
+
+            // Add advice to truncate the table after fixing or acknowledging errors
+            emailContent += "Please investigate and update values once fixed.";
+
+            // Send email with the collected information
+            var emailQuery = `
+                CALL SYSTEM$SEND_EMAIL('raintree_ingestion_failures','$${emailRecipient}','$${emailSubject}',:1);
+            `;
+            var emailStmt = snowflake.createStatement({ sqlText: emailQuery, binds: [emailContent] });
+            var emailResult = emailStmt.execute();
+        }
 
 
 
