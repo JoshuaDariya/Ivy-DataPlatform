@@ -613,7 +613,7 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
 
-            var alertingResult = `CALL CHECK_RAINTREE_INGESTION_LOG_AND_ALERT();`
+            var alertingResult = `CALL CHECK_RAINTREE_INGESTION_LOG_AND_ALERT()`;
             snowflake.execute({ sqlText: alertingResult });
         }
 }
