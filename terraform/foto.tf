@@ -18,7 +18,6 @@ resource "snowflake_storage_integration" "azure_foto_integration" {
   azure_tenant_id     = var.azure_tenant
 }
 
-
 resource "snowflake_stage" "snowflake_foto_stage" {
   name        = var.foto_stage
   url         = var.azure_url_storage_allowed_locations
