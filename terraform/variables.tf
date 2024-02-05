@@ -22,7 +22,7 @@ variable "aws_url_storage_allowed_locations"{
   type = string
 }
 
-variable "azure_url_storage_allowed_locations"{
+variable "azure_foto_url_storage_allowed_locations"{
   type = string
 }
 
