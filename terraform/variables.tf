@@ -22,6 +22,10 @@ variable "aws_url_storage_allowed_locations"{
   type = string
 }
 
+variable "azure_url_storage_allowed_locations"{
+  type = string
+}
+
 variable "azure_adaptive_url_storage_allowed_locations"{
   type = string
 }
@@ -124,6 +128,25 @@ variable "raintree_stage"{
   type = string
 
   default = "SNOWFLAKE_RAINTREE_STAGE"
+}
+
+
+variable "foto_stage"{
+  type = string
+
+  default = "SNOWFLAKE_FOTO_STAGE"
+}
+
+variable "foto_schema"{
+  type = string
+
+  default = "FOTO"
+}
+
+variable "foto_azure_int"{
+  type = string
+
+  default = "FOTO_AZURE_SNOWFLAKE_INT"
 }
 
 variable "adaptive_stage"{
