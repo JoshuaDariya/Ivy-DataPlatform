@@ -26,3 +26,10 @@ resource "snowflake_schema" "presentation_schema" {
   is_managed = false
 }
 
+resource "snowflake_schema" "foto_schema" {
+
+  database = var.landing
+  name       = "FOTO" 
+  is_managed = false
+}
+

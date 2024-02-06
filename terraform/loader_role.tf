@@ -142,6 +142,14 @@ resource "snowflake_task_grant" "loader_access_future_tasks_grant_landing" {
   on_future         = true
 }
 
+resource "snowflake_integration_grant" "foto_azure_grant" {
+  integration_name = var.foto_azure_int
+
+  privilege = "ALL PRIVILEGES"
+  roles     = [var.loader_role]
+
+}
+
 // ------------ RAINTREE V2 SPECIFC ACCESS -----------------
 resource "snowflake_integration_grant" "raintree_v2_s3_grant" {
   integration_name = var.raintree_s3_int
@@ -150,4 +158,6 @@ resource "snowflake_integration_grant" "raintree_v2_s3_grant" {
   roles     = [var.loader_role]
 
 }
+
+
 
