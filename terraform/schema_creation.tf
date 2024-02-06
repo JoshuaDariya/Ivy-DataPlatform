@@ -27,7 +27,7 @@ resource "snowflake_schema" "presentation_schema" {
 }
 
 resource "snowflake_schema" "foto_schema" {
-        for_each = var.databases_with_schema
+        for_each = var.landing_databases_with_schema
 
   database = each.key
   name       = "FOTO" 
