@@ -27,9 +27,8 @@ resource "snowflake_schema" "presentation_schema" {
 }
 
 resource "snowflake_schema" "foto_schema" {
-        for_each = var.landing_databases_with_schema
 
-  database = each.key
+  database = "LANDING"
   name       = "FOTO" 
   is_managed = false
 }

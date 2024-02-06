@@ -46,12 +46,6 @@ variable "databases_with_schema" {
   default = ["DEV","QA","PROD"]
 }
 
-variable "landing_databases_with_schema" {
-  type = set(string)
-
-  default = ["LANDING","LANDING_DEV","LANDING_QA"]
-}
-
 variable "landing"{
   type = string
 
