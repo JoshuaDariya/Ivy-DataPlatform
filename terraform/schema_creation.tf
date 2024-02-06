@@ -25,11 +25,3 @@ resource "snowflake_schema" "presentation_schema" {
   name       = "PRESENTATION" #Name would want to be changed to something better
   is_managed = false
 }
-
-resource "snowflake_schema" "foto_schema" {
-
-  database = "LANDING"
-  name       = "FOTO" 
-  is_managed = false
-}
-
