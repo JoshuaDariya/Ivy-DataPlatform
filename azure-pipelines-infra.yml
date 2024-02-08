@@ -62,7 +62,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
-              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -location $(Location) -KeyVaultName $(KeyVaultNameDev)dev'
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdDev) -location $(Location) -KeyVaultName $(KeyVaultNameDev)dev'
       - job: DeployDevFunctionApp
         displayName: Deploy function app to RG
         steps:
