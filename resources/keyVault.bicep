@@ -17,6 +17,13 @@ resource keyVaultResourceName 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
         keys: ['get', 'list']
         secrets: ['get', 'list']
       }
+      {
+      objectId: adfObjectId  
+      permissions: {
+        keys: ['get', 'list']
+        secrets: ['get', 'list']
+        certificates: ['get', 'list']
+      }
       tenantId: tenantId 
     }]    
     sku: {
