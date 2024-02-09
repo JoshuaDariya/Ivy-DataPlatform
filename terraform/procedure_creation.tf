@@ -1224,7 +1224,7 @@ resource "snowflake_procedure" "create_batch_process_results_table" {
             // Insert the processed table and batch number into Batch_Process_Results
             var insertIntoResultsQuery = `
                 INSERT INTO Testing_Batch_Process_Results (Table_Name, Batch_Number,no_of_files_match, no_of_row_count_match, all_file_names_match)
-                VALUES ('${tableName}', '${batchNum}', ${countSourceTable === countStagedFiles} , ${rowCountMatch} , ${filesMatch})
+                VALUES ('$${tableName}', '$${batchNum}', $${countSourceTable === countStagedFiles} , $${rowCountMatch} , $${filesMatch})
             `;
             var insertIntoResultsStmt = snowflake.createStatement({ sqlText: insertIntoResultsQuery });
             try{
