@@ -1221,19 +1221,16 @@ resource "snowflake_procedure" "create_batch_process_results_table" {
             var filesMatch = JSON.stringify(historyFiles.sort()) === JSON.stringify(stageFiles.sort());
     
 
-            // Update the processed table and batch number in Batch_Process_Results
-            var updateResultsQuery = `
-                UPDATE Testing_Batch_Process_Results
-                SET no_of_files_match = $${countSourceTable === countStagedFiles},
-                    no_of_row_count_match = $${rowCountMatch},
-                    all_file_names_match = $${filesMatch}
-                WHERE Table_Name = '$${tableName}' AND Batch_Number = '$${batchNum}'
+            // Insert the processed table and batch number into Batch_Process_Results
+            var insertIntoResultsQuery = `
+                INSERT INTO Testing_Batch_Process_Results (Table_Name, Batch_Number,no_of_files_match, no_of_row_count_match, all_file_names_match)
+                VALUES ('${tableName}', '${batchNum}', ${countSourceTable === countStagedFiles} , ${rowCountMatch} , ${filesMatch})
             `;
-            var updateResultsStmt = snowflake.createStatement({ sqlText: updateResultsQuery });
-            try {
-                updateResultsStmt.execute();
-            } catch (err) {
-                return 'update broke ' + err;
+            var insertIntoResultsStmt = snowflake.createStatement({ sqlText: insertIntoResultsQuery });
+            try{
+            insertIntoResultsStmt.execute();}
+            catch(err){
+            return 'insert broke ' + err
             }
         }
     }
