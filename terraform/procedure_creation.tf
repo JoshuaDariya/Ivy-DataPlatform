@@ -1297,3 +1297,241 @@ resource "snowflake_procedure" "create_batch_process_results_table" {
 }
 EOF
 }
+
+resource "snowflake_procedure" "create_loading_process_results_table" {
+  name     = "CREATE_LOADING_PROCESS_RESULTS_TABLE"
+  database = var.landing
+  schema   = var.foto_schema
+  language = "JAVASCRIPT"
+
+
+  return_type         = "VARCHAR(16777216)"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+  try {
+      // Create Loding_Process_Results table if it doesn''t exist
+      var createTableQuery = `
+          CREATE TABLE IF NOT EXISTS Testing_foto_Loading_Process_Results (
+              Table_Name VARCHAR,
+              table_modified_date TIMESTAMP,
+              is_row_count_match BOOLEAN,
+              is_folder_name_match BOOLEAN
+          )
+      `;
+      var createTableStmt = snowflake.createStatement({ sqlText: createTableQuery });
+      createTableStmt.execute();
+
+    
+     // Truncate testing table before insert records.
+        var trucateTableQuery = `
+            TRUNCATE TABLE Testing_foto_Loading_Process_Results;
+        `;
+        
+        var trucateTableStmt = snowflake.createStatement({ sqlText: trucateTableQuery });
+        try{
+            trucateTableStmt.execute();}
+            catch(err){
+            return ''truncate broke '' + err
+            }
+        
+     // Get copied folder name from  information_schema
+        var getRowCountDatabaseQuery = `
+            SELECT FILE_NAME
+            FROM LANDING.INFORMATION_SCHEMA.LOAD_HISTORY
+            WHERE SCHEMA_NAME = ''FOTO''
+            ORDER BY LAST_LOAD_TIME DESC
+            LIMIT 1;
+        `;
+        var folderPathLoadHistoryStmt = snowflake.createStatement({ sqlText: getRowCountDatabaseQuery });
+        var folderPathLoadHistoryStmtResult = folderPathLoadHistoryStmt.execute();
+        var folderPathLoadHistory = folderPathLoadHistoryStmtResult.next() ? folderPathLoadHistoryStmtResult.getColumnValue(1) : 0;
+
+        var pathSegmentsLoadHistory = folderPathLoadHistory.split(''/'');
+        var folderNameLoadHistory = pathSegmentsLoadHistory[pathSegmentsLoadHistory.length - 2];
+    
+     // Perform operations for each batch number
+        var getStageFilesSQL = `LIST @SNOWFLAKE_FOTO_STAGE/NetHealth/ PATTERN=''.*\\.parquet''`;
+        var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
+
+     // Declare an array to store all file names
+        var allFileNames = [];
+
+     // Loop through the result set and extract all file names
+        while (fileListResultSet.next()) {
+            var fileName = fileListResultSet.getColumnValue(1);
+            allFileNames.push(fileName);
+        }
+    
+     // Get most Recent Folder name from ExternalStage
+        var mostRecentFolder = findLatestFolder(allFileNames);   
+
+     // Get most recent files from folder:
+        var mostRecentFiles = allFileNames.filter(file => file.includes(''/'' + mostRecentFolder +''/''));
+        var processedTables = [];
+
+     // Iterate through the filtered mostRecentFiles array
+        for (var i = 0; i < mostRecentFiles.length; i++) {
+            var fullFileName = mostRecentFiles[i];
+
+            // Extract last segment of the path
+            var lastSegment = fullFileName.split(''/'').pop();
+            // Extract the table name
+            var tableName = lastSegment.split(''.'')[0];
+
+            // Check if the table has already been processed
+            if (processedTables.includes(tableName)) {
+                // Skip processing if the table has been processed before
+                continue;
+            }
+
+            // Add the current table to the list of processed tables
+            processedTables.push(tableName);
+        }
+
+        for (var i = 0; i < processedTables.length; i++) {
+            var tableName = processedTables[i];
+            try{
+                var upperTableName = tableName.toUpperCase();}
+                catch(err){
+                return ''uppercase''
+            }
+
+    
+            //BEGINNING OF ROW COUNT MATCH
+            var getRowCountQuery = `
+                SELECT COUNT(*) AS table_row_count
+                FROM $${upperTableName}
+            `;
+            var rowCountStmt = snowflake.createStatement({ sqlText: getRowCountQuery });
+            var rowCountResult = rowCountStmt.execute();
+            var rowCount = rowCountResult.next() ? rowCountResult.getColumnValue(1) : 0;
+        
+            // Get row count from equivalent table from information_schema
+            var getRowCountDatabaseQuery = `
+                SELECT ROW_COUNT as external_stage_row_count, LAST_LOAD_TIME
+                FROM LANDING.INFORMATION_SCHEMA.LOAD_HISTORY
+                WHERE SCHEMA_NAME = ''FOTO'' AND TABLE_NAME = ''Z_$${upperTableName}''
+                ORDER BY LAST_LOAD_TIME DESC
+                LIMIT 1;
+            `;
+            var rowCountExternalStageStmt = snowflake.createStatement({ sqlText: getRowCountDatabaseQuery });
+            var rowCountExternalStageResult = rowCountExternalStageStmt.execute();
+            if (rowCountExternalStageResult.next()) {
+                var rowCountExternalStage = rowCountExternalStageResult.getColumnValue(1);
+                var tableModifiedDate = rowCountExternalStageResult.getColumnValue(2);
+            }
+            else
+            {
+                var rowCountExternalStage = 0;
+                var tableModifiedDate = 0;
+            }
+   
+            rowCount = rowCount === null ? 0 : rowCount;
+            rowCountExternalStage = rowCountExternalStage === null ? 0 : rowCountExternalStage;
+
+            // Compare row counts
+            var rowCountMatch = rowCount === rowCountExternalStage;
+
+            // Compare if copied the folder is the most recent folder from External stage
+            var folderNameMatch = mostRecentFolder === folderNameLoadHistory
+            var dateObject = new Date(tableModifiedDate);
+            var isoDateString = dateObject.toISOString();
+            
+            // Insert the processed table and batch number into Batch_Process_Results
+            var insertIntoResultsQuery = `
+                INSERT INTO Testing_foto_Loading_Process_Results (Table_Name, Table_Modified_Date, is_row_count_match, is_folder_name_match)
+                VALUES (''$${upperTableName}'', ''$${isoDateString}'', $${rowCountMatch} , $${folderNameMatch})
+            `;
+            
+            var insertIntoResultsStmt = snowflake.createStatement({ sqlText: insertIntoResultsQuery });
+            try{
+                insertIntoResultsStmt.execute();}
+                catch(err){
+                return ''insert broke '' + err
+                }
+            }
+        
+        // Select rows where is_row_count_match = false or is_folder_name_match = false
+        var selectMismatchedRowsQuery = `
+            SELECT *
+            FROM Testing_foto_Loading_Process_Results
+            WHERE is_row_count_match = FALSE or is_folder_name_match = FALSE
+        `;
+        var selectMismatchedRowsStmt = snowflake.createStatement({ sqlText: selectMismatchedRowsQuery });
+        var selectMismatchedRowsResult = selectMismatchedRowsStmt.execute();
+
+        // Initialize array to store information about mismatched rows
+        var mismatchedRows = [];
+
+        // Loop through mismatched rows and add each row to the array
+        while (selectMismatchedRowsResult.next()) {
+            try{
+                var tableName = selectMismatchedRowsResult.getColumnValue(1);
+                var tableModifiedDate = selectMismatchedRowsResult.getColumnValue(2);
+                var isRowCountMatch = selectMismatchedRowsResult.getColumnValue(3);
+                var isFolderNameMatch = selectMismatchedRowsResult.getColumnValue(4);
+                
+                // Add the row information to the array
+                mismatchedRows.push({
+                    tableName: tableName,
+                    tableModifiedDate: tableModifiedDate,
+                    isRowCountMatch: isRowCountMatch,
+                    isFolderNameMatch: isFolderNameMatch
+                });
+                } catch(error){
+                    console.error("Error processing row:", error);
+                }
+        }
+
+    // Check if there are mismatched rows
+        if (mismatchedRows.length > 0) {
+            // Initialize variables for email content
+            var emailSubject = "Error occures in FOTO Stage to Landing";
+            var emailRecipient = "d5924730.ivyrehab.onmicrosoft.com@amer.teams.ms";
+            var emailContent = "The following tables need to be investigated as to why they failed their category:\\n\\n";
+
+            // Loop through mismatched rows and append information to email content
+            for (var i = 0; i < mismatchedRows.length; i++) {
+                var rowInfo = mismatchedRows[i];
+                emailContent += "Table: " + rowInfo.tableName + "\\n";
+                emailContent += "Row Count Match: " + rowInfo.isRowCountMatch + "\\n\\n";
+                emailContent += "Most recent files loaded: " + rowInfo.isFolderNameMatch + "\\n\\n";
+            }
+
+            // Add advice to truncate the table after fixing or acknowledging errors
+            emailContent += "Please investigate and update values once fixed.";
+
+            // Send email with the collected information
+            var emailQuery = `
+                CALL SYSTEM$SEND_EMAIL(''"foto_ingestion_failures"'',''${emailRecipient}'',''${emailSubject}'',:1);
+            `;
+            var emailStmt = snowflake.createStatement({ sqlText: emailQuery, binds: [emailContent] });
+            var emailResult = emailStmt.execute();
+        }
+
+     return "Mismatched rows or misamatched file names: " + mismatchedRows.length;
+} catch (err) {
+    return "Error: " + err.message;
+}
+
+function findLatestFolder(files) {
+    var largestFolderNumber = -1;
+    var mostRecentFolder = null;
+
+    files.forEach(file => {
+        var pathSegments = file.split(''/'');
+        var folder = pathSegments[pathSegments.length - 2]
+        var dateString = folder.split(''_'')[1];
+        var dateInteger = parseInt(dateString,10);
+        
+        if (dateInteger > largestFolderNumber) {
+            largestFolderNumber = dateInteger;
+            mostRecentFolder = "IvyRehab_"+ largestFolderNumber;
+        }
+    });
+
+    return mostRecentFolder;
+}
+EOF
+}
