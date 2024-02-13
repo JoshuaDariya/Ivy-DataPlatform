@@ -1324,7 +1324,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
       createTableStmt.execute();
 
      // Perform operations for each batch number
-        var getStageFilesSQL = `LIST @SNOWFLAKE_FOTO_STAGE/NetHealth/ PATTERN=''.*\\.parquet''`;
+        var getStageFilesSQL = `LIST @SNOWFLAKE_FOTO_STAGE/NetHealth/ PATTERN='.*\\.parquet'`;
         var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
 
      // Declare an array to store all file names
@@ -1340,7 +1340,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
         var mostRecentFolder = findLatestFolder(allFileNames);   
 
      // Get most recent files from folder:
-        var mostRecentFiles = allFileNames.filter(file => file.includes(''/'' + mostRecentFolder +''/''));
+        var mostRecentFiles = allFileNames.filter(file => file.includes('/' + mostRecentFolder +'/'));
         var processedTables = [];
 
      // Iterate through the filtered mostRecentFiles array
@@ -1348,9 +1348,9 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             var fullFileName = mostRecentFiles[i];
 
             // Extract last segment of the path
-            var lastSegment = fullFileName.split(''/'').pop();
+            var lastSegment = fullFileName.split('/').pop();
             // Extract the table name
-            var tableName = lastSegment.split(''.'')[0];
+            var tableName = lastSegment.split('.')[0];
 
             // Check if the table has already been processed
             if (processedTables.includes(tableName)) {
@@ -1367,7 +1367,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             try{
                 var upperTableName = tableName.toUpperCase();}
                 catch(err){
-                return ''uppercase''
+                return 'uppercase'
             }
 
     
@@ -1384,7 +1384,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             var getRowCountDatabaseQuery = `
                 SELECT ROW_COUNT as external_stage_row_count, FILE_NAME, LAST_LOAD_TIME
                 FROM LANDING.INFORMATION_SCHEMA.LOAD_HISTORY
-                WHERE SCHEMA_NAME = ''FOTO'' AND TABLE_NAME = ''Z_$${upperTableName}''
+                WHERE SCHEMA_NAME = 'FOTO' AND TABLE_NAME = 'Z_$${upperTableName}'
                 ORDER BY LAST_LOAD_TIME DESC
                 LIMIT 1;
             `;
@@ -1407,7 +1407,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             rowCountLoadHistory = rowCountLoadHistory === null ? 0 : rowCountLoadHistory;
 
             
-            var pathSegmentsLoadHistory = folderPathLoadHistory.split(''/'');
+            var pathSegmentsLoadHistory = folderPathLoadHistory.split('/');
             var folderNameLoadHistory = pathSegmentsLoadHistory[pathSegmentsLoadHistory.length - 2];
                 
             // Compare row counts
@@ -1421,14 +1421,14 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             // Insert the processed table and batch number into Batch_Process_Results
             var insertIntoResultsQuery = `
                 INSERT INTO Testing_foto_Loading_Process_Results (Table_Name, Table_Modified_Date, is_row_count_match, is_folder_name_match, created_at)
-                VALUES (''$${upperTableName}'', ''$${isoDateString}'', $${rowCountMatch} , $${folderNameMatch}, CURRENT_DATE())
+                VALUES ('$${upperTableName}', '$${isoDateString}', $${rowCountMatch} , $${folderNameMatch}, CURRENT_DATE())
             `;
             
             var insertIntoResultsStmt = snowflake.createStatement({ sqlText: insertIntoResultsQuery });
             try{
                 insertIntoResultsStmt.execute();}
                 catch(err){
-                return ''insert broke '' + err
+                return 'insert broke ' + err
                 }
             }
         
@@ -1469,7 +1469,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
     // Check if there are mismatched rows
         if (mismatchedRows.length > 0) {
             // Initialize variables for email content
-            var curentDate = mismatchedRows[0].createdAt.toISOString().split(''T'')[0];
+            var curentDate = mismatchedRows[0].createdAt.toISOString().split('T')[0];
             var emailSubject = "Error occures in FOTO Stage to Landing as of " + curentDate;
             var emailRecipient = "d5924730.ivyrehab.onmicrosoft.com@amer.teams.ms";
             var emailContent = "The following tables need to be investigated as to why they failed their category:\\n\\n";
@@ -1503,9 +1503,9 @@ function findLatestFolder(files) {
     var mostRecentFolder = null;
 
     files.forEach(file => {
-        var pathSegments = file.split(''/'');
+        var pathSegments = file.split('/');
         var folder = pathSegments[pathSegments.length - 2]
-        var dateString = folder.split(''_'')[1];
+        var dateString = folder.split('_')[1];
         var dateInteger = parseInt(dateString,10);
         
         if (dateInteger > largestFolderNumber) {
