@@ -1323,19 +1323,6 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
       var createTableStmt = snowflake.createStatement({ sqlText: createTableQuery });
       createTableStmt.execute();
 
-    
-     // Truncate testing table before insert records.
-        var trucateTableQuery = `
-            TRUNCATE TABLE Testing_foto_Loading_Process_Results;
-        `;
-        
-        var trucateTableStmt = snowflake.createStatement({ sqlText: trucateTableQuery });
-        try{
-            trucateTableStmt.execute();}
-            catch(err){
-            return ''truncate broke '' + err
-            }
-
      // Perform operations for each batch number
         var getStageFilesSQL = `LIST @SNOWFLAKE_FOTO_STAGE/NetHealth/ PATTERN=''.*\\.parquet''`;
         var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
