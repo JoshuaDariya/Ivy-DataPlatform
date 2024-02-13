@@ -1310,7 +1310,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
   return_behavior     = "IMMUTABLE"
   statement           = <<EOF
   try {
-      // Create Loding_Process_Results table if it doesn''t exist
+        // Create Loding_Process_Results table if it doesn''t exist
       var createTableQuery = `
           CREATE TABLE IF NOT EXISTS Testing_foto_Loading_Process_Results (
               Table_Name VARCHAR,
@@ -1334,22 +1334,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             catch(err){
             return ''truncate broke '' + err
             }
-        
-     // Get copied folder name from  information_schema
-        var getRowCountDatabaseQuery = `
-            SELECT FILE_NAME
-            FROM LANDING.INFORMATION_SCHEMA.LOAD_HISTORY
-            WHERE SCHEMA_NAME = ''FOTO''
-            ORDER BY LAST_LOAD_TIME DESC
-            LIMIT 1;
-        `;
-        var folderPathLoadHistoryStmt = snowflake.createStatement({ sqlText: getRowCountDatabaseQuery });
-        var folderPathLoadHistoryStmtResult = folderPathLoadHistoryStmt.execute();
-        var folderPathLoadHistory = folderPathLoadHistoryStmtResult.next() ? folderPathLoadHistoryStmtResult.getColumnValue(1) : 0;
 
-        var pathSegmentsLoadHistory = folderPathLoadHistory.split(''/'');
-        var folderNameLoadHistory = pathSegmentsLoadHistory[pathSegmentsLoadHistory.length - 2];
-    
      // Perform operations for each batch number
         var getStageFilesSQL = `LIST @SNOWFLAKE_FOTO_STAGE/NetHealth/ PATTERN=''.*\\.parquet''`;
         var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
@@ -1401,7 +1386,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             //BEGINNING OF ROW COUNT MATCH
             var getRowCountQuery = `
                 SELECT COUNT(*) AS table_row_count
-                FROM $${upperTableName}
+                FROM foto.$${upperTableName}
             `;
             var rowCountStmt = snowflake.createStatement({ sqlText: getRowCountQuery });
             var rowCountResult = rowCountStmt.execute();
@@ -1409,29 +1394,36 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
         
             // Get row count from equivalent table from information_schema
             var getRowCountDatabaseQuery = `
-                SELECT ROW_COUNT as external_stage_row_count, LAST_LOAD_TIME
+                SELECT ROW_COUNT as external_stage_row_count, FILE_NAME, LAST_LOAD_TIME
                 FROM LANDING.INFORMATION_SCHEMA.LOAD_HISTORY
                 WHERE SCHEMA_NAME = ''FOTO'' AND TABLE_NAME = ''Z_$${upperTableName}''
                 ORDER BY LAST_LOAD_TIME DESC
                 LIMIT 1;
             `;
-            var rowCountExternalStageStmt = snowflake.createStatement({ sqlText: getRowCountDatabaseQuery });
-            var rowCountExternalStageResult = rowCountExternalStageStmt.execute();
-            if (rowCountExternalStageResult.next()) {
-                var rowCountExternalStage = rowCountExternalStageResult.getColumnValue(1);
-                var tableModifiedDate = rowCountExternalStageResult.getColumnValue(2);
+            var rowCountLoadHistoryStmt = snowflake.createStatement({ sqlText: getRowCountDatabaseQuery });
+            var rowCountLoadHistoryResult = rowCountLoadHistoryStmt.execute();
+            if (rowCountLoadHistoryResult.next()) {
+                var rowCountLoadHistory = rowCountLoadHistoryResult.getColumnValue(1);
+                var folderPathLoadHistory = rowCountLoadHistoryResult.getColumnValue(2) ;
+                var tableModifiedDate = rowCountLoadHistoryResult.getColumnValue(3);
             }
             else
             {
-                var rowCountExternalStage = 0;
+                var rowCountLoadHistory = 0;
+                var folderPathLoadHistory  = 0;
                 var tableModifiedDate = 0;
             }
    
             rowCount = rowCount === null ? 0 : rowCount;
-            rowCountExternalStage = rowCountExternalStage === null ? 0 : rowCountExternalStage;
+            folderPathLoadHistory = folderPathLoadHistory === null ? 0 : folderPathLoadHistory;
+            rowCountLoadHistory = rowCountLoadHistory === null ? 0 : rowCountLoadHistory;
 
+            
+            var pathSegmentsLoadHistory = folderPathLoadHistory.split(''/'');
+            var folderNameLoadHistory = pathSegmentsLoadHistory[pathSegmentsLoadHistory.length - 2];
+                
             // Compare row counts
-            var rowCountMatch = rowCount === rowCountExternalStage;
+            var rowCountMatch = rowCount === rowCountLoadHistory;
 
             // Compare if copied the folder is the most recent folder from External stage
             var folderNameMatch = mostRecentFolder === folderNameLoadHistory
@@ -1495,7 +1487,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             for (var i = 0; i < mismatchedRows.length; i++) {
                 var rowInfo = mismatchedRows[i];
                 emailContent += "Table: " + rowInfo.tableName + "\\n";
-                emailContent += "Row Count Match: " + rowInfo.isRowCountMatch + "\\n\\n";
+                emailContent += "Row Count Match: " + rowInfo.isRowCountMatch + "\\n";
                 emailContent += "Most recent files loaded: " + rowInfo.isFolderNameMatch + "\\n\\n";
             }
 
