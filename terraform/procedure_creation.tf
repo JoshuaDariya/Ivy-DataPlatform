@@ -1313,10 +1313,11 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
         // Create Loding_Process_Results table if it doesn''t exist
       var createTableQuery = `
           CREATE TABLE IF NOT EXISTS Testing_foto_Loading_Process_Results (
-              Table_Name VARCHAR,
+              table_name VARCHAR,
               table_modified_date TIMESTAMP,
               is_row_count_match BOOLEAN,
-              is_folder_name_match BOOLEAN
+              is_folder_name_match BOOLEAN, 
+              created_at DATE
           )
       `;
       var createTableStmt = snowflake.createStatement({ sqlText: createTableQuery });
@@ -1432,8 +1433,8 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             
             // Insert the processed table and batch number into Batch_Process_Results
             var insertIntoResultsQuery = `
-                INSERT INTO Testing_foto_Loading_Process_Results (Table_Name, Table_Modified_Date, is_row_count_match, is_folder_name_match)
-                VALUES (''$${upperTableName}'', ''$${isoDateString}'', $${rowCountMatch} , $${folderNameMatch})
+                INSERT INTO Testing_foto_Loading_Process_Results (Table_Name, Table_Modified_Date, is_row_count_match, is_folder_name_match, created_at)
+                VALUES (''$${upperTableName}'', ''$${isoDateString}'', $${rowCountMatch} , $${folderNameMatch}, CURRENT_DATE())
             `;
             
             var insertIntoResultsStmt = snowflake.createStatement({ sqlText: insertIntoResultsQuery });
@@ -1448,7 +1449,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
         var selectMismatchedRowsQuery = `
             SELECT *
             FROM Testing_foto_Loading_Process_Results
-            WHERE is_row_count_match = FALSE or is_folder_name_match = FALSE
+            WHERE is_row_count_match = FALSE or is_folder_name_match = FALSE and DATE(created_at) = CURRENT_DATE()
         `;
         var selectMismatchedRowsStmt = snowflake.createStatement({ sqlText: selectMismatchedRowsQuery });
         var selectMismatchedRowsResult = selectMismatchedRowsStmt.execute();
@@ -1463,13 +1464,15 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
                 var tableModifiedDate = selectMismatchedRowsResult.getColumnValue(2);
                 var isRowCountMatch = selectMismatchedRowsResult.getColumnValue(3);
                 var isFolderNameMatch = selectMismatchedRowsResult.getColumnValue(4);
+                var createdAt = selectMismatchedRowsResult.getColumnValue(5)
                 
                 // Add the row information to the array
                 mismatchedRows.push({
                     tableName: tableName,
                     tableModifiedDate: tableModifiedDate,
                     isRowCountMatch: isRowCountMatch,
-                    isFolderNameMatch: isFolderNameMatch
+                    isFolderNameMatch: isFolderNameMatch,
+                    createdAt: createdAt
                 });
                 } catch(error){
                     console.error("Error processing row:", error);
@@ -1479,7 +1482,8 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
     // Check if there are mismatched rows
         if (mismatchedRows.length > 0) {
             // Initialize variables for email content
-            var emailSubject = "Error occures in FOTO Stage to Landing";
+            var curentDate = mismatchedRows[0].createdAt.toISOString().split(''T'')[0];
+            var emailSubject = "Error occures in FOTO Stage to Landing as of " + curentDate;
             var emailRecipient = "d5924730.ivyrehab.onmicrosoft.com@amer.teams.ms";
             var emailContent = "The following tables need to be investigated as to why they failed their category:\\n\\n";
 
