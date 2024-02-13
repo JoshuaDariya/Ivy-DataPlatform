@@ -1500,7 +1500,7 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
 
             // Send email with the collected information
             var emailQuery = `
-                CALL SYSTEM$SEND_EMAIL(''"foto_ingestion_failures"'',''${emailRecipient}'',''${emailSubject}'',:1);
+                CALL SYSTEM$SEND_EMAIL('"foto_ingestion_failures"','$${emailRecipient}','$${emailSubject}',:1);
             `;
             var emailStmt = snowflake.createStatement({ sqlText: emailQuery, binds: [emailContent] });
             var emailResult = emailStmt.execute();
