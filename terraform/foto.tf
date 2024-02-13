@@ -23,3 +23,24 @@ resource "snowflake_stage" "snowflake_foto_stage" {
   schema      = var.foto_schema 
 
 }
+
+resource "snowflake_task" "foto_data_loading_testing" {
+
+  database  = var.landing
+  schema    = var.foto_schema
+
+  name          = "CREATE_LOADING_PROCESS_RESULTS_TABLE"
+  schedule      = "USING CRON 0 9 * * * America/New_York"
+  sql_statement = "CALL CREATE_LOADING_PROCESS_RESULTS_TABLE()"
+
+  user_task_timeout_ms                     = 86400000
+  user_task_managed_initial_warehouse_size = "LARGE"
+  enabled = true
+}
+
+resource "snowflake_email_notification_integration" "foto_ingestion_failures" { 
+  name    = "foto_ingestion_failures"  
+  comment = "A notification integration for foto ingestion."
+  enabled = true  
+  allowed_recipients = [var.alerts_email]
+}
