@@ -26,18 +26,18 @@ resource "snowflake_task" "prod_dbt_tests_task" {
   enabled       = true
 }
 
-resource "snowflake_task" "qa_dbt_tests_task" {
-  comment = "dbt task to email failures"
+# resource "snowflake_task" "qa_dbt_tests_task" {
+#   comment = "dbt task to email failures"
 
-  database  = var.qa
-  schema    = "DBT_TESTS"
-  warehouse = "IVY_WH"
+#   database  = var.qa
+#   schema    = "DBT_TESTS"
+#   warehouse = "IVY_WH"
 
-  name          = "dbt_tests_data_check_task"
-  schedule      = "USING CRON 0 9 * * * America/New_York"
-  sql_statement = "CALL check_dbt_tests_data_and_alert()"
-  enabled       = true
-}
+#   name          = "dbt_tests_data_check_task"
+#   schedule      = "USING CRON 0 9 * * * America/New_York"
+#   sql_statement = "CALL check_dbt_tests_data_and_alert()"
+#   enabled       = true
+# }
 
 resource "snowflake_task" "dev_dbt_tests_task" {
   comment = "dbt task to email failures"
