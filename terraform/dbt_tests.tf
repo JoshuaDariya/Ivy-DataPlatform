@@ -34,6 +34,7 @@ resource "snowflake_task" "qa_dbt_tests_task" {
   warehouse = "IVY_WH"
 
   name          = "dbt_tests_data_check_task"
+  schedule      = "USING CRON 0 9 * * * America/New_York"
   sql_statement = "CALL check_dbt_tests_data_and_alert()"
   enabled       = true
 }
@@ -46,6 +47,7 @@ resource "snowflake_task" "dev_dbt_tests_task" {
   warehouse = "IVY_WH"
 
   name          = "dbt_tests_data_check_task"
+  schedule      = "USING CRON 0 9 * * * America/New_York"
   sql_statement = "CALL check_dbt_tests_data_and_alert()"
   enabled       = true
 }
