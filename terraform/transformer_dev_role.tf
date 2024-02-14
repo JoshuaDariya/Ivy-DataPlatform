@@ -242,7 +242,7 @@ resource "snowflake_procedure_grant" "dev_access_all_procedures" {
   database_name  = var.dev
   schema_name = "DBT_TESTS"
   privilege   = "USAGE"
-  roles       = [var.dev_role]
+  roles       = [var.developer_role]
   on_all   = true
 }
 
@@ -250,6 +250,6 @@ resource "snowflake_procedure_grant" "dev_access_future_procedures" {
   database_name  = var.dev
   schema_name = "DBT_TESTS"
   privilege   = "USAGE"
-  roles       = [var.dev_role]
+  roles       = [var.developer_role]
   on_future   = true
 }
