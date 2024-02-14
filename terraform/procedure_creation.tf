@@ -190,7 +190,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'QA dbt Testing Failures', :1);
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', 'QA dbt Testing Failures', :1);
         `,
       binds: [emailContent]
     });
@@ -253,7 +253,7 @@ try {
  
     // Send an alert using the notification integration
     var state2 = snowflake.createStatement({
-      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'DEV dbt Testing Failures', :1);
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', 'DEV dbt Testing Failures', :1);
         `,
       binds: [emailContent]
     });

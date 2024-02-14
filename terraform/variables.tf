@@ -170,3 +170,7 @@ variable "adaptive_azure_int"{
 variable "alerts_email"{
   type = string
 }
+
+variable "dev_qa_alerts_email"{
+  type = string
+}
