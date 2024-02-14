@@ -35,7 +35,7 @@ resource "snowflake_task" "qa_dbt_tests_task" {
 
   name          = "dbt_tests_data_check_task"
   sql_statement = "CALL check_dbt_tests_data_and_alert()"
-  enabled       = false
+  enabled       = true
 }
 
 resource "snowflake_task" "dev_dbt_tests_task" {
@@ -47,5 +47,5 @@ resource "snowflake_task" "dev_dbt_tests_task" {
 
   name          = "dbt_tests_data_check_task"
   sql_statement = "CALL check_dbt_tests_data_and_alert()"
-  enabled       = false
+  enabled       = true
 }
