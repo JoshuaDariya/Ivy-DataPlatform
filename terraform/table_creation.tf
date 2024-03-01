@@ -9414,3 +9414,35 @@ database            = var.landing
     type = "VARCHAR"
   }
 }
+
+resource "snowflake_table" "objective_tracking_poc" {
+  database            = var.landing
+  schema              = "OBJECTIVES_TRACKING"
+  name                = "OBJ_TRACKING_KPIS"
+  change_tracking     = true
+
+  column {
+    name = "date"
+    type = "DATE"
+  }
+  column {
+    name = "kpi_name"
+    type = "VARCHAR"
+  }
+  column {
+    name = "clinic_id"
+    type = "INTEGER"
+  }
+  column {
+    name = "granularity"
+    type = "VARCHAR"
+  }
+  column {
+    name = "target_value"
+    type = "VARCHAR"
+  }
+  column {
+    name = "business_level"
+    type = "VARCHAR"
+  }
+}
