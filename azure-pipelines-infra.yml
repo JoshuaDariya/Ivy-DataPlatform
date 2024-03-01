@@ -62,7 +62,19 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
-              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -location $(Location) -KeyVaultName $(KeyVaultNameDev)dev'
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdDev) -location $(Location) -KeyVaultName $(KeyVaultNameDev)dev'
+      - job: DeployDevFunctionApp
+        displayName: Deploy function app to RG
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
+              csmFile: resources/functionApp.bicep
+              overrideParameters: '-functionAppName $(functionAppName)dev -location $(Location) -functionStorageAccountName $(functionStorageAccountName)dev -serviceAppName $(functionAppName)dev'
+
 
   - stage: StageDeployment
     displayName: Deploy Stage Infrastructure
@@ -111,7 +123,19 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName:  $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
-              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -location $(Location) -KeyVaultName $(KeyVaultName)stage'
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdStage) -location $(Location) -KeyVaultName $(KeyVaultName)stage'
+      - job: DeployStageFunctionApp
+        displayName: Deploy function app to RG
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName: $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
+              csmFile: resources/functionApp.bicep
+              overrideParameters: '-functionAppName $(functionAppName)stage -location $(Location) -functionStorageAccountName $(functionStorageAccountName)stage -serviceAppName $(functionAppName)stage'
+
 
   - stage: ProdDeployment
     displayName: Deploy Prod Infrastructure
@@ -161,6 +185,19 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName:  $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
-              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -location $(Location) -KeyVaultName $(KeyVaultName)prod'
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdProd) -location $(Location) -KeyVaultName $(KeyVaultName)prod'
+      
+      - job: DeployProdFunctionApp
+        displayName: Deploy function app to RG
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              connectedServiceName: $(ServiceConnectionName)
+              location: $(DeploymentDefaultLocation)
+              resourceGroupName: $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
+              csmFile: resources/functionApp.bicep
+              overrideParameters: '-functionAppName $(functionAppName)prod -location $(Location) -functionStorageAccountName $(functionStorageAccountName)prod -serviceAppName $(functionAppName)prod'
+
 
               

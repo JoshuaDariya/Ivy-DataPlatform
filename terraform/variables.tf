@@ -14,6 +14,26 @@ variable "region" {
   type = string
 }
 
+variable "storage_aws_role_arn"{
+  type = string
+}
+
+variable "aws_url_storage_allowed_locations"{
+  type = string
+}
+
+variable "azure_foto_url_storage_allowed_locations"{
+  type = string
+}
+
+variable "azure_adaptive_url_storage_allowed_locations"{
+  type = string
+}
+
+variable "azure_tenant"{
+  type = string
+}
+
 variable "databases" {
   type = set(string)
 
@@ -90,4 +110,67 @@ variable "prod_role"{
   type = string
 
   default = "SNOWFLAKEPROD"
+}
+
+variable "raintree_v2_schema"{
+  type = string
+
+  default = "RAINTREE"
+}
+
+variable "raintree_s3_int"{
+  type = string
+
+  default = "S3_SNOWFLAKE_INT"
+}
+
+variable "raintree_stage"{
+  type = string
+
+  default = "SNOWFLAKE_RAINTREE_STAGE"
+}
+
+
+variable "foto_stage"{
+  type = string
+
+  default = "SNOWFLAKE_FOTO_STAGE"
+}
+
+variable "foto_schema"{
+  type = string
+
+  default = "FOTO"
+}
+
+variable "foto_azure_int"{
+  type = string
+
+  default = "FOTO_AZURE_SNOWFLAKE_INT"
+}
+
+variable "adaptive_stage"{
+  type = string
+
+  default = "ADAPTIVE_API_STAGE"
+}
+
+variable "adaptive_schema"{
+  type = string
+
+  default = "ADAPTIVE"
+}
+
+variable "adaptive_azure_int"{
+  type = string
+
+  default = "ADAPTIVE_AZURE_SNOWFLAKE_INT"
+}
+
+variable "alerts_email"{
+  type = string
+}
+
+variable "dev_qa_alerts_email"{
+  type = string
 }

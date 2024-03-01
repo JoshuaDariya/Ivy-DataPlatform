@@ -26,3 +26,17 @@ resource "snowflake_schema" "presentation_schema" {
   is_managed = false
 }
 
+resource "snowflake_schema" "foto_schema" {
+
+  database = var.landing
+  name       = "FOTO" 
+  is_managed = false
+}
+
+resource "snowflake_schema" "clinic_master_schema" {
+
+  database = var.landing
+  name       = "CLINIC_MASTER" 
+  is_managed = false
+}
+

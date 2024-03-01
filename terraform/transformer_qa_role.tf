@@ -233,3 +233,20 @@ resource "snowflake_grant_privileges_to_role" "qa_access_future_views_qa" {
     }
   }
 }
+
+
+resource "snowflake_procedure_grant" "qa_access_all_procedures" {
+  database_name  = var.qa
+  schema_name = "DBT_TESTS"
+  privilege   = "USAGE"
+  roles       = [var.qa_role]
+  on_all   = true
+}
+
+resource "snowflake_procedure_grant" "qa_access_future_procedures" {
+  database_name  = var.qa
+  schema_name = "DBT_TESTS"
+  privilege   = "USAGE"
+  roles       = [var.qa_role]
+  on_future   = true
+}
