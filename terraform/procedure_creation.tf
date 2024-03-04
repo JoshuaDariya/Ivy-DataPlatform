@@ -789,21 +789,21 @@ resource "snowflake_procedure" "insert_ingestion_fail_log" {
         snowflake.execute({sqlText: insertQuery, binds: [BATCH_NUMBER, TABLE_NAME, FAIL_AREA, ERROR]});
     }
     // Check for specific error message in the ingestion fail log
-    var errorCheckQuery = `SELECT COUNT(*) AS ERROR_COUNT FROM $${tableName} WHERE error LIKE ''%Schema evolution is incomplete%''`;
+    var errorCheckQuery = `SELECT COUNT(*) AS ERROR_COUNT FROM $${tableName} WHERE error LIKE '%Schema evolution is incomplete%'`;
     var errorCheckResult = snowflake.execute({sqlText: errorCheckQuery});
     
-    if (errorCheckResult.next() && errorCheckResult.getColumnValue(''ERROR_COUNT'') > 0) {
+    if (errorCheckResult.next() && errorCheckResult.getColumnValue('ERROR_COUNT') > 0) {
         // Call the schema evolution function for each row with the specific error
         var schemaEvolutionQuery = `CALL INFER_SCHEMA_AND_COPY_DATA(:1, :2, true, false)`;
         snowflake.execute({sqlText: schemaEvolutionQuery, binds: [BATCH_NUMBER, TABLE_NAME]});
         
         // Update the error value accordingly
-        var updateErrorQuery = `UPDATE $${tableName} SET error = ''Schema Evolution Retry Successful'' WHERE error LIKE ''%Schema evolution is incomplete%''`;
+        var updateErrorQuery = `UPDATE $${tableName} SET error = 'Schema Evolution Retry Successful' WHERE error LIKE '%Schema evolution is incomplete%'`;
         snowflake.execute({sqlText: updateErrorQuery});
         
-        return ''Schema Evolution Retry Successful'';
+        return 'Schema Evolution Retry Successful';
     } else {
-        return ''No rows with the specific error found.'';
+        return 'No rows with the specific error found.';
     }
 
 } catch (err) {
