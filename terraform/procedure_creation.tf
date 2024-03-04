@@ -907,7 +907,7 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
         
     return tableCreatedCounter;    
   } catch (err) {
-    var errString = err;
+    var errString = String(err);
     var errWithoutQuotes = errString.split("'").join('');
     var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure when running infer_schema_and_copy_data', '$${INCREMENT_TABLE_NAME}','$${errWithoutQuotes}')`;
     var logFail = snowflake.execute({ sqlText: callFailLogSQL });
