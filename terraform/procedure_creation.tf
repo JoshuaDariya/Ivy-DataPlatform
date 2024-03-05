@@ -779,7 +779,6 @@ resource "snowflake_procedure" "insert_ingestion_fail_log" {
         var insertQuery = `INSERT INTO $${tableName} (fail_date, batchNumber, tableName, failArea, error) VALUES (CURRENT_DATE(), :1, :2, :3, :4)`;
         snowflake.execute({sqlText: insertQuery, binds: [BATCH_NUMBER, TABLE_NAME, FAIL_AREA, ERROR]});
         
-        return 'Data inserted into ' + tableName + ' successfully.';
     } else {
         // Table does not exist, create it
         var createTableQuery = `CREATE TABLE $${tableName} (fail_date DATE, batchNumber VARCHAR, tableName VARCHAR, failArea VARCHAR, error VARCHAR)`;
@@ -788,9 +787,28 @@ resource "snowflake_procedure" "insert_ingestion_fail_log" {
         // Insert data into the newly created table
         var insertQuery = `INSERT INTO $${tableName} (fail_date, batchNumber, tableName, failArea, error) VALUES (CURRENT_DATE(), :1, :2, :3, :4)`;
         snowflake.execute({sqlText: insertQuery, binds: [BATCH_NUMBER, TABLE_NAME, FAIL_AREA, ERROR]});
-
-        return 'Table ' + tableName + ' created and data inserted successfully.';
     }
+    // Check for specific error message in the ingestion fail log
+    var errorCheckQuery = `SELECT COUNT(*) AS ERROR_COUNT FROM $${tableName} WHERE error LIKE '%Schema evolution is incomplete%'`;
+    var errorCheckResult = snowflake.execute({sqlText: errorCheckQuery});
+    
+    if (errorCheckResult.next() && errorCheckResult.getColumnValue('ERROR_COUNT') > 0) {
+        var updateBeforeErrorQuery = `UPDATE $${tableName} SET error = 'Schema Retry In Progress' WHERE error LIKE '%Schema evolution is incomplete%' and batchNumber = '$${BATCH_NUMBER}' and tableName = '$${TABLE_NAME}'`;
+        snowflake.execute({sqlText: updateBeforeErrorQuery});
+
+        // Call the schema evolution function for each row with the specific error
+        var schemaEvolutionQuery = `CALL INFER_SCHEMA_AND_COPY_DATA(:1, :2, true, false)`;
+        snowflake.execute({sqlText: schemaEvolutionQuery, binds: [BATCH_NUMBER, TABLE_NAME]});
+        
+        // Update the error value accordingly
+        var updateErrorQuery = `UPDATE $${tableName} SET error = 'Schema Evolution Retry Successful' WHERE error LIKE '%Schema Retry In Progress%' and batchNumber = '$${BATCH_NUMBER}' and tableName = '$${TABLE_NAME}'`;
+        snowflake.execute({sqlText: updateErrorQuery});
+        
+        return 'Schema Evolution Retry Successful';
+    } else {
+        return 'No rows with the specific error found.';
+    }
+
 } catch (err) {
     return 'Error: ' + err;
 }
@@ -858,34 +876,10 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
             try {
                 var result = insertDataToTable(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
             } catch (err) {
-                var callFailLogSQL;
-
-                // Retry logic for schema evolution error
-                var retryCount = 0;
-                while (retryCount < 1) {
-                    try {
-                        if (err.message.includes("Schema evolution is incomplete. The data was not loaded. The table schema was updated as per new schema.") && SCHEMA_RETRY === false) {
-                            var tableRetrySQL = `CALL INFER_SCHEMA_AND_COPY_DATA('$${BATCH_ID}', '$${INCREMENT_TABLE_NAME}', '$${RE_RUN}', true);`;
-                            var tableRetry = snowflake.execute({ sqlText: tableRetrySQL });
-                            callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Successful')`;
-                            break; // Break the loop on successful retry
-                        }
-                    } catch (retryErr) {
-                        // Log retry failure
-                        callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Failed')`;
-                    }
-                    retryCount++;
-                }
-
-                // If retry was not successful, log the original error
-                if (!callFailLogSQL) {
-                    callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
-                }
-
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
             
-
             dataInsertedCounter++; 
               
         }
@@ -907,41 +901,18 @@ resource "snowflake_procedure" "infer_schema_and_copy_data" {
             try {
                 var result = insertDataToTable(BATCH_ID, INCREMENT_TABLE_NAME, RE_RUN);
             } catch (err) {
-                var callFailLogSQL;
-
-                // Retry logic for schema evolution error
-                var retryCount = 0;
-                while (retryCount < 1) {
-                    try {
-                        if (err.message.includes("Schema evolution is incomplete") && SCHEMA_RETRY === false) {
-                            var tableRetrySQL = `CALL INFER_SCHEMA_AND_COPY_DATA('$${BATCH_ID}', '$${INCREMENT_TABLE_NAME}', '$${RE_RUN}', true);`;
-                            var tableRetry = snowflake.execute({ sqlText: tableRetrySQL });
-                            callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Successful')`;
-                            break; // Break the loop on successful retry
-                        }
-                    } catch (retryErr) {
-                        // Log retry failure
-                        callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','Schema Evolution Retry Failed')`;
-                    }
-                    retryCount++;
-                }
-
-                // If retry was not successful, log the original error
-                if (!callFailLogSQL) {
-                    callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
-                }
-
+                var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure to insert data to table', '$${INCREMENT_TABLE_NAME}','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
             }
-
-
            dataInsertedCounter++; 
            tableCreatedCounter++;
         }
         
     return tableCreatedCounter;    
   } catch (err) {
-    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure when running infer_schema_and_copy_data', '$${INCREMENT_TABLE_NAME}','$${err}')`;
+    var errString = String(err);
+    var errWithoutQuotes = errString.split("'").join('');
+    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${BATCH_ID}','Failure when running infer_schema_and_copy_data', '$${INCREMENT_TABLE_NAME}','$${errWithoutQuotes}')`;
     var logFail = snowflake.execute({ sqlText: callFailLogSQL });
 }
 
