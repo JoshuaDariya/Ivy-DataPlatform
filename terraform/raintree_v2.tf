@@ -38,7 +38,7 @@ resource "snowflake_task" "ingest_raintree_v2_data_from_s3" {
   schema    = var.raintree_v2_schema
 
   name          = "SERVERLESS_INGEST_RAINTREEV2"
-  schedule      = "USING CRON 0 15 * * * America/New_York"
+  schedule      = "USING CRON 30 5 * * * America/New_York"
   sql_statement = "CALL PARENT_INGEST_RAINTREE_V2_DATA(true)"
 
   user_task_timeout_ms                     = 86400000
