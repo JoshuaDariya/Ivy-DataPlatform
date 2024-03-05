@@ -793,7 +793,7 @@ resource "snowflake_procedure" "insert_ingestion_fail_log" {
     var errorCheckResult = snowflake.execute({sqlText: errorCheckQuery});
     
     if (errorCheckResult.next() && errorCheckResult.getColumnValue('ERROR_COUNT') > 0) {
-        var updateBeforeErrorQuery = `UPDATE $${tableName} SET error = 'Schema Retry In Progress' WHERE error LIKE '%Schema evolution is incomplete%'' and batchNumber = '$${BATCH_NUMBER}' and tableName = '$${TABLE_NAME}'`;
+        var updateBeforeErrorQuery = `UPDATE $${tableName} SET error = 'Schema Retry In Progress' WHERE error LIKE '%Schema evolution is incomplete%' and batchNumber = '$${BATCH_NUMBER}' and tableName = '$${TABLE_NAME}'`;
         snowflake.execute({sqlText: updateBeforeErrorQuery});
 
         // Call the schema evolution function for each row with the specific error
