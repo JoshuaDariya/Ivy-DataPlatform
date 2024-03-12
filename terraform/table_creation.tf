@@ -9446,3 +9446,441 @@ resource "snowflake_table" "objective_tracking_poc" {
     type = "VARCHAR"
   }
 }
+
+resource "snowflake_table" "ingest_visit_ltnot" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "VISIT_LTNOT"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "NUMBER(38,0)"
+  }
+
+  column {
+    name = "_pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "emrpn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "emrprog"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "emrdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "exemptpedicat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "exemptpedicatreason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "nonbillable"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noserviceticket"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "novisit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "notetype"
+    type = "VARCHAR"  
+  }
+
+  column {
+    name = "notetypecode"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_z_visit_ltnot" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_VISIT_LTNOT"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "NUMBER(38,0)"
+  }
+
+  column {
+    name = "_pn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "emrpn"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "emrprog"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "emrdate"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "exemptpedicat"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "exemptpedicatreason"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "nonbillable"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "noserviceticket"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "novisit"
+    type = "VARCHAR"
+  }
+
+  column {
+    name = "notetype"
+    type = "VARCHAR"  
+  }
+
+  column {
+    name = "notetypecode"
+    type = "VARCHAR"
+  }
+}
+
+resource "snowflake_table" "ingest_rbi_emr_custom" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RBI_EMR_CUSTOM"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "NUMBER(38,0)"
+  }
+  column {
+    name = "owner"
+    type = "VARCHAR"
+  }
+  column {
+    name = "createdate"
+    type = "VARCHAR"
+  }
+  column {
+    name = "createtime"
+    type = "VARCHAR"
+  }
+  column {
+    name = "modifdate"
+    type = "VARCHAR"
+  }
+  column {
+    name = "modiftime"
+    type = "VARCHAR"
+  }
+  column {
+    name = "encdate"
+    type = "VARCHAR"
+  }
+  column {
+    name = "enctime"
+    type = "VARCHAR"
+  }
+  column {
+    name = "pat"
+    type = "VARCHAR"
+  }
+  column {
+    name = "patname"
+    type = "VARCHAR"
+  }
+  column {
+    name = "doc"
+    type = "VARCHAR"
+  }
+  column {
+    name = "loc"
+    type = "VARCHAR"
+  }
+  column {
+    name = "prog"
+    type = "VARCHAR"
+  }
+  column {
+    name = "templ"
+    type = "VARCHAR"
+  }
+  column {
+    name = "desc_"
+    type = "VARCHAR"
+  }
+  column {
+    name = "cat"
+    type = "VARCHAR"
+  }
+  column {
+    name = "groups_"
+    type = "VARCHAR"
+  }
+  column {
+    name = "link"
+    type = "VARCHAR"
+  }
+  column {
+    name = "soscript"
+    type = "VARCHAR"
+  }
+  column {
+    name = "guid"
+    type = "VARCHAR"
+  }
+  column {
+    name = "parentguid"
+    type = "VARCHAR"
+  }
+  column {
+    name = "noteflags"
+    type = "VARCHAR"
+  }
+  column {
+    name = "amended"
+    type = "VARCHAR"
+  }
+  column {
+    name = "closedate"
+    type = "VARCHAR"
+  }
+  column {
+    name = "closetime"
+    type = "VARCHAR"
+  }
+  column {
+    name = "closedby"
+    type = "VARCHAR"
+  }
+  column {
+    name = "modeflags"
+    type = "VARCHAR"
+  }
+  column {
+    name = "usefile"
+    type = "VARCHAR"
+  }
+  column {
+    name = "createdby"
+    type = "VARCHAR"
+  }
+  column {
+    name = "modifiedby"
+    type = "VARCHAR"
+  }
+  column {
+    name = "package"
+    type = "VARCHAR"
+  }
+  column {
+    name = "originator"
+    type = "VARCHAR"
+  }
+  column {
+    name = "reviewedtimestamp"
+    type = "TIMESTAMP"
+  }
+  column {
+    name = "reviewedby"
+    type = "VARCHAR"
+  }
+  column {
+    name = "customflags"
+    type = "VARCHAR"
+  }
+  column {
+    name = "_timestamp"
+    type = "TIMESTAMP"
+  }
+}
+
+resource "snowflake_table" "ingest_z_rbi_emr_custom" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_RBI_EMR_CUSTOM"
+  change_tracking     = true
+
+  column {
+    name = "id"
+    type = "NUMBER(38,0)"
+  }
+  column {
+    name = "owner"
+    type = "VARCHAR"
+  }
+  column {
+    name = "createdate"
+    type = "VARCHAR"
+  }
+  column {
+    name = "createtime"
+    type = "VARCHAR"
+  }
+  column {
+    name = "modifdate"
+    type = "VARCHAR"
+  }
+  column {
+    name = "modiftime"
+    type = "VARCHAR"
+  }
+  column {
+    name = "encdate"
+    type = "VARCHAR"
+  }
+  column {
+    name = "enctime"
+    type = "VARCHAR"
+  }
+  column {
+    name = "pat"
+    type = "VARCHAR"
+  }
+  column {
+    name = "patname"
+    type = "VARCHAR"
+  }
+  column {
+    name = "doc"
+    type = "VARCHAR"
+  }
+  column {
+    name = "loc"
+    type = "VARCHAR"
+  }
+  column {
+    name = "prog"
+    type = "VARCHAR"
+  }
+  column {
+    name = "templ"
+    type = "VARCHAR"
+  }
+  column {
+    name = "desc_"
+    type = "VARCHAR"
+  }
+  column {
+    name = "cat"
+    type = "VARCHAR"
+  }
+  column {
+    name = "groups_"
+    type = "VARCHAR"
+  }
+  column {
+    name = "link"
+    type = "VARCHAR"
+  }
+  column {
+    name = "soscript"
+    type = "VARCHAR"
+  }
+  column {
+    name = "guid"
+    type = "VARCHAR"
+  }
+  column {
+    name = "parentguid"
+    type = "VARCHAR"
+  }
+  column {
+    name = "noteflags"
+    type = "VARCHAR"
+  }
+  column {
+    name = "amended"
+    type = "VARCHAR"
+  }
+  column {
+    name = "closedate"
+    type = "VARCHAR"
+  }
+  column {
+    name = "closetime"
+    type = "VARCHAR"
+  }
+  column {
+    name = "closedby"
+    type = "VARCHAR"
+  }
+  column {
+    name = "modeflags"
+    type = "VARCHAR"
+  }
+  column {
+    name = "usefile"
+    type = "VARCHAR"
+  }
+  column {
+    name = "createdby"
+    type = "VARCHAR"
+  }
+  column {
+    name = "modifiedby"
+    type = "VARCHAR"
+  }
+  column {
+    name = "package"
+    type = "VARCHAR"
+  }
+  column {
+    name = "originator"
+    type = "VARCHAR"
+  }
+  column {
+    name = "reviewedtimestamp"
+    type = "TIMESTAMP"
+  }
+  column {
+    name = "reviewedby"
+    type = "VARCHAR"
+  }
+  column {
+    name = "customflags"
+    type = "VARCHAR"
+  }
+  column {
+    name = "_timestamp"
+    type = "TIMESTAMP"
+  }
+}
