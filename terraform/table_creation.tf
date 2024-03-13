@@ -9717,7 +9717,7 @@ database            = var.landing
   }
   column {
     name = "reviewedtimestamp"
-    type = "TIMESTAMP"
+    type = "VARCHAR"
   }
   column {
     name = "reviewedby"
@@ -9729,7 +9729,7 @@ database            = var.landing
   }
   column {
     name = "_timestamp"
-    type = "TIMESTAMP"
+    type = "VARCHAR"
   }
 }
 
@@ -9869,7 +9869,7 @@ database            = var.landing
   }
   column {
     name = "reviewedtimestamp"
-    type = "TIMESTAMP"
+    type = "VARCHAR"
   }
   column {
     name = "reviewedby"
@@ -9881,6 +9881,6 @@ database            = var.landing
   }
   column {
     name = "_timestamp"
-    type = "TIMESTAMP"
+    type = "VARCHAR"
   }
 }
