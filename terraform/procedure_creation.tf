@@ -1489,3 +1489,195 @@ function findLatestFolder(files) {
 }
 EOF
 }
+
+resource "snowflake_procedure" "create_batch_process_results_table_given_batch" {
+  name     = "CREATE_BATCH_PROCESS_RESULTS_TABLE_GIVEN_BATCH"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "JAVASCRIPT"
+
+  arguments {
+    name = "BATCH_NUMBER"
+    type = "varchar"
+  }
+
+  return_type         = "VARCHAR(16777216)"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+
+  try {
+   
+    // Loop from startingBatch to largestBatchLimit and return each number in a list
+    var batchNumbersList = [];
+    var batch_number_convert = parseInt(BATCH_NUMBER);
+    for (var batchNum = batch_number_convert; batchNum <= batch_number_convert; batchNum++) {
+        // Perform operations for each batch number
+        var getStageFilesSQL = `LIST @SNOWFLAKE_RAINTREE_STAGE PATTERN='.*incremental\/$${batchNum}\/*.*\.parquet'`;
+        var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
+
+        // Declare an array to store all file names
+        var allFileNames = [];
+
+        // Loop through the result set and extract all file names
+        while (fileListResultSet.next()) {
+            var fileName = fileListResultSet.getColumnValue(1);
+            allFileNames.push(fileName);
+        }
+
+        var processedTables = [];
+
+        // Iterate through the filtered parquetFileNames array
+        for (var i = 0; i < allFileNames.length; i++) {
+            var fullFileName = allFileNames[i];
+
+            // Extract the table name
+            var tableName = fullFileName.split('/')[6];
+
+            // Check if the table has already been processed
+            if (processedTables.includes(tableName)) {
+                // Skip processing if the table has been processed before
+                continue;
+            }
+
+            // Add the current table to the list of processed tables
+            processedTables.push(tableName);
+        }
+
+        for (var i = 0; i < processedTables.length; i++) {
+            var tableName = processedTables[i];
+            try{
+            var upperTableName = tableName.toUpperCase();}
+            catch(err){
+            return 'uppercase'
+            }
+
+
+
+            //Get count of raintree_copy_history
+            var countSourceTableQuery = `
+            SELECT COUNT(*) 
+            FROM landing.raintree.raintree_copy_history 
+            WHERE BATCH_ID = $${batchNum} 
+                AND TABLE_NAME = '$${upperTableName}'`;
+            var countSourceTableStmt = snowflake.createStatement({ sqlText: countSourceTableQuery });
+            try{
+
+            var countSourceTableResult = countSourceTableStmt.execute();}
+            catch(err){
+            return 'raintree_copy_history '+ err
+            }
+            var countSourceTable = countSourceTableResult.next() ? countSourceTableResult.getColumnValue(1) : 0;
+
+            var listCommand = `ls @SNOWFLAKE_RAINTREE_STAGE PATTERN='.*incremental\/$${batchNum}\/$${tableName}\/.*\.parquet';`;
+            try{
+            snowflake.execute({ sqlText: listCommand});}
+            catch(err){
+                return 'list broke'
+            }
+            
+            var countStagedFilesQuery = `
+            SELECT COUNT(*) 
+            FROM TABLE(RESULT_SCAN(LAST_QUERY_ID()))
+            `;
+            var countStagedFilesStmt = snowflake.createStatement({ sqlText: countStagedFilesQuery });
+            var countStagedFilesResult = countStagedFilesStmt.execute();
+            var countStagedFiles = countStagedFilesResult.next() ? countStagedFilesResult.getColumnValue(1) : 0;
+    
+            //BEGINNING OF ROW COUNT MATCH
+             // Get sum of ROW_COUNT from raintree_copy_history
+            var getRowCountHistoryQuery = `
+                SELECT SUM(ROW_COUNT) AS total_rows
+                FROM landing.raintree.raintree_copy_history 
+                WHERE BATCH_ID = $${batchNum}
+                    AND TABLE_NAME = '$${upperTableName}'
+            `;
+            var rowCountHistoryStmt = snowflake.createStatement({ sqlText: getRowCountHistoryQuery });
+            var rowCountHistoryResult = rowCountHistoryStmt.execute();
+            var rowCountHistory = rowCountHistoryResult.next() ? rowCountHistoryResult.getColumnValue(1) : 0;
+        
+            // Get row count from equivalent table in the database
+            var getRowCountDatabaseQuery = `
+                SELECT COUNT(*) AS row_count
+                FROM $${upperTableName}
+                WHERE BATCH_ID = $${batchNum};
+            `;
+            var rowCountDatabaseStmt = snowflake.createStatement({ sqlText: getRowCountDatabaseQuery });
+            var rowCountDatabaseResult = rowCountDatabaseStmt.execute();
+            var rowCountDatabase = rowCountDatabaseResult.next() ? rowCountDatabaseResult.getColumnValue(1) : 0;
+            
+
+            rowCountHistory = rowCountHistory === null ? 0 : rowCountHistory;
+            rowCountDatabase = rowCountDatabase === null ? 0 : rowCountDatabase;
+
+            // Compare row counts
+            var rowCountMatch = rowCountHistory === rowCountDatabase;
+
+
+
+            //BEGINNING OF ALL FILE_NAMES_MATCH
+            var getHistoryFilesQuery = `
+                SELECT stage_location || file_name AS history_file
+                FROM landing.raintree.raintree_copy_history 
+                WHERE BATCH_ID = $${batchNum}
+                    AND TABLE_NAME = '$${upperTableName}'
+            `;
+            var historyFilesStmt = snowflake.createStatement({ sqlText: getHistoryFilesQuery });
+            var historyFilesResult = historyFilesStmt.execute();
+            
+            // Array to store history files
+            var historyFiles = [];
+            
+            while (historyFilesResult.next()) {
+                historyFiles.push(historyFilesResult.getColumnValue('HISTORY_FILE'));
+            }
+            
+            var listCommand = `ls @SNOWFLAKE_RAINTREE_STAGE PATTERN='.*incremental\/$${batchNum}\/$${tableName}\/.*\.parquet';`;
+            try{
+            snowflake.execute({ sqlText: listCommand});}
+            catch(err){
+                return 'list broke'
+            }
+
+            var getStageFilesQuery = `
+                SELECT *
+            FROM TABLE(RESULT_SCAN(LAST_QUERY_ID()))
+            `;
+            var stageFilesStmt = snowflake.createStatement({ sqlText: getStageFilesQuery });
+            var stageFilesResult = stageFilesStmt.execute();
+            
+            // Array to store stage files
+            var stageFiles = [];
+            
+            while (stageFilesResult.next()) {
+                stageFiles.push(stageFilesResult.getColumnValue('name'));
+            }
+
+
+            var filesMatch = JSON.stringify(historyFiles.sort()) === JSON.stringify(stageFiles.sort());
+    
+
+             // Insert the processed table and batch number into Batch_Process_Results
+            var insertIntoResultsQuery = `
+                INSERT INTO Testing_Batch_Process_Results (Table_Name, Batch_Number,no_of_files_match, no_of_row_count_match, all_file_names_match)
+                VALUES ('$${tableName}', '$${batchNum}', $${countSourceTable === countStagedFiles} , $${rowCountMatch} , $${filesMatch})
+            `;
+            var insertIntoResultsStmt = snowflake.createStatement({ sqlText: insertIntoResultsQuery });
+            try{
+            insertIntoResultsStmt.execute();
+            }
+            catch(err){
+               return 'insert broke' + err
+            }
+       }
+    }
+
+
+
+     return "Batch_Process_Results table created or already exists.";
+} catch (err) {
+    return "Error: " + err.message;
+}
+  
+EOF
+}
