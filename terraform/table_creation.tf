@@ -9888,7 +9888,7 @@ database            = var.landing
 resource "snowflake_table" "ingest_test_t1148" {
 database            = var.landing
   schema              = "RAINTREE"
-  name                = "TEST_T1148"
+  name                = "TESTS_T1148"
   change_tracking     = true
 
 column {
@@ -9985,6 +9985,54 @@ column {
 }
 column {
   name = "items4"
+  type = "VARCHAR"
+}
+column {
+  name = "se1"
+  type = "VARCHAR"
+}
+column {
+  name = "se2"
+  type = "VARCHAR"
+}
+column {
+  name = "se3"
+  type = "VARCHAR"
+}
+column {
+  name = "se4"
+  type = "VARCHAR"
+}
+column {
+  name = "ts1"
+  type = "VARCHAR"
+}
+column {
+  name = "ts2"
+  type = "VARCHAR"
+}
+column {
+  name = "ts3"
+  type = "VARCHAR"
+}
+column {
+  name = "ts4"
+  type = "VARCHAR"
+}
+column {
+  name = "type1"
+  type = "VARCHAR"
+}
+column {
+  name = "type2"
+  type = "VARCHAR"
+}
+column {
+  name = "type3"
+  type = "VARCHAR"
+}
+column {
+  name = "type4"
   type = "VARCHAR"
 }
 }
@@ -9992,7 +10040,7 @@ column {
 resource "snowflake_table" "ingest_z_test_t1148" {
 database            = var.landing
   schema              = "RAINTREE"
-  name                = "Z_TEST_T1148"
+  name                = "Z_TESTS_T1148"
   change_tracking     = true
 
 column {
@@ -10089,6 +10137,54 @@ column {
 }
 column {
   name = "items4"
+  type = "VARCHAR"
+}
+column {
+  name = "se1"
+  type = "VARCHAR"
+}
+column {
+  name = "se2"
+  type = "VARCHAR"
+}
+column {
+  name = "se3"
+  type = "VARCHAR"
+}
+column {
+  name = "se4"
+  type = "VARCHAR"
+}
+column {
+  name = "ts1"
+  type = "VARCHAR"
+}
+column {
+  name = "ts2"
+  type = "VARCHAR"
+}
+column {
+  name = "ts3"
+  type = "VARCHAR"
+}
+column {
+  name = "ts4"
+  type = "VARCHAR"
+}
+column {
+  name = "type1"
+  type = "VARCHAR"
+}
+column {
+  name = "type2"
+  type = "VARCHAR"
+}
+column {
+  name = "type3"
+  type = "VARCHAR"
+}
+column {
+  name = "type4"
   type = "VARCHAR"
 }
 }
