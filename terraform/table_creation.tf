@@ -9884,3 +9884,307 @@ database            = var.landing
     type = "VARCHAR"
   }
 }
+
+resource "snowflake_table" "ingest_tests_t1148" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "TESTS_T1148"
+  change_tracking     = true
+
+column {
+  name = "_id"
+  type = "NUMBER(38,0)"
+}
+column {
+  name = "_pn"
+  type = "VARCHAR"
+}
+column {
+  name = "emrdate"
+  type = "VARCHAR"
+}
+column {
+  name = "graph"
+  type = "VARCHAR"
+}
+column {
+  name = "scaled1"
+  type = "VARCHAR"
+}
+column {
+  name = "scaled2"
+  type = "VARCHAR"
+}
+column {
+  name = "scaled3"
+  type = "VARCHAR"
+}
+column {
+  name = "scaled4"
+  type = "VARCHAR"
+}
+column {
+  name = "template"
+  type = "VARCHAR"
+}
+column {
+  name = "_timestamp_"
+  type = "VARCHAR"
+}
+column {
+  name = "_myvariabledata"
+  type = "VARCHAR"
+}
+column {
+  name = "ap1"
+  type = "VARCHAR"
+}
+column {
+  name = "ap2"
+  type = "VARCHAR"
+}
+column {
+  name = "ap3"
+  type = "VARCHAR"
+}
+column {
+  name = "ap4"
+  type = "VARCHAR"
+}
+column {
+  name = "assessmentstatus"
+  type = "VARCHAR"
+}
+column {
+  name = "fit1"
+  type = "VARCHAR"
+}
+column {
+  name = "fit2"
+  type = "VARCHAR"
+}
+column {
+  name = "fit3"
+  type = "VARCHAR"
+}
+column {
+  name = "fit4"
+  type = "VARCHAR"
+}
+column {
+  name = "items1"
+  type = "VARCHAR"
+}
+column {
+  name = "items2"
+  type = "VARCHAR"
+}
+column {
+  name = "items3"
+  type = "VARCHAR"
+}
+column {
+  name = "items4"
+  type = "VARCHAR"
+}
+column {
+  name = "se1"
+  type = "VARCHAR"
+}
+column {
+  name = "se2"
+  type = "VARCHAR"
+}
+column {
+  name = "se3"
+  type = "VARCHAR"
+}
+column {
+  name = "se4"
+  type = "VARCHAR"
+}
+column {
+  name = "ts1"
+  type = "VARCHAR"
+}
+column {
+  name = "ts2"
+  type = "VARCHAR"
+}
+column {
+  name = "ts3"
+  type = "VARCHAR"
+}
+column {
+  name = "ts4"
+  type = "VARCHAR"
+}
+column {
+  name = "type1"
+  type = "VARCHAR"
+}
+column {
+  name = "type2"
+  type = "VARCHAR"
+}
+column {
+  name = "type3"
+  type = "VARCHAR"
+}
+column {
+  name = "type4"
+  type = "VARCHAR"
+}
+}
+
+resource "snowflake_table" "ingest_z_tests_t1148" {
+database            = var.landing
+  schema              = "RAINTREE"
+  name                = "Z_TESTS_T1148"
+  change_tracking     = true
+
+column {
+  name = "_id"
+  type = "NUMBER(38,0)"
+}
+column {
+  name = "_pn"
+  type = "VARCHAR"
+}
+column {
+  name = "emrdate"
+  type = "VARCHAR"
+}
+column {
+  name = "graph"
+  type = "VARCHAR"
+}
+column {
+  name = "scaled1"
+  type = "VARCHAR"
+}
+column {
+  name = "scaled2"
+  type = "VARCHAR"
+}
+column {
+  name = "scaled3"
+  type = "VARCHAR"
+}
+column {
+  name = "scaled4"
+  type = "VARCHAR"
+}
+column {
+  name = "template"
+  type = "VARCHAR"
+}
+column {
+  name = "_timestamp_"
+  type = "VARCHAR"
+}
+column {
+  name = "_myvariabledata"
+  type = "VARCHAR"
+}
+column {
+  name = "ap1"
+  type = "VARCHAR"
+}
+column {
+  name = "ap2"
+  type = "VARCHAR"
+}
+column {
+  name = "ap3"
+  type = "VARCHAR"
+}
+column {
+  name = "ap4"
+  type = "VARCHAR"
+}
+column {
+  name = "assessmentstatus"
+  type = "VARCHAR"
+}
+column {
+  name = "fit1"
+  type = "VARCHAR"
+}
+column {
+  name = "fit2"
+  type = "VARCHAR"
+}
+column {
+  name = "fit3"
+  type = "VARCHAR"
+}
+column {
+  name = "fit4"
+  type = "VARCHAR"
+}
+column {
+  name = "items1"
+  type = "VARCHAR"
+}
+column {
+  name = "items2"
+  type = "VARCHAR"
+}
+column {
+  name = "items3"
+  type = "VARCHAR"
+}
+column {
+  name = "items4"
+  type = "VARCHAR"
+}
+column {
+  name = "se1"
+  type = "VARCHAR"
+}
+column {
+  name = "se2"
+  type = "VARCHAR"
+}
+column {
+  name = "se3"
+  type = "VARCHAR"
+}
+column {
+  name = "se4"
+  type = "VARCHAR"
+}
+column {
+  name = "ts1"
+  type = "VARCHAR"
+}
+column {
+  name = "ts2"
+  type = "VARCHAR"
+}
+column {
+  name = "ts3"
+  type = "VARCHAR"
+}
+column {
+  name = "ts4"
+  type = "VARCHAR"
+}
+column {
+  name = "type1"
+  type = "VARCHAR"
+}
+column {
+  name = "type2"
+  type = "VARCHAR"
+}
+column {
+  name = "type3"
+  type = "VARCHAR"
+}
+column {
+  name = "type4"
+  type = "VARCHAR"
+}
+}
