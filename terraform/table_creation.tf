@@ -9885,7 +9885,7 @@ database            = var.landing
   }
 }
 
-resource "snowflake_table" "ingest_test_t1148" {
+resource "snowflake_table" "ingest_tests_t1148" {
 database            = var.landing
   schema              = "RAINTREE"
   name                = "TESTS_T1148"
@@ -10037,7 +10037,7 @@ column {
 }
 }
 
-resource "snowflake_table" "ingest_z_test_t1148" {
+resource "snowflake_table" "ingest_z_tests_t1148" {
 database            = var.landing
   schema              = "RAINTREE"
   name                = "Z_TESTS_T1148"
