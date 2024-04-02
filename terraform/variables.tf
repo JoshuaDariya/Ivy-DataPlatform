@@ -30,6 +30,10 @@ variable "azure_adaptive_url_storage_allowed_locations"{
   type = string
 }
 
+variable "azure_adaptive_url_storage_allowed_locations_prod"{
+  type = string
+}
+
 variable "azure_tenant"{
   type = string
 }
@@ -149,10 +153,16 @@ variable "foto_azure_int"{
   default = "FOTO_AZURE_SNOWFLAKE_INT"
 }
 
-variable "adaptive_stage"{
+variable "adaptive_stage_dev"{
   type = string
 
   default = "ADAPTIVE_API_STAGE"
+}
+
+variable "adaptive_stage_prod"{
+  type = string
+
+  default = "ADAPTIVE_API_STAGE_PROD"
 }
 
 variable "adaptive_schema"{
@@ -161,10 +171,16 @@ variable "adaptive_schema"{
   default = "ADAPTIVE"
 }
 
-variable "adaptive_azure_int"{
+variable "adaptive_azure_int_dev"{
   type = string
 
   default = "ADAPTIVE_AZURE_SNOWFLAKE_INT"
+}
+
+variable "adaptive_azure_int_prod"{
+  type = string
+
+  default = "ADAPTIVE_AZURE_SNOWFLAKE_INT_PROD"
 }
 
 variable "alerts_email"{
