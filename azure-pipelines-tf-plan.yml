@@ -48,7 +48,7 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'terraform'
-              commandOptions: '-var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user) -var storage_aws_role_arn=$(storage-aws-role-arn) -var aws_url_storage_allowed_locations=$(aws-url-storage-allowed-locations) -var azure_foto_url_storage_allowed_locations=$(azure_foto_url_storage_allowed_locations) -var azure_adaptive_url_storage_allowed_locations=$(azure_adaptive_url_storage_allowed_locations) -var azure_adaptive_url_storage_allowed_locations_prod = $(azure_adaptive_url_storage_allowed_locations_prod) -var azure_tenant=$(azure_tenant) -var alerts_email=$(alerts_email) -var dev_qa_alerts_email=$(dev_qa_alerts_email)'
+              commandOptions: '-var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user) -var storage_aws_role_arn=$(storage-aws-role-arn) -var aws_url_storage_allowed_locations=$(aws-url-storage-allowed-locations) -var azure_foto_url_storage_allowed_locations=$(azure_foto_url_storage_allowed_locations) -var azure_adaptive_url_storage_allowed_locations=$(azure_adaptive_url_storage_allowed_locations) -var azure_adaptive_url_storage_allowed_locations_prod=$(azure_adaptive_url_storage_allowed_locations_prod) -var azure_tenant=$(azure_tenant) -var alerts_email=$(alerts_email) -var dev_qa_alerts_email=$(dev_qa_alerts_email)'
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
 
 
