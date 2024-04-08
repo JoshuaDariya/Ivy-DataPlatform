@@ -224,7 +224,7 @@ try {
   yesterday.setDate(today.getDate() - 1);
 
   // Format the date as YYYY-MM-DD
-  var formatDate = (date) => date.toISOString().split('"T"')[0];
+  var formatDate = (date) => date.toISOString().split('T')[0];
 
   var failedTables = [];
 
