@@ -5,7 +5,7 @@ resource "snowflake_email_notification_integration" "cost_center_alert_emailing"
   allowed_recipients = [var.cost_center_alerts_email]
 }
 
-resource "snowflake_task" "batch_testing_stage_to_landing" {
+resource "snowflake_task" "create_cost_center_alert" {
 
   database  = var.prod
   schema    = "WAREHOUSE"
