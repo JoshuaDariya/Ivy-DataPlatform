@@ -224,7 +224,7 @@ try {
   yesterday.setDate(today.getDate() - 1);
 
   // Format the date as YYYY-MM-DD
-  var formatDate = (date) => date.toISOString().split('T')[0];
+  var formatDate = (date) => date.toISOString().split(''T'')[0];
 
   var failedTables = [];
 
@@ -282,16 +282,25 @@ try {
     });
 
     var state2 = snowflake.createStatement({
-      sqlText: `CALL SYSTEM$SEND_EMAIL(''"dev_qa_dbt_test_failures"'', '${var.dev_qa_alerts_email}', ''DEV dbt Testing Failures'', :1);`,
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', ''DEV dbt Testing Failures'', :1);`,
       binds: [emailContent]
     });
     state2.execute();
     return "Alert: New data found in DBT_TESTS. Check email for details.";
   }
+  else {
+    var emailContent2 = "No new failures found";
+    var state3 = snowflake.createStatement({
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', ''DEV dbt Testing Success'', :1);`,
+      binds: [emailContent2]
+    });
+    state3.execute();
+    return "No new failures found";
+  }
 } catch (e) {
   console.error("Error occurred while checking DBT test data:", e);
   return "Error checking DBT test data: " + e.message;
-}'
+}
 EOT
 }
 
