@@ -1715,3 +1715,66 @@ resource "snowflake_procedure" "create_batch_process_results_table_given_batch" 
   
 EOF
 }
+
+resource "snowflake_procedure" "create_cost_center_alert" {
+  name     = "COST_CENTER_ALERT"
+  database = var.prod
+  schema   = "WAREHOUSE"
+  language = "JAVASCRIPT"
+  return_type         = "VARCHAR(16777216)"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  comment = "Read the cost_center_alert_view and send a notification if there is record(s) in the view."
+  statement           = <<EOF
+
+  try {
+   
+  var result = "";
+ 
+  // Check for the existence of tables in the DBT_TESTS schema
+  var sqlStatement = snowflake.createStatement({
+    sqlText: "SELECT * FROM COST_CENTER_ALERT;"
+  });
+ 
+  var mismatches = sqlStatement.execute();
+  var msg = `<html><head><style>
+          table {
+            border-collapse: collapse;
+            width: 100%;
+          }
+          th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+          }
+        </style></head><body><table border="1" style="background-color: #D6EEEE"><tr><th>MASTER_LIST_RAINTREE_CODE</th><th>RT_LOCATION_ID</th><th>ADAPTIVE_CLINIC_NAME</th><th>RAINTREE_CLINIC_NAME</th><th>POTENTIAL_ADAPTIVE_COST_CENTER_CODE</th><th>RAINTREE_COST_CENTER_CODE</th></tr>`;
+  
+  while (mismatches.next()) {
+    var MASTER_LIST_RAINTREE_CODE = mismatches.getColumnValue(1);
+    var RT_LOCATION_ID = mismatches.getColumnValue(2);
+    var ADAPTIVE_CLINIC_NAME = mismatches.getColumnValue(3);
+    var RAINTREE_CLINIC_NAME = mismatches.getColumnValue(4);  
+    var POTENTIAL_ADAPTIVE_COST_CENTER_CODE = mismatches.getColumnValue(5);  
+    var RAINTREE_COST_CENTER_CODE = mismatches.getColumnValue(6);  
+    
+    msg += '<tr :hover {background-color: coral;}><td>' + MASTER_LIST_RAINTREE_CODE + '</td><td>' + RT_LOCATION_ID + '</td><td>' + ADAPTIVE_CLINIC_NAME + '</td><td>' + RAINTREE_CLINIC_NAME + '</td><td>' + POTENTIAL_ADAPTIVE_COST_CENTER_CODE  + '</td><td>' + RAINTREE_COST_CENTER_CODE + '</td></tr>';
+    }
+    msg += `</table></body></html>`; 
+     
+    // Send an alert using the notification integration
+    var state2 = snowflake.createStatement({
+        sqlText: `CALL SYSTEM$SEND_EMAIL('"cost_center_alert"', '${var.cost_center_alerts_email}', 'Cost Center Mismatches', :1,'text/html');`,
+        binds: [msg]
+    });
+    var alertResult = state2.execute();
+    
+    result = "Alert: Data found in COST_CENTER_ALERT. Check email for details.";
+} catch (e) {
+  // Handle any errors that occur during the execution of the procedure
+  console.error("Error occurred while checking COST_CENTER_ALERT data:", e);
+  result = "Error checking COST_CENTER_ALERT data: " + e.message;
+}
+
+  return result;
+EOF
+}

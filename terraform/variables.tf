@@ -134,7 +134,6 @@ variable "raintree_stage"{
   default = "SNOWFLAKE_RAINTREE_STAGE"
 }
 
-
 variable "foto_stage"{
   type = string
 
@@ -184,6 +183,10 @@ variable "adaptive_azure_int_prod"{
 }
 
 variable "alerts_email"{
+  type = string
+}
+
+variable "cost_center_alerts_email"{
   type = string
 }
 
