@@ -1766,7 +1766,6 @@ resource "snowflake_procedure" "create_cost_center_alert" {
         sqlText: `CALL SYSTEM$SEND_EMAIL('"cost_center_alert"', '${var.cost_center_alerts_email}', 'Cost Center Mismatches', :1,'text/html');`,
         binds: [msg]
     });
-    var state2 = snowflake.createStatement({ sqlText: proc });
     var alertResult = state2.execute();
     
     result = "Alert: Data found in COST_CENTER_ALERT. Check email for details.";
