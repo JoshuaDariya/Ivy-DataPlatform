@@ -64,9 +64,14 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_dev"
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_qa" {
   privileges = ["USAGE","MONITOR"]
   role_name  = var.powerbi_role
-  on_schema {
-
-    future_schemas_in_database = var.qa
+  for_each = var.landing_schemas_available_to_loader
+  dynamic "on_schema" {
+    for_each = {
+      schema_name = each.key
+    }
+    content {
+      future_schemas_in_database = on_schema.value.schema_name
+    }
   }
 }
 
@@ -85,10 +90,18 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_prod
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
-  on_schema {
-    all_schemas_in_database = var.landing
+  for_each = var.landing_schemas_available_to_loader
+  
+  dynamic "on_schema" {
+    for_each = {
+      schema_name = each.key
+    }
+    content {
+      all_schemas_in_database = on_schema.value.schema_name
+    }
   }
 }
+
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_dev" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
@@ -108,24 +121,6 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_prod
   role_name  = var.powerbi_role
   on_schema {
     all_schemas_in_database = var.prod
-  }
-}
-
-//Revoke Loader's access to Workday Schema.
-resource "snowflake_revoke_privileges_from_role" "revoke_reporter_privileges_workday" {
-  privileges = ["USAGE", "MONITOR"]
-  role_name  = snowflake_role.role_name
-
-  on_schema {
-    schema_name = "${var.landing}.WORKDAY"
-  }
-}
-
-resource "snowflake_revoke_future_privileges_from_role" "reporter_future_access_revoke_landing" {
-  privileges = ["USAGE", "MONITOR"]
-  role_name  = var.powerbi_role
-  on_schema {
-    future_schemas_in_database = "${var.landing}.WORKDAY"
   }
 }
 
