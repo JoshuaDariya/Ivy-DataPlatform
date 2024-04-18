@@ -212,10 +212,10 @@ try {
 
   // Adjust the email content to include only the new failed tables
   if (newFailedTables.length > 0) {
-    var emailContent = "Alert: New data found in DBT_TESTS tables today ("+formatDate(today)+"):\\n\\n";
+    var emailContent = "Alert: New data found in DBT_TESTS tables today ("+formatDate(today)+"):\n\n";
 
     newFailedTables.forEach(tableName => {
-      emailContent += "Table: " + tableName + "\\n\\n";
+      emailContent += "Table: " + tableName + "\n\n";
     });
 
     var state2 = snowflake.createStatement({
@@ -309,10 +309,10 @@ try {
 
   // Adjust the email content to include only the new failed tables
   if (newFailedTables.length > 0) {
-    var emailContent = "Alert: New data found in DBT_TESTS tables today ("+formatDate(today)+"):\\n\\n";
+    var emailContent = "Alert: New data found in DBT_TESTS tables today ("+formatDate(today)+"):\n\n";
 
     newFailedTables.forEach(tableName => {
-      emailContent += "Table: " + tableName + "\\n\\n";
+      emailContent += "Table: " + tableName + "\n\n";
     });
 
     var state2 = snowflake.createStatement({
