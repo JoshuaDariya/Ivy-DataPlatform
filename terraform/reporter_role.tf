@@ -70,7 +70,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_qa" 
       schema_name = each.key
     }
     content {
-      future_schemas_in_database = on_schema.value.schema_name
+      future_schemas_in_database = on_schema.value
     }
   }
 }
@@ -91,17 +91,17 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_land
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   for_each = var.landing_schemas_available_to_loader
-  
+
   dynamic "on_schema" {
     for_each = {
       schema_name = each.key
     }
+
     content {
-      all_schemas_in_database = on_schema.value.schema_name
+      all_schemas_in_database = on_schema.value
     }
   }
 }
-
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_dev" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
