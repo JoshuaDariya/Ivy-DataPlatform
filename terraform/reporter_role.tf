@@ -111,6 +111,24 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_prod
   }
 }
 
+//Revoke Loader's access to Workday Schema.
+resource "snowflake_revoke_privileges_from_role" "revoke_reporter_privileges_workday" {
+  privileges = ["USAGE", "MONITOR"]
+  role_name  = snowflake_role.role_name
+
+  on_schema {
+    schema_name = "${var.landing}.WORKDAY"
+  }
+}
+
+resource "snowflake_revoke_future_privileges_from_role" "reporter_future_access_revoke_landing" {
+  privileges = ["USAGE", "MONITOR"]
+  role_name  = var.powerbi_role
+  on_schema {
+    future_schemas_in_database = "${var.landing}.WORKDAY"
+  }
+}
+
 //--------- TESTING ACCESS TO TABLES, VIEWS ------------------
 
 resource "snowflake_grant_privileges_to_role" "reporter_access_all_tables_grant_landing" {
