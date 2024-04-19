@@ -116,10 +116,12 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_land
   for_each = var.landing_schemas_available_to_loader
 
   dynamic "on_schema" {
-    for_each = each.key
+    for_each = {
+      schema_name = each.key
+    }
 
     content {
-      schema_name = on_schema.value
+      schema_name = on_schema.value.schema_name
     }
   }
 }
