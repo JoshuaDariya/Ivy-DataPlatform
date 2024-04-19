@@ -130,7 +130,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_land
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   on_schema {
-    schema_name = "\"LANDING\".\"RAINTREE\""
+    schema_name = ["\"LANDING\".\"RAINTREE\"", "\"LANDING\".\"ADAPTIVE\""]
   }
 }
  
