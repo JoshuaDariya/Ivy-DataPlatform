@@ -121,7 +121,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_land
     }
 
     content {
-      schema_name = on_schema.key
+      schema_name = on_schema.value
     }
   }
 }
