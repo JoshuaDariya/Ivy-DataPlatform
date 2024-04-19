@@ -51,27 +51,20 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_land
   }
 }
 
-# resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
-#   privileges = ["USAGE","MONITOR"]
-#   role_name  = var.powerbi_role
-#   for_each = var.landing_schemas_available_to_loader
-#   dynamic "on_schema" {
-#     for_each = {
-#       schema_name = each.key
-#     }
-#     content {
-#       future_schemas_in_database = on_schema.value
-#     }
-#   }
-# }
+resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
+  privileges = ["USAGE","MONITOR"]
+  role_name  = var.powerbi_role
+  for_each = var.landing_schemas_available_to_loader
+    dynamic "on_schema" {
+    for_each = {
+      schema_name = each.key
+    }
 
-# resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
-#   privileges = ["USAGE","MONITOR"]
-#   role_name  = var.powerbi_role
-#   on_schema {
-#     future_schemas_in_database = "\"LANDING\".\"RAINTREE\"" 
-#   }
-# }
+    content {
+      future_schemas_in_database = on_schema.value
+    }
+  }
+}
 
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_dev" {
   privileges = ["USAGE","MONITOR"]
