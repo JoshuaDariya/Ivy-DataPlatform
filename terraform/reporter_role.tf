@@ -58,13 +58,21 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_prod" {
 # }
 
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
-  privileges = ["USAGE","MONITOR"]
-  role_name  = var.powerbi_role
+  privileges = ["MODIFY", "CREATE TABLE"]
+  role_name  = snowflake_role.r.name
   on_schema {
-
-    future_schemas_in_database = var.landing
+    schema_name = "\"LANDING\".\"RAINTREE\"" 
   }
 }
+
+# resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
+#   privileges = ["USAGE","MONITOR"]
+#   role_name  = var.powerbi_role
+#   on_schema {
+
+#     future_schemas_in_database = var.landing
+#   }
+# }
 
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_dev" {
   privileges = ["USAGE","MONITOR"]
@@ -96,13 +104,13 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_prod
 
 // ---------------- SCHEMA GRANTS --------------------
 
-resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
-  privileges = ["USAGE", "MONITOR"]
-  role_name  = var.powerbi_role
-  on_schema {
-    all_schemas_in_database = var.landing
-  }
-}
+# resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
+#   privileges = ["USAGE", "MONITOR"]
+#   role_name  = var.powerbi_role
+#   on_schema {
+#     all_schemas_in_database = var.landing
+#   }
+# }
 # resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
 #   privileges = ["USAGE", "MONITOR"]
 #   role_name  = var.powerbi_role
@@ -118,6 +126,15 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_land
 #     }
 #   }
 # }
+
+resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
+  privileges = ["USAGE", "MONITOR"]
+  role_name  = var.powerbi_role
+  on_schema {
+    all_schemas_in_database = "\"LANDING\".\"RAINTREE\""
+  }
+}
+ 
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_dev" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
