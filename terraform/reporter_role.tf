@@ -58,10 +58,10 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_prod" {
 # }
 
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
-  privileges = ["MODIFY", "CREATE TABLE"]
-  role_name  = snowflake_role.r.name
+  privileges = ["USAGE","MONITOR"]
+  role_name  = var.powerbi_role
   on_schema {
-    schema_name = "\"LANDING\".\"RAINTREE\"" 
+    future_schemas_in_database = "\"LANDING\".\"RAINTREE\"" 
   }
 }
 
