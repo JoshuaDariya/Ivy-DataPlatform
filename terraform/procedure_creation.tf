@@ -1765,7 +1765,6 @@ resource "snowflake_procedure" "create_cost_center_alert" {
    
   var result = "";
  
-  // Check for the existence of tables in the DBT_TESTS schema
   var sqlStatement = snowflake.createStatement({
     sqlText: "SELECT * FROM PROD.WAREHOUSE.COST_CENTER_ALERT ORDER BY POTENTIAL_RAINTREE_LOCATION_CODE;"
   });
