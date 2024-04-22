@@ -414,11 +414,11 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
 
     // Send a single email if there are failed tables
     if (failedTables.length > 0) {
-        var emailContent = "Alert: Data found in the following tables:\n\n";
+        var emailContent = "Alert: Data found in the following tables:\n Documentation for common errors: https://ivyrehab.atlassian.net/wiki/spaces/KB/pages/36995108/Understanding+Snowflake+Alerts \n";
 
         for (var i = 0; i < failedTables.length; i++) {
             var tableInfo = failedTables[i];
-            emailContent += "Documentation for common errors: https://ivyrehab.atlassian.net/wiki/spaces/KB/pages/36995108/Understanding+Snowflake+Alerts Table: " + tableInfo.tableName + ",\n Batch Number: " + tableInfo.batchNumber + ",\n Fail Date: " + tableInfo.failDate + ",\n Fail Area: " + tableInfo.failArea + ",\n Error: " + tableInfo.error + "\n\n";
+            emailContent += "Table: " + tableInfo.tableName + ",\n Batch Number: " + tableInfo.batchNumber + ",\n Fail Date: " + tableInfo.failDate + ",\n Fail Area: " + tableInfo.failArea + ",\n Error: " + tableInfo.error + "\n\n";
         }
 
         // Add the advice to truncate the table after fixing or acknowledging errors
