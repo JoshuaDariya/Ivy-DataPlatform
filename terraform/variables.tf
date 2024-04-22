@@ -50,6 +50,11 @@ variable "databases_with_schema" {
   default = ["DEV","QA","PROD"]
 }
 
+variable "landing_schemas_available_to_loader" {
+  type = set(string)
+  default = ["\"LANDING\".\"RAINTREE\"", "\"LANDING\".\"SALESFORCE\"", "\"LANDING\".\"ADAPTIVE\"", "\"LANDING\".\"CLINIC_MASTER\"", "\"LANDING\".\"FOTO\"", "\"LANDING\".\"OBJECTIVES_TRACKING\"","\"LANDING\".\"RINGCENTRAL\"", "\"LANDING\".\"FIVETRAN_COSTUME_SYMPHYSIS_STAGING\"", "\"LANDING\".\"FIVETRAN_METADATA\"", "\"LANDING\".\"FIVETRAN_OFT_EFFICIENCY_STAGING\"", "\"LANDING\".\"LOCATIONS_MASTER_DATA_TEST\"", "\"LANDING\".\"PUBLIC\"", "\"LANDING\".\"TESTGRANTSCHEMA\""]
+}
+
 variable "landing"{
   type = string
 

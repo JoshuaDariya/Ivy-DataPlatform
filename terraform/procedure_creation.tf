@@ -1765,9 +1765,8 @@ resource "snowflake_procedure" "create_cost_center_alert" {
    
   var result = "";
  
-  // Check for the existence of tables in the DBT_TESTS schema
   var sqlStatement = snowflake.createStatement({
-    sqlText: "SELECT * FROM COST_CENTER_ALERT;"
+    sqlText: "SELECT * FROM PROD.WAREHOUSE.COST_CENTER_ALERT ORDER BY POTENTIAL_RAINTREE_LOCATION_CODE;"
   });
  
   var mismatches = sqlStatement.execute();
@@ -1781,17 +1780,15 @@ resource "snowflake_procedure" "create_cost_center_alert" {
             padding: 8px;
             text-align: center;
           }
-        </style></head><body><table border="1" style="background-color: #D6EEEE"><tr><th>MASTER_LIST_RAINTREE_CODE</th><th>RT_LOCATION_ID</th><th>ADAPTIVE_CLINIC_NAME</th><th>RAINTREE_CLINIC_NAME</th><th>POTENTIAL_ADAPTIVE_COST_CENTER_CODE</th><th>RAINTREE_COST_CENTER_CODE</th></tr>`;
+       </style></head><body><table border="1" style="background-color: #D6EEEE"><tr><th>ADAPTIVE_COST_CENTER_CODE</th><th>ADAPTIVE_CLINIC_NAME</th><th>RAINTREE_COST_CENTER_CODE</th><th>POTENTIAL_RAINTREE_LOCATION_CODE</th></tr>`;
   
   while (mismatches.next()) {
-    var MASTER_LIST_RAINTREE_CODE = mismatches.getColumnValue(1);
-    var RT_LOCATION_ID = mismatches.getColumnValue(2);
-    var ADAPTIVE_CLINIC_NAME = mismatches.getColumnValue(3);
-    var RAINTREE_CLINIC_NAME = mismatches.getColumnValue(4);  
-    var POTENTIAL_ADAPTIVE_COST_CENTER_CODE = mismatches.getColumnValue(5);  
-    var RAINTREE_COST_CENTER_CODE = mismatches.getColumnValue(6);  
+    var ADAPTIVE_COST_CENTER_CODE = mismatches.getColumnValue(1);
+    var ADAPTIVE_CLINIC_NAME = mismatches.getColumnValue(2);
+    var RAINTREE_COST_CENTER_CODE = mismatches.getColumnValue(3);
+    var POTENTIAL_RAINTREE_LOCATION_CODE = mismatches.getColumnValue(4);  
     
-    msg += '<tr :hover {background-color: coral;}><td>' + MASTER_LIST_RAINTREE_CODE + '</td><td>' + RT_LOCATION_ID + '</td><td>' + ADAPTIVE_CLINIC_NAME + '</td><td>' + RAINTREE_CLINIC_NAME + '</td><td>' + POTENTIAL_ADAPTIVE_COST_CENTER_CODE  + '</td><td>' + RAINTREE_COST_CENTER_CODE + '</td></tr>';
+    msg += '<tr :hover {background-color: coral;}><td>' + ADAPTIVE_COST_CENTER_CODE + '</td><td>' + ADAPTIVE_CLINIC_NAME + '</td><td>' + RAINTREE_COST_CENTER_CODE + '</td><td>' + POTENTIAL_RAINTREE_LOCATION_CODE + '</td></tr>';
     }
     msg += `</table></body></html>`; 
      
