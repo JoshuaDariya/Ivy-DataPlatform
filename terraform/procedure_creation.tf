@@ -93,19 +93,30 @@ resource "snowflake_procedure" "prod_dbttests_alerts" {
   return_behavior     = "IMMUTABLE"
   statement           = <<EOT
 try {
-  var result = "No data in DBT_TESTS";
+  var today = new Date();
+  var yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  // Format the date as YYYY-MM-DD
+  var formatDate = (date) => date.toISOString().split('T')[0];
+
   var failedTables = [];
- 
-  // Check for the existence of tables in the DBT_TESTS schema
+
+  // Ensure the single results table exists with a date column
+  var ensureTableState = snowflake.createStatement({
+    sqlText: `CREATE TABLE IF NOT EXISTS PROD.DBT_TESTS.FAILED_TABLES (tableName STRING, rowCount NUMBER, script STRING, failureDate DATE);`
+  });
+  ensureTableState.execute();
+
+  // Find failed tables and insert into the results table with todays date
   var state1 = snowflake.createStatement({
     sqlText: "SHOW TABLES IN SCHEMA PROD.DBT_TESTS;"
   });
- 
+
   var tables = state1.execute();
   while (tables.next()) {
     var tableName = tables.getColumnValue(2);
     var rowCount = tables.getColumnValue("rows");
-    // Check if the table has at least one row of data
     if (rowCount > 0) {
       var script = "SELECT * FROM " + tables.getColumnValue(3) + ".DBT_TESTS." + tableName;
       failedTables.push({
@@ -113,36 +124,60 @@ try {
         rowCount: rowCount,
         script: script
       });
+
+      // Insert into the single failed table with todays date
+      var insertState = snowflake.createStatement({
+        sqlText: `INSERT INTO PROD.DBT_TESTS.FAILED_TABLES VALUES(:1, :2, :3, :4);`,
+        binds: [tableName, rowCount, script, formatDate(today)]
+      });
+      insertState.execute();
     }
   }
- 
-  // Send a single email if there are failed tables
-  if (failedTables.length > 0) {
-    var emailContent = "Alert: Data found in the following DBT_TESTS tables:\n\n";
- 
-    for (var i = 0; i < failedTables.length; i++) {
-      var tableInfo = failedTables[i];
-      emailContent += "Table: " + tableInfo.tableName + ", Row Count: "+ tableInfo.rowCount + "\nScript: "+ tableInfo.script + "\n\n";
-    }
- 
-    // Send an alert using the notification integration
+
+  // Find new failures by comparing records inserted today with those inserted yesterday
+  var newFailuresState = snowflake.createStatement({
+    sqlText: `SELECT tableName FROM PROD.DBT_TESTS.FAILED_TABLES WHERE failureDate = :1
+              EXCEPT
+              SELECT tableName FROM PROD.DBT_TESTS.FAILED_TABLES WHERE failureDate = :2;`,
+    binds: [formatDate(today), formatDate(yesterday)]
+  });
+  var newFailures = newFailuresState.execute();
+  var newFailedTables = [];
+  while (newFailures.next()) {
+    newFailedTables.push(newFailures.getColumnValue(1)); // Assuming the first column is tableName
+  }
+
+  // Adjust the email content to include only the new failed tables
+  if (newFailedTables.length > 0) {
+    var emailContent = "Alert: New data found in DBT_TESTS tables today ("+formatDate(today)+"):\n\n";
+
+    newFailedTables.forEach(tableName => {
+      emailContent += "Table: " + tableName + "\n\n";
+    });
+
     var state2 = snowflake.createStatement({
-      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'PROD dbt Testing Failures', :1);
-        `,
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"','${var.alerts_email}', 'PROD dbt Testing Failures', :1);`,
       binds: [emailContent]
     });
-    var alertResult = state2.execute();
-    result = "Alert: Data found in DBT_TESTS. Check email for details.";
+    state2.execute();
+    return "Alert: New data found in DBT_TESTS. Check email for details.";
+  }
+  else {
+    var emailContent2 = "No new failures found";
+    var state3 = snowflake.createStatement({
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dbt_test_failures"', '${var.alerts_email}', 'PROD dbt Testing Success', :1);`,
+      binds: [emailContent2]
+    });
+    state3.execute();
+    return "No new failures found";
   }
 } catch (e) {
-  // Handle any errors that occur during the execution of the procedure
   console.error("Error occurred while checking DBT test data:", e);
-  result = "Error checking DBT test data: " + e.message;
+  return "Error checking DBT test data: " + e.message;
 }
- 
-return result;
 EOT
 }
+
 
 resource "snowflake_procedure" "qa_dbttests_alerts" {
   name     = "CHECK_DBT_TESTS_DATA_AND_ALERT"
@@ -212,10 +247,10 @@ try {
 
   // Adjust the email content to include only the new failed tables
   if (newFailedTables.length > 0) {
-    var emailContent = "Alert: New data found in DBT_TESTS tables today ("+formatDate(today)+"):\\n\\n";
+    var emailContent = "Alert: New data found in DBT_TESTS tables today ("+formatDate(today)+"):\n\n";
 
     newFailedTables.forEach(tableName => {
-      emailContent += "Table: " + tableName + "\\n\\n";
+      emailContent += "Table: " + tableName + "\n\n";
     });
 
     var state2 = snowflake.createStatement({
@@ -228,7 +263,7 @@ try {
   else {
     var emailContent2 = "No new failures found";
     var state3 = snowflake.createStatement({
-      sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', 'DEV dbt Testing Success', :1);`,
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', 'QA dbt Testing Success', :1);`,
       binds: [emailContent2]
     });
     state3.execute();
@@ -309,10 +344,10 @@ try {
 
   // Adjust the email content to include only the new failed tables
   if (newFailedTables.length > 0) {
-    var emailContent = "Alert: New data found in DBT_TESTS tables today ("+formatDate(today)+"):\\n\\n";
+    var emailContent = "Alert: New data found in DBT_TESTS tables today ("+formatDate(today)+"):\n\n";
 
     newFailedTables.forEach(tableName => {
-      emailContent += "Table: " + tableName + "\\n\\n";
+      emailContent += "Table: " + tableName + "\n\n";
     });
 
     var state2 = snowflake.createStatement({
@@ -379,11 +414,11 @@ resource "snowflake_procedure" "check_raintree_ingestion_log" {
 
     // Send a single email if there are failed tables
     if (failedTables.length > 0) {
-        var emailContent = "Alert: Data found in the following tables:\n\n";
+        var emailContent = "Alert: Data found in the following tables:\n Documentation for common errors: https://ivyrehab.atlassian.net/wiki/spaces/KB/pages/36995108/Understanding+Snowflake+Alerts \n";
 
         for (var i = 0; i < failedTables.length; i++) {
             var tableInfo = failedTables[i];
-            emailContent += "Documentation for common errors: https://ivyrehab.atlassian.net/wiki/spaces/KB/pages/36995108/Understanding+Snowflake+Alerts Table: " + tableInfo.tableName + ",\n Batch Number: " + tableInfo.batchNumber + ",\n Fail Date: " + tableInfo.failDate + ",\n Fail Area: " + tableInfo.failArea + ",\n Error: " + tableInfo.error + "\n\n";
+            emailContent += "Table: " + tableInfo.tableName + ",\n Batch Number: " + tableInfo.batchNumber + ",\n Fail Date: " + tableInfo.failDate + ",\n Fail Area: " + tableInfo.failArea + ",\n Error: " + tableInfo.error + "\n\n";
         }
 
         // Add the advice to truncate the table after fixing or acknowledging errors
