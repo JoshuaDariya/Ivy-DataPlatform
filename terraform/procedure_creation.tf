@@ -263,7 +263,7 @@ try {
   else {
     var emailContent2 = "No new failures found";
     var state3 = snowflake.createStatement({
-      sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', 'PROD dbt Testing Success', :1);`,
+      sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', 'QA dbt Testing Success', :1);`,
       binds: [emailContent2]
     });
     state3.execute();
