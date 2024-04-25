@@ -350,7 +350,7 @@ try {
       emailContent += "Table: " + tableName + "\n\n";
     });
 
-    emailContent += "Number of stale errors currently existing: " + failedTables.length;
+    emailContent += "Number of total (new and stale) errors currently existing: " + failedTables.length;
 
     var state2 = snowflake.createStatement({
       sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', 'DEV dbt Testing Failures', :1);`,
