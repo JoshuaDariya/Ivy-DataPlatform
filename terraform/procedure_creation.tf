@@ -350,6 +350,8 @@ try {
       emailContent += "Table: " + tableName + "\n\n";
     });
 
+    emailContent += "Number of stale errors currently existing: " + failedTables.length;
+
     var state2 = snowflake.createStatement({
       sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', 'DEV dbt Testing Failures', :1);`,
       binds: [emailContent]
@@ -358,7 +360,7 @@ try {
     return "Alert: New data found in DBT_TESTS. Check email for details.";
   }
   else {
-    var emailContent2 = "No new failures found";
+    var emailContent2 = "No new failures found. Stale error count: " + failedTables.length;
     var state3 = snowflake.createStatement({
       sqlText: `CALL SYSTEM$SEND_EMAIL('"dev_qa_dbt_test_failures"', '${var.dev_qa_alerts_email}', 'DEV dbt Testing Success', :1);`,
       binds: [emailContent2]
