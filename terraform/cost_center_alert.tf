@@ -12,7 +12,7 @@ resource "snowflake_task" "create_cost_center_alert" {
   warehouse="IVY_WH"
 
   name          = "CREATE_COST_CENTER_ALERT"
-  schedule      = "USING CRON 0 12 * * * America/New_York"
+  schedule      = "USING CRON 0 7 * * 1 America/New_York"
   sql_statement = "CALL COST_CENTER_ALERT()"
   user_task_timeout_ms                     = 86400000
 }
