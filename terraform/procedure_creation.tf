@@ -1552,14 +1552,14 @@ resource "snowflake_procedure" "create_loading_process_results_table" {
             var curentDate = mismatchedRows[0].createdAt.toISOString().split('T')[0];
             var emailSubject = "Error occures in FOTO Stage to Landing as of " + curentDate;
             var emailRecipient = "d5924730.ivyrehab.onmicrosoft.com@amer.teams.ms";
-            var emailContent = "The following tables need to be investigated as to why they failed their category:\\n\\n";
+            var emailContent = "The following tables need to be investigated as to why they failed their category:\n\n";
 
             // Loop through mismatched rows and append information to email content
             for (var i = 0; i < mismatchedRows.length; i++) {
                 var rowInfo = mismatchedRows[i];
-                emailContent += "Table: " + rowInfo.tableName + "\\n";
-                emailContent += "Row Count Match: " + rowInfo.isRowCountMatch + "\\n";
-                emailContent += "Most recent files loaded: " + rowInfo.isFolderNameMatch + "\\n\\n";
+                emailContent += "Table: " + rowInfo.tableName + "\n";
+                emailContent += "Row Count Match: " + rowInfo.isRowCountMatch + "\n";
+                emailContent += "Most recent files loaded: " + rowInfo.isFolderNameMatch + "\n\n";
             }
 
             // Add advice to truncate the table after fixing or acknowledging errors
