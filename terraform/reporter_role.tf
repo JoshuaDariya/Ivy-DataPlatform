@@ -45,9 +45,16 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_prod" {
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
   privileges = ["USAGE","MONITOR"]
   role_name  = var.powerbi_role
-  on_schema {
+  for_each = var.landing_schemas_available_to_loader
 
-    future_schemas_in_database = var.landing
+  dynamic "on_schema" {
+    for_each = {
+      schema_name = each.key
+    }
+
+    content {
+      schema_name = on_schema.value
+    }
   }
 }
 
