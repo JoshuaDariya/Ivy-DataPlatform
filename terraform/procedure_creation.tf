@@ -63,7 +63,7 @@ resource "snowflake_procedure" "ingest_foto_data" {
   statement           = <<EOT
 try {
     // Set the default schema for the session
-    var setSchemaQuery = `USE SCHEMA LANDING.FOTO`;
+    var setSchemaQuery = `USE SCHEMA FOTO`;
     snowflake.execute({ sqlText: setSchemaQuery });
     
     //Truncate Z table
