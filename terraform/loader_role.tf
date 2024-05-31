@@ -124,7 +124,7 @@ resource "snowflake_procedure_grant" "loader_access_future_procedures" {
   on_future   = true
 }
 
-resource "snowflake_procedure_grant" "loader_access_future_procedures" {
+resource "snowflake_procedure_grant" "loader_access_future_foto_procedures" {
   database_name  = var.landing
   schema_name = "FOTO"
   privilege   = "USAGE"
