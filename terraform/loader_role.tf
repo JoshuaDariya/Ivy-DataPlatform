@@ -59,6 +59,14 @@ resource "snowflake_procedure_grant" "loader_access_all_procedures" {
   on_all   = true
 }
 
+resource "snowflake_procedure_grant" "loader_access_foto_procedures" {
+  database_name  = var.landing
+  schema_name = "FOTO"
+  privilege   = "USAGE"
+  roles       = [var.loader_role]
+  on_all   = true
+}
+
 resource "snowflake_stage_grant" "loader_current_access_stage_grant" {
   database_name = var.landing
   privilege = "ALL PRIVILEGES"
@@ -111,6 +119,14 @@ resource "snowflake_grant_privileges_to_role" "loader_access_future_views_landin
 resource "snowflake_procedure_grant" "loader_access_future_procedures" {
   database_name  = var.landing
   schema_name = "RAINTREE"
+  privilege   = "USAGE"
+  roles       = [var.loader_role]
+  on_future   = true
+}
+
+resource "snowflake_procedure_grant" "loader_access_future_foto_procedures" {
+  database_name  = var.landing
+  schema_name = "FOTO"
   privilege   = "USAGE"
   roles       = [var.loader_role]
   on_future   = true

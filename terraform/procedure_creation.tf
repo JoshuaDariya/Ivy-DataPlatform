@@ -39,6 +39,56 @@ END
 EOT
 }
 
+resource "snowflake_procedure" "ingest_foto_data" {
+  name     = "INGEST_FOTO_DATA"
+  database = var.landing
+  schema   = "FOTO"
+  language = "JAVASCRIPT"
+  arguments {
+    name = "Z_TABLE_NAME"
+    type = "varchar"
+  }
+  arguments {
+    name = "TABLE_NAME"
+    type = "varchar"
+  }
+  arguments {
+    name = "LATEST_FOLDER"
+    type = "varchar"
+  }
+  comment             = "Ingest FOTO data from Azure blob storage."
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+try {
+    // Set the default schema for the session
+    var setSchemaQuery = `USE SCHEMA FOTO`;
+    snowflake.execute({ sqlText: setSchemaQuery });
+    
+    //Truncate Z table
+    var truncateTableQuery = `Truncate table $${Z_TABLE_NAME}`
+    snowflake.execute({ sqlText: truncateTableQuery });
+
+    // Load FOTO data into the table
+    var copyQuery = `
+        COPY INTO $${Z_TABLE_NAME}
+        FROM @snowflake_foto_stage/$${LATEST_FOLDER}/$${TABLE_NAME}.parquet
+            FILE_FORMAT = (TYPE = PARQUET) 
+            MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE 
+            FORCE = TRUE
+    `;
+
+    snowflake.execute({ sqlText: copyQuery });
+    
+    return "Data Inserted"; 
+}
+catch (err) {
+    return err;
+}
+EOT
+}
+
 resource "snowflake_procedure" "delete_row" {
   name     = "DELETE_ROW_BY_COLUMN_VALUES"
   database = var.landing
