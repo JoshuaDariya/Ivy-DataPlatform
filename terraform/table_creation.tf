@@ -1,14 +1,14 @@
-resource "snowflake_table" "terraform_testing" {
-  database            = var.landing
-  schema              = "RAINTREE"
-  name                = "TERRAFORM_TESTING"
-  change_tracking     = true
+// resource "snowflake_table" "terraform_testing" {
+//   database            = var.landing
+//   schema              = "RAINTREE"
+//   name                = "TERRAFORM_TESTING"
+//   change_tracking     = true
 
-  column {
-    name = "Test"
-    type = "VARCHAR"
-  }
-}
+//   column {
+//     name = "Test"
+//     type = "VARCHAR"
+//   }
+// }
 
 resource "snowflake_table" "ingest_ivyfotoexport_stage" {
   database            = var.landing
