@@ -9443,7 +9443,7 @@ resource "snowflake_table" "objective_tracking_poc" {
   }
   column {
     name = "clinic_id"
-    type = "INTEGER"
+    type = "NUMBER"
   }
   column {
     name = "granularity"
