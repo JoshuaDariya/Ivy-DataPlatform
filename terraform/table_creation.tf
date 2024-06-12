@@ -1,3 +1,16 @@
+resource "snowflake_table" "testing" {
+  database            = var.landing
+  schema              = "RAINTREE"
+  name                = "testing"
+  change_tracking     = true
+
+  column {
+    name = "testing"
+    type = "VARCHAR"
+  }
+}
+
+
 resource "snowflake_table" "ingest_ivyfotoexport_stage" {
   database            = var.landing
   schema              = "RAINTREE"
