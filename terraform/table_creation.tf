@@ -10188,3 +10188,20 @@ column {
   type = "VARCHAR"
 }
 }
+
+resource "snowflake_table" "ingest_raintree_load_message" {
+  database            = var.landing
+  schema              = "RAINTREE"
+  name                = "raintree_load_tracking"
+  change_tracking     = true
+
+  column {
+    name = "message_datetime"
+    type = "DATETIME"
+  }
+
+  column {
+    name = "status"
+    type = "VARCHAR"
+  }
+}
