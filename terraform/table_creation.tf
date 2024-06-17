@@ -1,3 +1,16 @@
+resource "snowflake_table" "testing" {
+  database            = var.landing
+  schema              = "RAINTREE"
+  name                = "testing"
+  change_tracking     = true
+
+  column {
+    name = "testing"
+    type = "VARCHAR"
+  }
+}
+
+
 resource "snowflake_table" "ingest_ivyfotoexport_stage" {
   database            = var.landing
   schema              = "RAINTREE"
@@ -9431,7 +9444,7 @@ resource "snowflake_table" "objective_tracking_poc" {
   }
   column {
     name = "clinic_id"
-    type = "INTEGER"
+    type = "NUMBER(38,0)"
   }
   column {
     name = "granularity"
