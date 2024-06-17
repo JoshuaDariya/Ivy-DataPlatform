@@ -66,3 +66,14 @@ resource "snowflake_email_notification_integration" "raintree_ingestion_failures
   enabled = true  
   allowed_recipients = [var.alerts_email]
 }
+
+resource "snowflake_task" "check_raintre_load_tracking_table" {
+
+  database  = var.landing
+  schema    = var.raintree_v2_schema
+  warehouse = "IVY_WH"
+  name          = "CHECK_RAINTREE_LOAD_MESSAGE_TABLE"
+  schedule      = "3 MINUTES"
+  sql_statement = "CALL CHECK_RAINTREE_LOAD_MESSAGE()"
+  enabled = true
+}
