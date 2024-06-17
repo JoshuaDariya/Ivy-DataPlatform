@@ -689,6 +689,10 @@ resource "snowflake_procedure" "parent_ingest_raintree_v2_data" {
   statement           = <<EOF
   try{
 
+// Set the default schema for the session
+var setSchemaQuery = `USE SCHEMA LANDING.RAINTREE`;
+snowflake.execute({ sqlText: setSchemaQuery });
+
 // UPDATE RAINTREE_LOAD_TRACKING status to IN PROGRESS
 var updateRaintreeLoadTrackingTableQuery = `UPDATE raintree.raintree_load_tracking
                         SET STATUS = 'IN PROGRESS'
