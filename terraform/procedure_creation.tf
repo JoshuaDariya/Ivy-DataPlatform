@@ -1946,7 +1946,7 @@ resource "snowflake_procedure" "check_raintree_loading_message_table" {
   try {
   var countNewMessageQuery = `
           SELECT COUNT(*) AS count
-          FROM raintree.raintree_load_tracking
+          FROM LANDING.raintree.raintree_load_tracking
           WHERE STATUS = 'NEW'
       `;
   var countNewMessageStmt = snowflake.createStatement({ sqlText: countNewMessageQuery });
