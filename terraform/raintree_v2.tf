@@ -43,7 +43,7 @@ resource "snowflake_task" "ingest_raintree_v2_data_from_s3" {
 
   user_task_timeout_ms                     = 86400000
   user_task_managed_initial_warehouse_size = "LARGE"
-  enabled = true
+  enabled = false
 }
 
 resource "snowflake_task" "batch_testing_stage_to_landing" {
@@ -71,9 +71,12 @@ resource "snowflake_task" "check_raintre_load_tracking_table" {
 
   database  = var.landing
   schema    = var.raintree_v2_schema
-  warehouse = "IVY_WH"
+
   name          = "CHECK_RAINTREE_LOAD_MESSAGE_TABLE"
   schedule      = "3 MINUTES"
   sql_statement = "CALL CHECK_RAINTREE_LOAD_MESSAGE()"
+
+  user_task_timeout_ms                     = 86400000
+  user_task_managed_initial_warehouse_size = "LARGE"
   enabled = true
 }
