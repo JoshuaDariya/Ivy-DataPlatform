@@ -10209,12 +10209,12 @@ resource "snowflake_table" "ingest_raintree_load_message" {
   change_tracking     = true
 
   column {
-    name = "message_datetime"
+    name = "MESSAGE_DATETIME"
     type = "DATETIME"
   }
 
   column {
-    name = "status"
+    name = "STATUS"
     type = "VARCHAR"
   }
 }
