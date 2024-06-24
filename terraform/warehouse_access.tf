@@ -25,3 +25,12 @@ resource "snowflake_warehouse_grant" "power_bi_grant" {
 
   with_grant_option = false
 }
+
+resource "snowflake_warehouse_grant" "power_bi_grant" {
+  warehouse_name = "POWER_BI_WH"
+  privilege      = "USAGE"
+
+  roles = [var.workday_payroll_role]
+
+  with_grant_option = false
+}
