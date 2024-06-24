@@ -10205,7 +10205,7 @@ column {
 resource "snowflake_table" "ingest_raintree_load_message" {
   database            = var.landing
   schema              = "RAINTREE"
-  name                = "raintree_load_tracking"
+  name                = "RAINTREE_LOAD_TRACKING"
   change_tracking     = true
 
   column {
