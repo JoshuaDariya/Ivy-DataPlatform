@@ -1937,7 +1937,7 @@ EOF
 }
 
 resource "snowflake_procedure" "check_raintree_loading_message_table" {
-  name     = "CHECK_RAINTREE_LOAD_MESSAGE_TABLE"
+  name     = "CHECK_RAINTREE_LOAD_MESSAGE"
   database = var.landing
   schema   = "RAINTREE"
   language = "JAVASCRIPT"
