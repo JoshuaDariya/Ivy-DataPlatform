@@ -689,10 +689,21 @@ resource "snowflake_procedure" "parent_ingest_raintree_v2_data" {
   statement           = <<EOF
   try{
 
-
 // Set the default schema for the session
 var setSchemaQuery = `USE SCHEMA LANDING.RAINTREE`;
 snowflake.execute({ sqlText: setSchemaQuery });
+
+// UPDATE RAINTREE_LOAD_TRACKING status to IN PROGRESS
+var updateRaintreeLoadTrackingTableQuery = `UPDATE raintree.raintree_load_tracking
+                        SET STATUS = 'IN PROGRESS'
+                        WHERE STATUS = 'NEW'`;
+try {
+        snowflake.execute({ sqlText: updateRaintreeLoadTrackingTableQuery });
+    }
+    catch(err){
+        var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to update Raintree_Load_Tracking Status to IN PROGRESS', '--','$${err}')`;
+        var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+    }
 
 // Get the list of file names
 var getStageFilesSQL = `list @SNOWFLAKE_RAINTREE_STAGE`;
@@ -775,8 +786,32 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
             var alertingResult = `CALL CHECK_RAINTREE_INGESTION_LOG_AND_ALERT()`;
             snowflake.execute({ sqlText: alertingResult });
         }
+
+// UPDATE RAINTREE_LOAD_TRACKING status to COMPLETE
+var updateRaintreeLoadTrackingTableQuery = `UPDATE raintree.raintree_load_tracking
+                        SET STATUS = 'COMPLETE'
+                        WHERE STATUS = 'IN PROGRESS'`;
+try {
+        snowflake.execute({ sqlText: updateRaintreeLoadTrackingTableQuery });
+    }
+    catch(err){
+        var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to update Raintree_Load_Tracking Status to COMPLETE', '--','$${err}')`;
+        var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+    }
 }
 catch (err) {
+        // REVERSE RAINTREE_LOAD_TRACKING status to NEW
+        var updateRaintreeLoadTrackingTableQuery = `UPDATE raintree.raintree_load_tracking
+                                SET STATUS = 'FAILED'
+                                WHERE STATUS = 'IN PROGRESS'`;
+        try {
+                snowflake.execute({ sqlText: updateRaintreeLoadTrackingTableQuery });
+            }
+        catch(err){
+            var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to Reverse Raintree_Load_Tracking Status back to FAILED', '--','$${err}')`;
+            var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+        }
+
         // write failure to ingestion failure table table
             var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to ingest batch', '--','$${err}')`;
             var logFail = snowflake.execute({ sqlText: callFailLogSQL });
@@ -1898,5 +1933,50 @@ resource "snowflake_procedure" "create_cost_center_alert" {
 }
 
   return result;
+EOF
+}
+
+resource "snowflake_procedure" "check_raintree_loading_message_table" {
+  name     = "CHECK_RAINTREE_LOAD_MESSAGE"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "JAVASCRIPT"
+  return_type         = "VARCHAR(16777216)"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  comment = "Check raintree tree Teams channel message."
+  statement           = <<EOF
+
+  try {
+  var countNewMessageQuery = `
+          SELECT COUNT(*) AS count
+          FROM LANDING.raintree.raintree_load_tracking
+          WHERE STATUS = 'NEW'
+      `;
+  var countNewMessageStmt = snowflake.createStatement({ sqlText: countNewMessageQuery });
+  var result = countNewMessageStmt.execute();
+
+  var newMessageCount = 0;
+  if (result.next()) {
+    newMessageCount = result.getColumnValue(1);
+  }
+  
+  var shouldTaskRun;
+  if (newMessageCount > 0) {
+    shouldTaskRun = true;
+    var callProcedureQuery = `
+          CALL PARENT_INGEST_RAINTREE_V2_DATA(true)
+      `;
+    var callProcedureStmt = snowflake.createStatement({ sqlText: callProcedureQuery });
+    var result = callProcedureStmt.execute();
+    
+  } else {
+    shouldTaskRun = false;
+  }
+
+  return shouldTaskRun;
+} catch (err) {
+  return "Error occurred: " + err.message;
+}
 EOF
 }
