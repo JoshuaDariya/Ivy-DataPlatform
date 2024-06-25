@@ -758,6 +758,11 @@ var parquetFilePaths = allFileNames.filter(fileName => fileName.endsWith(".parqu
             catch(err){
                 var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure in ingest_raintree_v2_data', '--','$${err}')`;
                 var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+                 // Write failure to execution audit table
+                var guid = generateGUID()
+                var curr_date = Date.now()
+                var setFailureQuery = `INSERT INTO EXECUTION_AUDIT VALUES ('$${guid}', '$${curr_date}', '$${curr_date}', 'FAILURE', '$${failureBatchNum}' )`;
+                snowflake.execute({ sqlText: setFailureQuery });
             }
             
             // Generate GUID & current timestamp for execution
@@ -815,11 +820,6 @@ catch (err) {
         // write failure to ingestion failure table table
             var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to ingest batch', '--','$${err}')`;
             var logFail = snowflake.execute({ sqlText: callFailLogSQL });
-        // Write failure to execution audit table
-            var guid = generateGUID()
-            var curr_date = Date.now()
-            var setFailureQuery = `INSERT INTO EXECUTION_AUDIT VALUES ('$${guid}', '$${curr_date}', '$${curr_date}', 'FAILURE', '$${failureBatchNum}' )`;
-            snowflake.execute({ sqlText: setFailureQuery });
 }
 
     function generateGUID() {
