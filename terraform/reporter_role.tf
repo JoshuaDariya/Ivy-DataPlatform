@@ -432,7 +432,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_prod" {
 resource "null_resource" "revoke_reporter_privileges" {
   provisioner "local-exec" {
     command = <<EOF
-    snowsql -a ${var.var.account} -u ${var.username} -p ${var.password} -q "REVOKE SELECT ON TABLE LANDING.WORKDAY.PAYROLL FROM ROLE SNOWFLAKEPAYROLLREADER;"
+    snowsql -a ${var.account} -u ${var.username} -p ${var.password} -q "REVOKE SELECT ON TABLE LANDING.WORKDAY.PAYROLL FROM ROLE SNOWFLAKEPAYROLLREADER;"
     EOF
   }
 }
