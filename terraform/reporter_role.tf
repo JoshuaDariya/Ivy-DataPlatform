@@ -42,20 +42,29 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_prod" {
 }
 
 // ---------------- FUTURE GRANTS --------------------
+# resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
+#   privileges = ["USAGE","MONITOR"]
+#   role_name  = var.powerbi_role
+#   for_each = var.landing_schemas_available_to_reporter
+
+#   dynamic "on_schema" {
+#     for_each = {
+#       schema_name = each.key
+#     }
+
+#     content {
+#       schema_name = on_schema.value
+#     }
+#   }
+# }
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
   privileges = ["USAGE","MONITOR"]
   role_name  = var.powerbi_role
-  for_each = var.landing_schemas_available_to_reporter
 
-  dynamic "on_schema" {
-    for_each = {
-      schema_name = each.key
-    }
+  on_schema {
 
-    content {
-      schema_name = on_schema.value
+      future_schemas_in_database = var.landing
     }
-  }
 }
 
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_dev" {
@@ -87,19 +96,27 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_prod
 
 
 // ---------------- SCHEMA GRANTS --------------------
+# resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
+#   privileges = ["USAGE", "MONITOR"]
+#   role_name  = var.powerbi_role
+#   for_each = var.landing_schemas_available_to_reporter
+
+#   dynamic "on_schema" {
+#     for_each = {
+#       schema_name = each.key
+#     }
+
+#     content {
+#       schema_name = on_schema.value
+#     }
+#   }
+# }
+
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
-  for_each = var.landing_schemas_available_to_reporter
-
-  dynamic "on_schema" {
-    for_each = {
-      schema_name = each.key
-    }
-
-    content {
-      schema_name = on_schema.value
-    }
+   on_schema {
+    all_schemas_in_database = var.landing
   }
 }
  
@@ -408,5 +425,14 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_prod" {
       object_type_plural = "DYNAMIC TABLES"
       in_database        = var.prod
     }
+  }
+}
+
+// -------- REVOKE REPORTER ACCESS ON CERTAIN TABLES ----------
+resource "null_resource" "revoke_reporter_privileges" {
+  provisioner "local-exec" {
+    command = <<EOF
+    snowsql -a ${var.var.account} -u ${var.username} -p ${var.password} -q "REVOKE SELECT ON TABLE LANDING.WORKDAY.PAYROLL FROM ROLE SNOWFLAKEPAYROLLREADER;"
+    EOF
   }
 }
