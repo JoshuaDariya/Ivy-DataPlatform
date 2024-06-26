@@ -429,10 +429,26 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_prod" {
 }
 
 // -------- REVOKE REPORTER ACCESS ON CERTAIN TABLES ----------
-resource "null_resource" "revoke_reporter_privileges" {
-  provisioner "local-exec" {
-    command = <<EOF
-    snowsql -a ${var.account} -u ${var.username} -p ${var.password} -q "REVOKE SELECT ON TABLE LANDING.WORKDAY.PAYROLL FROM ROLE SNOWFLAKEPAYROLLREADER;"
-    EOF
-  }
+resource "snowflake_table_grant" "grant_payroll_select_role" {
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = "PAYROLL"
+
+  privilege = "SELECT"
+  roles     = [var.developer_role,var.qa_role, var.prod_role, var.loader_role]
+
+  on_future         = false
+  with_grant_option = false
+}
+
+resource "snowflake_table_grant" "grant_payroll_full_role_loader" {
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = "PAYROLL"
+
+  privilege = ["OWNERSHIP, DELLETE, INSERT, TRUNCATE, SELECT"]
+  roles     = [var.loader_role]
+
+  on_future         = false
+  with_grant_option = false
 }
