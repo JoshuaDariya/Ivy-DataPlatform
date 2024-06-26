@@ -446,7 +446,7 @@ resource "snowflake_table_grant" "grant_payroll_full_role_loader" {
   schema_name   = "WORKDAY"
   table_name    = "PAYROLL"
 
-  privilege = ["OWNERSHIP, DELLETE, INSERT, TRUNCATE, SELECT"]
+  privilege = ["OWNERSHIP, DELETE, INSERT, TRUNCATE, SELECT"]
   roles     = [var.loader_role]
 
   on_future         = false
