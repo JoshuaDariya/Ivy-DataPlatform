@@ -448,7 +448,7 @@ locals {
   ]
 }
 
-
+# Remove reporter's access to certain tables
 resource "snowflake_table_grant" "reporter_table_access" {
   for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if !contains(local.excluded_tables, table.name) }
   database_name = var.landing
@@ -460,19 +460,3 @@ resource "snowflake_table_grant" "reporter_table_access" {
 
   with_grant_option = false
 }
-
-# resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
-#   privileges = ["USAGE","MONITOR"]
-#   role_name  = var.powerbi_role
-#   for_each = var.landing_schemas_available_to_reporter
-
-#   dynamic "on_schema" {
-#     for_each = {
-#       schema_name = each.key
-#     }
-
-#     content {
-#       schema_name = on_schema.value
-#     }
-#   }
-# }
