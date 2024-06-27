@@ -39,7 +39,7 @@ stages:
               export PATH=$PATH:/home/vsts/.snowsql/bin
               snowsql -v
             displayName: 'Install SnowSQL'
-            
+
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
@@ -69,6 +69,8 @@ stages:
               environmentServiceNameAzureRM: 'Ivy Dev Data Platform'
               commandOptions: '-lock=false -input=false -var account=$(account) -var password=$(pass) -var region=$(region) -var username=$(user) -var storage_aws_role_arn=$(storage-aws-role-arn) -var aws_url_storage_allowed_locations=$(aws-url-storage-allowed-locations) -var azure_foto_url_storage_allowed_locations=$(azure_foto_url_storage_allowed_locations) -var azure_adaptive_url_storage_allowed_locations=$(azure_adaptive_url_storage_allowed_locations) -var azure_adaptive_url_storage_allowed_locations_prod=$(azure_adaptive_url_storage_allowed_locations_prod) -var azure_tenant=$(azure_tenant) -var alerts_email=$(alerts_email) -var cost_center_alerts_email=$(cost_center_alerts_email) -var dev_qa_alerts_email=$(dev_qa_alerts_email)'
 
-
-          
+          - script: |
+              echo "Cleaning up SnowSQL installation files"
+              rm -f snowsql-1.3.0-linux_x86_64.bash
+            displayName: 'Cleanup SnowSQL Install Files'
 
