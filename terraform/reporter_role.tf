@@ -441,7 +441,7 @@ resource "snowflake_table_grant" "reporter_table_access" {
   schema_name   = "WORKDAY"
   table_name    = each.key
 
-  privilege = ["SELECT"]
+  privilege = "SELECT"
   roles     = [var.powerbi_role]
 
   on_future         = false
