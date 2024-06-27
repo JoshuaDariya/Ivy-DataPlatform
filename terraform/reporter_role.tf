@@ -435,15 +435,55 @@ data "snowflake_tables" "all_tables" {
 }
 
 
-# Remove reporter priviledge on certain table in workday
-resource "snowflake_table_grant" "reporter_table_access" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if table.name != ["PAYROLL", "PAY_ACCUMULATION","PAYROLL_DEDUCTION_INSTANT_MESSAGER","PAYROLL_LINE","PAYROLL_LINE_PAY_COMPONENT","PAYROLL_LINE_RELATED_CALCULATION","PAYROLL_LINE_WITHHOLDING","PAYROLL_NATIONAL_ID"] }
+# List of tables to exclude
+locals {
+  excluded_tables = [
+    "PAYROLL",
+    "PAY_ACCUMULATION",
+    "PAYROLL_DEDUCTION_INSTANT_MESSAGER",
+    "PAYROLL_LINE",
+    "PAYROLL_LINE_PAY_COMPONENT",
+    "PAYROLL_LINE_RELATED_CALCULATION",
+    "PAYROLL_LINE_WITHHOLDING",
+    "PAYROLL_NATIONAL_ID"
+  ]
+}
+
+# Remove reporter's access to certain tables
+resource "snowflake_table_grant" "table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if !contains(local.excluded_tables, table.name) }
   database_name = var.landing
   schema_name   = "WORKDAY"
   table_name    = each.key
 
   privilege = "SELECT"
-  roles     = [var.powerbi_role]
+  roles     = [var.powerbi_role, var.developer_role, var.prod_role, var.qa_role, var.loader_role ]
+
+  with_grant_option = false
+}
+
+
+resource "snowflake_table_grant" "other_roles_table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if contains(local.excluded_tables, table.name) }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = "SELECT"
+  roles     = [var.developer_role, var.prod_role, var.qa_role, var.loader_role ]
+
+  with_grant_option = false
+}
+
+#Grant loader "OWNERSHIP, DELETE, INSERT, TRUNCATE" privilege
+resource "snowflake_table_grant" "reporter_table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = ["OWNERSHIP, DELETE, INSERT, TRUNCATE"]
+  roles     = [var.loader_role]
 
   with_grant_option = false
 }
