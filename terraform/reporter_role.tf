@@ -481,7 +481,43 @@ resource "snowflake_table_grant" "reporter_table_access" {
   schema_name   = "WORKDAY"
   table_name    = each.key
 
-  privilege = ["OWNERSHIP", "DELETE", "INSERT", "TRUNCATE"]
+  privilege = ["OWNERSHIP"]
+  roles     = [var.loader_role]
+
+  with_grant_option = false
+}
+
+resource "snowflake_table_grant" "reporter_table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = ["DELETE"]
+  roles     = [var.loader_role]
+
+  with_grant_option = false
+}
+
+resource "snowflake_table_grant" "reporter_table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = ["INSERT"]
+  roles     = [var.loader_role]
+
+  with_grant_option = false
+}
+
+resource "snowflake_table_grant" "reporter_table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = ["TRUNCATE"]
   roles     = [var.loader_role]
 
   with_grant_option = false
