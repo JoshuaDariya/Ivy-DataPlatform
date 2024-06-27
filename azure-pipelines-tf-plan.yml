@@ -24,35 +24,6 @@ stages:
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: 'latest'
-              
-  - stage: SnowSQLInstall
-    displayName: Install SnowSQL
-    jobs:
-      - job: InstallSnowSQL
-        displayName: Install SnowSQL
-        timeoutInMinutes: 60  # Increase timeout if necessary
-        steps:
-          - script: |
-              echo "Updating package list and installing dependencies"
-              sudo apt-get update
-              sudo apt-get install -y wget
-            displayName: 'Install Dependencies'
-
-          - script: |
-              echo "Downloading SnowSQL version 1.3.0"
-              wget https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.3/linux_x86_64/snowsql-1.3.0-linux_x86_64.bash
-              echo "Making the SnowSQL installation script executable"
-              chmod +x snowsql-1.3.0-linux_x86_64.bash
-              echo "Installing SnowSQL"
-              ./snowsql-1.3.0-linux_x86_64.bash
-              export PATH=$PATH:/home/vsts/.snowsql/bin
-              snowsql -v
-            displayName: 'Download and Install SnowSQL'
-
-          - script: |
-              echo "Cleaning up SnowSQL installation files"
-              rm -f snowsql-1.3.0-linux_x86_64.bash
-            displayName: 'Cleanup SnowSQL Install Files'
 
   - stage: TerraformInitPlan
     displayName: Terraform Init Plan
