@@ -449,7 +449,7 @@ locals {
   ]
 }
 
-# Remove reporter's access to certain tables
+# Grant access to certain tables
 resource "snowflake_table_grant" "table_access" {
   for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if !contains(local.excluded_tables, table.name) }
   database_name = var.landing
@@ -461,7 +461,6 @@ resource "snowflake_table_grant" "table_access" {
 
   with_grant_option = false
 }
-
 
 resource "snowflake_table_grant" "other_roles_table_access" {
   for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if contains(local.excluded_tables, table.name) }
@@ -482,7 +481,7 @@ resource "snowflake_table_grant" "reporter_table_access" {
   schema_name   = "WORKDAY"
   table_name    = each.key
 
-  privilege = ["OWNERSHIP, DELETE, INSERT, TRUNCATE"]
+  privilege = ["OWNERSHIP", "DELETE", "INSERT", "TRUNCATE"]
   roles     = [var.loader_role]
 
   with_grant_option = false
