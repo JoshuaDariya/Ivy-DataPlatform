@@ -434,7 +434,7 @@ data "snowflake_tables" "all_tables" {
   schema   = "WORKDAY"
 }
 
-resource "snowflake_grant_privileges_to_account_role" "table_access" {
+resource "snowflake_grant_privileges_to_role" "reporter_table_access" {
   for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if table.name != "PAYROLL" }
 
   privileges    = ["SELECT"]
@@ -451,7 +451,17 @@ resource "snowflake_grant_privileges_to_account_role" "table_access" {
   }
 }
 
-
+resource "snowflake_grant_privileges_to_account_role" "reporter_table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if table.name != "PAYROLL" }
+  privileges        = ["SELECT"]
+  account_role_name = var.powerbi_role
+  on_schema_object {
+    all {
+      object_type_plural = "TABLES"
+      in_schema          = "\"${var.landing}\".\"WORKDAY\".\"${each.key}\"" 
+    }
+  }
+}
 
 # resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
 #   privileges = ["USAGE","MONITOR"]
