@@ -436,14 +436,14 @@ data "snowflake_tables" "all_tables" {
 
 
 resource "snowflake_table_grant" "reporter_table_access" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if table.name != "PAYROLL" }
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if table.name != ["PAYROLL", "PAY_ACCUMULATION","PAYROLL_DEDUCTION_INSTANT_MESSAGER","PAYROLL_LINE","PAYROLL_LINE_PAY_COMPONENT","PAYROLL_LINE_RELATED_CALCULATION","PAYROLL_LINE_WITHHOLDING","PAYROLL_NATIONAL_ID"] }
   database_name = var.landing
   schema_name   = "WORKDAY"
   table_name    = each.key
 
   privilege = "SELECT"
   roles     = [var.powerbi_role]
-  
+
   with_grant_option = false
 }
 
