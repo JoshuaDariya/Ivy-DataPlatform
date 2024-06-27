@@ -434,33 +434,18 @@ data "snowflake_tables" "all_tables" {
   schema   = "WORKDAY"
 }
 
-resource "snowflake_grant_privileges_to_role" "reporter_table_access" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if table.name != "PAYROLL" }
 
-  privileges    = ["SELECT"]
+resource "snowflake_table_grant" "reporter_table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if table.name != "PAYROLL" }
   database_name = "LANDING"
   schema_name   = "WORKDAY"
-  role_name  = var.powerbi_role
-    dynamic "on_table" {
-      for_each = {
-        table_name = each.key
-      }
-    content {
-        table_name = on_table.value
-    }
-  }
-}
+  table_name    = each.key
 
-resource "snowflake_grant_privileges_to_account_role" "reporter_table_access" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if table.name != "PAYROLL" }
-  privileges        = ["SELECT"]
-  account_role_name = var.powerbi_role
-  on_schema_object {
-    all {
-      object_type_plural = "TABLES"
-      in_schema          = "\"${var.landing}\".\"WORKDAY\".\"${each.key}\"" 
-    }
-  }
+  privilege = ["SELECT"]
+  roles     = [var.powerbi_role]
+
+  on_future         = false
+  with_grant_option = false
 }
 
 # resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
