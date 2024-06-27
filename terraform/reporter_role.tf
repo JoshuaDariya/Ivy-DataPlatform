@@ -443,8 +443,7 @@ resource "snowflake_table_grant" "reporter_table_access" {
 
   privilege = "SELECT"
   roles     = [var.powerbi_role]
-
-  on_future         = false
+  
   with_grant_option = false
 }
 
