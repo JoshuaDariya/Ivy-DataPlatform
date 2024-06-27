@@ -42,30 +42,30 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_prod" {
 }
 
 // ---------------- FUTURE GRANTS --------------------
-# resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
-#   privileges = ["USAGE","MONITOR"]
-#   role_name  = var.powerbi_role
-#   for_each = var.landing_schemas_available_to_reporter
-
-#   dynamic "on_schema" {
-#     for_each = {
-#       schema_name = each.key
-#     }
-
-#     content {
-#       schema_name = on_schema.value
-#     }
-#   }
-# }
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
   privileges = ["USAGE","MONITOR"]
   role_name  = var.powerbi_role
+  for_each = var.landing_schemas_available_to_reporter
 
-  on_schema {
-
-      future_schemas_in_database = var.landing
+  dynamic "on_schema" {
+    for_each = {
+      schema_name = each.key
     }
+
+    content {
+      schema_name = on_schema.value
+    }
+  }
 }
+# resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
+#   privileges = ["USAGE","MONITOR"]
+#   role_name  = var.powerbi_role
+
+#   on_schema {
+
+#       future_schemas_in_database = var.landing
+#     }
+# }
 
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_dev" {
   privileges = ["USAGE","MONITOR"]
@@ -96,29 +96,29 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_prod
 
 
 // ---------------- SCHEMA GRANTS --------------------
-# resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
-#   privileges = ["USAGE", "MONITOR"]
-#   role_name  = var.powerbi_role
-#   for_each = var.landing_schemas_available_to_reporter
-
-#   dynamic "on_schema" {
-#     for_each = {
-#       schema_name = each.key
-#     }
-
-#     content {
-#       schema_name = on_schema.value
-#     }
-#   }
-# }
-
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
-   on_schema {
-    all_schemas_in_database = var.landing
+  for_each = var.landing_schemas_available_to_reporter
+
+  dynamic "on_schema" {
+    for_each = {
+      schema_name = each.key
+    }
+
+    content {
+      schema_name = on_schema.value
+    }
   }
 }
+
+# resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
+#   privileges = ["USAGE", "MONITOR"]
+#   role_name  = var.powerbi_role
+#    on_schema {
+#     all_schemas_in_database = var.landing
+#   }
+# }
  
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_dev" {
   privileges = ["USAGE", "MONITOR"]
@@ -426,29 +426,4 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_prod" {
       in_database        = var.prod
     }
   }
-}
-
-// -------- REVOKE REPORTER ACCESS ON CERTAIN TABLES ----------
-resource "snowflake_table_grant" "grant_payroll_select_role" {
-  database_name = var.landing
-  schema_name   = "WORKDAY"
-  table_name    = "PAYROLL"
-
-  privilege = "SELECT"
-  roles     = [var.developer_role,var.qa_role, var.prod_role, var.loader_role]
-
-  on_future         = false
-  with_grant_option = false
-}
-
-resource "snowflake_table_grant" "grant_payroll_full_role_loader" {
-  database_name = var.landing
-  schema_name   = "WORKDAY"
-  table_name    = "PAYROLL"
-
-  privilege = ["OWNERSHIP, DELETE, INSERT, TRUNCATE, SELECT"]
-  roles     = [var.loader_role]
-
-  on_future         = false
-  with_grant_option = false
 }

@@ -31,6 +31,15 @@ stages:
       - job: TFinit
         displayName: Terraform Init Plan Apply
         steps:
+        # Install SnowSQL
+          - script: |
+              echo "Downloading and installing SnowSQL version 1.3.0"
+              wget https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.3/linux_x86_64/snowsql-1.3.0-linux_x86_64.bash
+              bash snowsql-1.3.0-linux_x86_64.bash
+              export PATH=$PATH:/home/vsts/.snowsql/bin
+              snowsql -v
+            displayName: 'Install SnowSQL'
+            
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
