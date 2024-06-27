@@ -481,7 +481,7 @@ resource "snowflake_table_grant" "loader_table_access_ownership" {
   schema_name   = "WORKDAY"
   table_name    = each.key
 
-  privilege = ["OWNERSHIP"]
+  privilege = "OWNERSHIP"
   roles     = [var.loader_role]
 
   with_grant_option = false
@@ -493,7 +493,7 @@ resource "snowflake_table_grant" "loader_table_access_delete" {
   schema_name   = "WORKDAY"
   table_name    = each.key
 
-  privilege = ["DELETE"]
+  privilege = "DELETE"
   roles     = [var.loader_role]
 
   with_grant_option = false
@@ -505,7 +505,7 @@ resource "snowflake_table_grant" "loader_table_access_insert" {
   schema_name   = "WORKDAY"
   table_name    = each.key
 
-  privilege = ["INSERT"]
+  privilege = "INSERT"
   roles     = [var.loader_role]
 
   with_grant_option = false
@@ -517,7 +517,7 @@ resource "snowflake_table_grant" "loader_table_access_truncate" {
   schema_name   = "WORKDAY"
   table_name    = each.key
 
-  privilege = ["TRUNCATE"]
+  privilege = "TRUNCATE"
   roles     = [var.loader_role]
 
   with_grant_option = false
