@@ -430,14 +430,14 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_prod" {
 
 # Fetch all table names in the schema, excluding the restricted table
 data "snowflake_tables" "all_tables" {
-  database = "LANDING"
+  database = var.landing
   schema   = "WORKDAY"
 }
 
 
 resource "snowflake_table_grant" "reporter_table_access" {
   for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if table.name != "PAYROLL" }
-  database_name = "LANDING"
+  database_name = var.landing
   schema_name   = "WORKDAY"
   table_name    = each.key
 
