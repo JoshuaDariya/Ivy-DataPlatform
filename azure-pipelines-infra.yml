@@ -62,7 +62,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName: $(ResourceGroupName)dev-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
-              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdDev) -location $(Location) -KeyVaultName $(KeyVaultNameDev)dev'
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdDev) -location $(Location) -KeyVaultName $(KeyVaultNameDev)'
       - job: DeployDevFunctionApp
         displayName: Deploy function app to RG
         steps:
@@ -123,7 +123,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName:  $(ResourceGroupName)stage-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
-              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdStage) -location $(Location) -KeyVaultName $(KeyVaultNameStage)stage'
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdStage) -location $(Location) -KeyVaultName $(KeyVaultNameStage)'
       - job: DeployStageFunctionApp
         displayName: Deploy function app to RG
         steps:
@@ -185,7 +185,7 @@ stages:
               location: $(DeploymentDefaultLocation)
               resourceGroupName:  $(ResourceGroupName)prod-$(DeploymentDefaultLocation)
               csmFile: resources/keyVault.bicep
-              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdProd) -location $(Location) -KeyVaultName $(KeyVaultNameProd)prod'
+              overrideParameters: '-tenantId $(tenantId) -spObjectId $(ServicePrincipleObjectId) -adfObjectId $(adfObjectIdProd) -location $(Location) -KeyVaultName $(KeyVaultNameProd)'
       
       - job: DeployProdFunctionApp
         displayName: Deploy function app to RG
