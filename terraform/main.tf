@@ -21,7 +21,7 @@ terraform {
 
 //------------- TERRAFORM ACCOUNT WITH SNOWFLAKE -----------------
 provider "snowflake" {
-  role = "ACCOUNTADMIN"
+  role = "TERRAFORMADMIN"
   account = var.account
   user = var.username
   password = var.password
