@@ -42,20 +42,29 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_db_grant_prod" {
 }
 
 // ---------------- FUTURE GRANTS --------------------
+# resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
+#   privileges = ["USAGE","MONITOR"]
+#   role_name  = var.powerbi_role
+#   for_each = var.landing_schemas_available_to_reporter
+
+#   dynamic "on_schema" {
+#     for_each = {
+#       schema_name = each.key
+#     }
+
+#     content {
+#       schema_name = on_schema.value
+#     }
+#   }
+# }
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
   privileges = ["USAGE","MONITOR"]
   role_name  = var.powerbi_role
-  for_each = var.landing_schemas_available_to_reporter
 
-  dynamic "on_schema" {
-    for_each = {
-      schema_name = each.key
-    }
+  on_schema {
 
-    content {
-      schema_name = on_schema.value
+      future_schemas_in_database = var.landing
     }
-  }
 }
 
 resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_dev" {
@@ -87,19 +96,27 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_prod
 
 
 // ---------------- SCHEMA GRANTS --------------------
+# resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
+#   privileges = ["USAGE", "MONITOR"]
+#   role_name  = var.powerbi_role
+#   for_each = var.landing_schemas_available_to_reporter
+
+#   dynamic "on_schema" {
+#     for_each = {
+#       schema_name = each.key
+#     }
+
+#     content {
+#       schema_name = on_schema.value
+#     }
+#   }
+# }
+
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
-  for_each = var.landing_schemas_available_to_reporter
-
-  dynamic "on_schema" {
-    for_each = {
-      schema_name = each.key
-    }
-
-    content {
-      schema_name = on_schema.value
-    }
+   on_schema {
+    all_schemas_in_database = var.landing
   }
 }
  
@@ -409,4 +426,99 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_prod" {
       in_database        = var.prod
     }
   }
+}
+
+# Fetch all table names in the schema, excluding the restricted table
+data "snowflake_tables" "all_tables" {
+  database = var.landing
+  schema   = "WORKDAY"
+}
+
+
+# List of tables to exclude
+locals {
+  excluded_tables = [
+    "PAYROLL",
+    "PAY_ACCUMULATION",
+    "PAYROLL_DEDUCTION_INSTANT_MESSENGER",
+    "PAYROLL_LINE",
+    "PAYROLL_LINE_PAY_COMPONENT",
+    "PAYROLL_LINE_RELATED_CALCULATION",
+    "PAYROLL_LINE_WITHHOLDING",
+    "PAYROLL_NATIONAL_ID"
+  ]
+}
+
+# Grant access to certain tables
+resource "snowflake_table_grant" "table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if !contains(local.excluded_tables, table.name) }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = "SELECT"
+  roles     = [var.powerbi_role, var.developer_role, var.prod_role, var.qa_role, var.loader_role ]
+
+  with_grant_option = false
+}
+
+resource "snowflake_table_grant" "other_roles_table_access" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if contains(local.excluded_tables, table.name) }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = "SELECT"
+  roles     = [var.developer_role, var.prod_role, var.qa_role, var.loader_role ]
+
+  with_grant_option = false
+}
+
+#Grant loader "OWNERSHIP, DELETE, INSERT, TRUNCATE" privilege
+resource "snowflake_table_grant" "loader_table_access_ownership" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = "OWNERSHIP"
+  roles     = [var.loader_role]
+
+  with_grant_option = false
+}
+
+resource "snowflake_table_grant" "loader_table_access_delete" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = "DELETE"
+  roles     = [var.loader_role]
+
+  with_grant_option = false
+}
+
+resource "snowflake_table_grant" "loader_table_access_insert" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = "INSERT"
+  roles     = [var.loader_role]
+
+  with_grant_option = false
+}
+
+resource "snowflake_table_grant" "loader_table_access_truncate" {
+  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  database_name = var.landing
+  schema_name   = "WORKDAY"
+  table_name    = each.key
+
+  privilege = "TRUNCATE"
+  roles     = [var.loader_role]
+
+  with_grant_option = false
 }
