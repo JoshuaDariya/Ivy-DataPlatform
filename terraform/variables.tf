@@ -205,31 +205,31 @@ variable "adaptive_azure_int_prod"{
 variable "calltracking_stage"{
   type = string
 
-  default = "calltracking_API_STAGE"
+  default = "CALLTRACKING_API_STAGE"
 }
 
 variable "calltracking_stage_prod"{
   type = string
 
-  default = "calltracking_API_STAGE_PROD"
+  default = "CALLTRACKING_API_STAGE_PROD"
 }
 
 variable "calltracking_schema"{
   type = string
 
-  default = "calltracking"
+  default = "CALLTRACKING"
 }
 
 variable "calltracking_azure_int"{
   type = string
 
-  default = "calltracking_AZURE_SNOWFLAKE_INT"
+  default = "CALLTRACKING_AZURE_SNOWFLAKE_INT"
 }
 
 variable "calltracking_azure_int_prod"{
   type = string
 
-  default = "calltracking_AZURE_SNOWFLAKE_INT_PROD"
+  default = "CALLTRACKING_AZURE_SNOWFLAKE_INT_PROD"
 }
 
 variable "alerts_email"{
