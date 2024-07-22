@@ -40,3 +40,9 @@ resource "snowflake_schema" "clinic_master_schema" {
   is_managed = false
 }
 
+resource "snowflake_schema" "calltracking_schema" {
+
+  database = var.landing
+  name       = "CALLTRACKING" 
+  is_managed = false
+}
