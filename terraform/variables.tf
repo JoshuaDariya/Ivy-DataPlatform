@@ -106,7 +106,7 @@ variable "powerbi_role"{
 variable "workday_payroll_role"{
   type = string
 
-  default = "SNOWFLAKEPAYROLLREADER"
+  default = "SNOWFLAKEFINANCIALREPORTER"
 }
 
 
