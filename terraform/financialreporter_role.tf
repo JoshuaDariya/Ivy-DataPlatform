@@ -87,16 +87,6 @@ resource "snowflake_grant_privileges_to_role" "financialreporter_access_schema_g
     all_schemas_in_database = var.landing
   }
 }
-
-resource "snowflake_grant_privileges_to_role" "financialreporter_access_db_grant_prod" {
-  privileges = ["USAGE", "MONITOR"]
-  role_name  = var.workday_payroll_role
-  on_account_object {
-    object_type = "DATABASE"
-
-    object_name = var.prod
-  }
-}
  
 resource "snowflake_grant_privileges_to_role" "financialreporter_access_schema_grant_dev" {
   privileges = ["USAGE", "MONITOR"]
