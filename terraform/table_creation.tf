@@ -6437,7 +6437,7 @@ resource "snowflake_table" "ingest_raintree_load_message" {
 
   column {
     name = "MESSAGE_DATETIME"
-    type = "DATETIME"
+    type = "TIMESTAMP_NTZ(9)"
   }
 
   column {
