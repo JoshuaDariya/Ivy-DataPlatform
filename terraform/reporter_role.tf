@@ -96,22 +96,6 @@ resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_prod
 
 
 // ---------------- SCHEMA GRANTS --------------------
-# resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
-#   privileges = ["USAGE", "MONITOR"]
-#   role_name  = var.powerbi_role
-#   for_each = var.landing_schemas_available_to_reporter
-
-#   dynamic "on_schema" {
-#     for_each = {
-#       schema_name = each.key
-#     }
-
-#     content {
-#       schema_name = on_schema.value
-#     }
-#   }
-# }
-
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
