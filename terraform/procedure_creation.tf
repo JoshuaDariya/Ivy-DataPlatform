@@ -803,6 +803,16 @@ try {
         var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to update Raintree_Load_Tracking Status to COMPLETE', '--','$${err}')`;
         var logFail = snowflake.execute({ sqlText: callFailLogSQL });
     }
+
+var runFivetranTransformationFunction = `SELECT fivetran_python()`;
+
+try {
+        snowflake.execute({ sqlText: runFivetranTransformationFunction });
+    }
+    catch(err){
+        var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to run Fivetran Transformation function', '--','$${err}')`;
+        var logFail = snowflake.execute({ sqlText: callFailLogSQL });
+    }
 }
 catch (err) {
         // REVERSE RAINTREE_LOAD_TRACKING status to NEW

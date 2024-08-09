@@ -441,7 +441,7 @@ resource "snowflake_table_grant" "table_access" {
   table_name    = each.key
 
   privilege = "SELECT"
-  roles     = [var.powerbi_role, var.developer_role, var.prod_role, var.qa_role, var.loader_role ]
+  roles     = [var.powerbi_role, var.developer_role, var.prod_role, var.qa_role, var.loader_role, var.workday_payroll_role ]
 
   with_grant_option = false
 }
@@ -453,7 +453,7 @@ resource "snowflake_table_grant" "other_roles_table_access" {
   table_name    = each.key
 
   privilege = "SELECT"
-  roles     = [var.developer_role, var.prod_role, var.qa_role, var.loader_role ]
+  roles     = [var.developer_role, var.prod_role, var.qa_role, var.loader_role, var.workday_payroll_role ]
 
   with_grant_option = false
 }
