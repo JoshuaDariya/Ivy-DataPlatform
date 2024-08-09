@@ -46,3 +46,10 @@ resource "snowflake_schema" "calltracking_schema" {
   name       = "CALLTRACKING" 
   is_managed = false
 }
+
+resource "snowflake_schema" "adaptive_schema" {
+
+  database = var.landing
+  name     = var.adaptive_schema
+  is_managed = false
+}
