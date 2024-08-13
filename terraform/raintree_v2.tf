@@ -80,3 +80,14 @@ resource "snowflake_task" "check_raintre_load_tracking_table" {
   user_task_managed_initial_warehouse_size = "LARGE"
   enabled = true
 }
+
+resource "snowflake_task" "fivetran_run" {
+
+  database  = var.landing
+  schema    = var.raintree_v2_schema
+  warehouse = "IVY_WH"
+
+  name          = "FIVETRAN_RUN"
+  sql_statement = "select fivetran_python()"
+
+}
