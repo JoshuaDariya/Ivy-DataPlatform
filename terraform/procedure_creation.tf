@@ -804,10 +804,8 @@ try {
         var logFail = snowflake.execute({ sqlText: callFailLogSQL });
     }
 
-var runFivetranTransformationFunction = `SELECT fivetran_python()`;
-
 try {
-        snowflake.execute({ sqlText: runFivetranTransformationFunction });
+        snowflake.execute({ sqlText: `EXECUTE TASK fivetran_run`});
     }
     catch(err){
         var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${failureBatchNum}','Failure to run Fivetran Transformation function', '--','$${err}')`;
