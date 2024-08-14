@@ -205,13 +205,13 @@ variable "adaptive_azure_int_prod"{
 variable "calltracking_stage"{
   type = string
 
-  default = "CALLTRACKING_API_STAGE"
+  default = "CALLTRACKING_STAGE"
 }
 
 variable "calltracking_stage_prod"{
   type = string
 
-  default = "CALLTRACKING_API_STAGE_PROD"
+  default = "CALLTRACKING_STAGE_PROD"
 }
 
 variable "calltracking_schema"{
