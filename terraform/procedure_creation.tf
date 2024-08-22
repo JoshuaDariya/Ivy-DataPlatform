@@ -2041,7 +2041,7 @@ try {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: `CALL SYSTEM$SEND_EMAIL(''dynamic_table_email_integration'', ${var.dev_qa_alerts_email}, ''Dynamic Table Refresh Failures'', :1);`,
+            sqlText: `CALL SYSTEM$SEND_EMAIL('"dynamic_table_email_integration"', '${var.dev_qa_alerts_email}', 'Dynamic Table Refresh Failures', :1);`,
             binds: [emailContent]
         });
         var alertResult = state2.execute();
