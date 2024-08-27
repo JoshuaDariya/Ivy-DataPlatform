@@ -91,3 +91,29 @@ resource "snowflake_task" "fivetran_run" {
   sql_statement = "select fivetran_python()"
 
 }
+
+resource "snowflake_email_notification_integration" "raintree_transformation_completion" { 
+  name    = "RAINTREE_TRANSFORMATION_COMPLETION"  
+  comment = "A notification integration for raintree transformations."
+  enabled = true  
+  allowed_recipients = [var.transformation_alerts_email]
+}
+
+resource "snowflake_alert" "raintree_transformation_alert" {
+  database  = var.landing
+  schema    = var.raintree_v2_schema
+  name      = "RAINTREE_TRANSFORMATION_ALERT"
+  warehouse = "IVY_WH"
+  alert_schedule {
+    interval = 5
+  }
+  condition = "select * from raintree_transformation_status where TO_DATE(transformation_starttime) = CURRENT_DATE() and status = 'Succeeded'"
+  action    = "CALL SYSTEM$SEND_EMAIL(
+    'RAINTREE_TRANSFORMATION_COMPLETION',
+    '6f56fb39.ivyrehab.onmicrosoft.com@amer.teams.ms',
+    'Email Alert: Raintree transformations have successfully finished.',
+    'Raintree transformations have successfully finished.'
+)"
+  enabled   = true
+  comment   = "An alert to notify the team of daily, completed raintree transformations."
+}
