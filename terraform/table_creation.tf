@@ -6445,3 +6445,20 @@ resource "snowflake_table" "ingest_raintree_load_message" {
     type = "VARCHAR"
   }
 }
+
+resource "snowflake_table" "raintree_transformation_status" {
+  database            = var.landing
+  schema              = "RAINTREE"
+  name                = "RAINTREE_TRANSFORMATION_STATUS"
+  change_tracking     = true
+
+  column {
+    name = "TRANSFORMATION_STARTTIME"
+    type = "TIMESTAMP_NTZ(9)"
+  }
+
+  column {
+    name = "STATUS"
+    type = "VARCHAR"
+  }
+}
