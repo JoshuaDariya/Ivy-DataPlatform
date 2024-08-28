@@ -2078,7 +2078,10 @@ try {
 
     // SQL query to query dynamic table refresh table
     // Default timestamp per Snowflake documentation is for the past day
-    var query = "SELECT NAME, SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE FROM TABLE(INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY(ERROR_ONLY => TRUE, DATA_TIMESTAMP_START => DATEADD(day, -1, CURRENT_TIMESTAMP())))";
+    var query = `SELECT NAME, MAX(DATA_TIMESTAMP), SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE
+                 FROM TABLE(DEV.INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY(ERROR_ONLY=>TRUE, DATA_TIMESTAMP_START=>DATEADD(day, -1, CURRENT_TIMESTAMP()))) 
+                 WHERE DATABASE_NAME = '${var.qa}' AND SCHEMA_NAME IN ('PRESENTATION', 'WAREHOUSE')
+                 GROUP BY NAME, SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE`;
 
     // Execute the query
     var statement1 = snowflake.createStatement({ sqlText: query });
@@ -2146,7 +2149,10 @@ try {
 
     // SQL query to query dynamic table refresh table
     // Default timestamp per Snowflake documentation is for the past day
-    var query = "SELECT NAME, SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE FROM TABLE(INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY(ERROR_ONLY => TRUE, DATA_TIMESTAMP_START => DATEADD(day, -1, CURRENT_TIMESTAMP())))";
+    var query = `SELECT NAME, MAX(DATA_TIMESTAMP), SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE
+                 FROM TABLE(DEV.INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY(ERROR_ONLY=>TRUE, DATA_TIMESTAMP_START=>DATEADD(day, -1, CURRENT_TIMESTAMP()))) 
+                 WHERE DATABASE_NAME = '${var.prod}' AND SCHEMA_NAME IN ('PRESENTATION', 'WAREHOUSE')
+                 GROUP BY NAME, SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE`;
 
     // Execute the query
     var statement1 = snowflake.createStatement({ sqlText: query });
