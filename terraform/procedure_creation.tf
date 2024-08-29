@@ -2090,9 +2090,9 @@ try {
     // Loop through the result set and add each row to the array
     while (resultSet1.next()) {
         var table_name = resultSet1.getColumnValue(1);
-        var schema_name = resultSet1.getColumnValue(2);
-        var database_name = resultSet1.getColumnValue(3);
-        var state_message = resultSet1.getColumnValue(4);
+        var schema_name = resultSet1.getColumnValue(3);
+        var database_name = resultSet1.getColumnValue(4);
+        var state_message = resultSet1.getColumnValue(5);
 
         // Add the row information to the array
         failedTables.push({
@@ -2161,9 +2161,9 @@ try {
     // Loop through the result set and add each row to the array
     while (resultSet1.next()) {
         var table_name = resultSet1.getColumnValue(1);
-        var schema_name = resultSet1.getColumnValue(2);
-        var database_name = resultSet1.getColumnValue(3);
-        var state_message = resultSet1.getColumnValue(4);
+        var schema_name = resultSet1.getColumnValue(3);
+        var database_name = resultSet1.getColumnValue(4);
+        var state_message = resultSet1.getColumnValue(5);
 
         // Add the row information to the array
         failedTables.push({
