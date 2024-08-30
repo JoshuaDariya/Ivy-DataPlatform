@@ -136,12 +136,6 @@ variable "prod_role"{
   default = "SNOWFLAKEPROD"
 }
 
-variable "tf_role"{
-  type= string
-
-  default = "TERRAFORMADMIN"
-}
-
 variable "raintree_v2_schema"{
   type = string
 
