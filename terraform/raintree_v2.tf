@@ -108,12 +108,7 @@ resource "snowflake_alert" "raintree_transformation_alert" {
     interval = 5
   }
   condition = "select * from raintree_transformation_status where TO_DATE(transformation_starttime) = CURRENT_DATE() and status = 'Succeeded'"
-  action    = "CALL SYSTEM$SEND_EMAIL(
-    'RAINTREE_TRANSFORMATION_COMPLETION',
-    '6f56fb39.ivyrehab.onmicrosoft.com@amer.teams.ms',
-    'Email Alert: Raintree transformations have successfully finished.',
-    'Raintree transformations have successfully finished.'
-)"
+  action    = "CALL SYSTEM$SEND_EMAIL('RAINTREE_TRANSFORMATION_COMPLETION','6f56fb39.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Email Alert: Raintree transformations have successfully finished.','Raintree transformations have successfully finished.')"
   enabled   = true
   comment   = "An alert to notify the team of daily, completed raintree transformations."
 }

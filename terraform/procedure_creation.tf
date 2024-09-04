@@ -1988,3 +1988,58 @@ resource "snowflake_procedure" "check_raintree_loading_message_table" {
 }
 EOF
 }
+
+resource "snowflake_procedure" "check_raintree_transformation_status" {
+  name     = "CHECK_RAINTREE_TRANSFORMATION_STATUS"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "PYTHON"
+
+
+  return_type         = "VARCHAR(16777216)"
+  packages            = ["snowflake-snowpark-python","requests"]
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+
+  import _snowflake
+  import requests
+  import json
+  from requests.auth import HTTPBasicAuth
+  from datetime import datetime
+  from dateutil.parser import parse
+
+  def main(session):
+      username_password_object = _snowflake.get_username_password("cred")
+      api_key = username_password_object.username
+      api_secret = username_password_object.password
+      
+      auth = HTTPBasicAuth(api_key, api_secret)
+      
+      headers = {
+          "Content-Type": "application/json"
+      }
+      url = "https://api.fivetran.com/v1/dbt/transformations/profile_loft"
+      
+      try:
+          response = requests.get(url=url, auth=auth, headers=headers)
+          response_data = response.json()
+          data = response_data.get('data', {})
+          status = data.get('status')
+          last_run = data.get('last_run')
+          last_run_parse = parse(last_run)
+          last_run_date = last_run_parse.date()
+          last_run_date_str = last_run_date.strftime("%Y-%m-%d")
+
+          if status.lower() == "succeeded" and last_run_date_str == datetime.today().strftime("%Y-%m-%d"):
+              success = session.sql("INSERT INTO transform_test SELECT ('SUCCESS'), (CURRENT_DATE())").collect_nowait()
+              return success.result()
+          elif response_data.get("status") == "Failed":
+              fail = session.sql("INSERT INTO transform_test SELECT ('FAILED'), (CURRENT_DATE())").collect_nowait()
+              return fail.result()
+          
+      except Exception as e:
+        return f"An error occurred: {str(e)}"
+
+EOF
+}
