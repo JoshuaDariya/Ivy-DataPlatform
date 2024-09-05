@@ -2044,3 +2044,272 @@ resource "snowflake_procedure" "check_raintree_transformation_status" {
 
 EOF
 }
+
+resource "snowflake_procedure" "check_raintree_transformation_status" {
+  name     = "CHECK_RAINTREE_TRANSFORMATION_STATUS"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "PYTHON"
+
+
+  return_type         = "VARCHAR(16777216)"
+  packages            = ["snowflake-snowpark-python","requests"]
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+
+  import requests
+  import json
+  from requests.auth import HTTPBasicAuth
+  from datetime import datetime
+  from dateutil.parser import parse
+
+  def main(session):
+      api_key = "${var.fivetran_api_key}"
+      api_secret = "${var.fivetran_api_secret}"
+      auth = HTTPBasicAuth(api_key, api_secret)
+      
+      headers = {
+          "Content-Type": "application/json"
+      }
+      url = "https://api.fivetran.com/v1/dbt/transformations/profile_loft"
+      
+      try:
+          response = requests.get(url=url, auth=auth, headers=headers)
+          response_data = response.json()
+          data = response_data.get("data", {})
+          status = data.get("status")
+          last_run = data.get("last_run")
+          last_run_parse = parse(last_run)
+          last_run_date = last_run_parse.date()
+          last_run_date_str = last_run_date.strftime("%Y-%m-%d")
+
+          if status.lower() == "succeeded" and last_run_date_str == datetime.today().strftime("%Y-%m-%d"):
+              check_table1 = session.sql("SELECT * FROM RAINTREE_TRANSFORMATION_STATUS WHERE status_date = CURRENT_DATE()").collect_nowait()
+              if check_table1.result() == []:
+                  success = session.sql("INSERT INTO RAINTREE_TRANSFORMATION_STATUS SELECT ('SUCCESS'), (CURRENT_DATE())").collect_nowait()
+                  return success.result()
+          elif status.lower() == "failed":
+              check_table2 = session.sql("SELECT * FROM RAINTREE_TRANSFORMATION_STATUS WHERE status_date = CURRENT_DATE()").collect_nowait()
+              if check_table2.result() == []:
+                  fail = session.sql("INSERT INTO RAINTREE_TRANSFORMATION_STATUS SELECT ('FAILED'), (CURRENT_DATE())").collect_nowait()
+                  return fail.result()
+          
+      except Exception as e:
+          return f"An error occurred: {str(e)}"
+
+EOF
+}
+
+resource "snowflake_procedure" "dev_dynamictablealerts" {
+  name     = "CHECK_DYNAMIC_TABLE_REFRESH"
+  database = var.dev
+  schema   = "PRESENTATION"
+  language = "JAVASCRIPT"
+
+  comment             = "Query information schema to find failed dynamic tables and alert the teams channel"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+try {
+    var failedTables = []; // Array to store failed tables information
+    // const today = new Date();
+    // const yesterday = new Date(today.getTime() - (24 * 60 * 60 * 1000));
+
+    // SQL query to query dynamic table refresh table
+    // Default timestamp per Snowflake documentation is for the past day
+    var query = `SELECT NAME, MAX(DATA_TIMESTAMP), SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE
+                 FROM TABLE(DEV.INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY(ERROR_ONLY=>TRUE, DATA_TIMESTAMP_START=>DATEADD(day, -1, CURRENT_TIMESTAMP()))) 
+                 WHERE DATABASE_NAME = '${var.dev}' AND SCHEMA_NAME IN ('PRESENTATION', 'WAREHOUSE')
+                 GROUP BY NAME, SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE`;
+
+    // Execute the query
+    var statement1 = snowflake.createStatement({ sqlText: query });
+    var resultSet1 = statement1.execute();
+
+    // Loop through the result set and add each row to the array
+    while (resultSet1.next()) {
+        var table_name = resultSet1.getColumnValue(1);
+        var schema_name = resultSet1.getColumnValue(3);
+        var database_name = resultSet1.getColumnValue(4);
+        var state_message = resultSet1.getColumnValue(5);
+
+        // Add the row information to the array
+        failedTables.push({
+            table_name: table_name,
+            schema_name: schema_name,
+            database_name: database_name,
+            state_message: state_message
+        });
+    }
+
+    // Send a single email if there are failed tables
+    if (failedTables.length > 0) {
+        var emailContent = "Dynamic table refresh failed for the following tables:\n\n";
+
+        for (var i = 0; i < failedTables.length; i++) {
+            var tableInfo = failedTables[i];
+            emailContent += "Table: " + tableInfo.database_name + "." + tableInfo.schema_name + "." + tableInfo.table_name + "\n\n Failure Message: " + tableInfo.state_message + "\n\n";
+        }
+        
+
+        // Send an alert using the notification integration
+        var state2 = snowflake.createStatement({
+            sqlText: `CALL SYSTEM$SEND_EMAIL('dynamic_table_email_integration', '${var.dev_qa_alerts_email}', 'Dev Dynamic Table Refresh Failures', :1);`,
+            binds: [emailContent]
+        });
+        var alertResult = state2.execute();
+
+        return "Alert: Dynamic Table Refresh Failures found. Check email for details.";
+    } else {
+        return "No Dev Dynamic Table Refresh Failures found.";
+    }
+} catch (err) {
+    // Handle any errors that may occur
+    return "Error: " + err;
+}
+EOT
+}
+
+resource "snowflake_procedure" "qa_dynamictablealerts" {
+  name     = "CHECK_DYNAMIC_TABLE_REFRESH"
+  database = var.qa
+  schema   = "PRESENTATION"
+  language = "JAVASCRIPT"
+
+  comment             = "Query information schema to find failed dynamic tables and alert the teams channel"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+try {
+    var failedTables = []; // Array to store failed tables information
+    // const today = new Date();
+    // const yesterday = new Date(today.getTime() - (24 * 60 * 60 * 1000));
+
+    // SQL query to query dynamic table refresh table
+    // Default timestamp per Snowflake documentation is for the past day
+    var query = `SELECT NAME, MAX(DATA_TIMESTAMP), SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE
+                 FROM TABLE(DEV.INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY(ERROR_ONLY=>TRUE, DATA_TIMESTAMP_START=>DATEADD(day, -1, CURRENT_TIMESTAMP()))) 
+                 WHERE DATABASE_NAME = '${var.qa}' AND SCHEMA_NAME IN ('PRESENTATION', 'WAREHOUSE')
+                 GROUP BY NAME, SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE`;
+
+    // Execute the query
+    var statement1 = snowflake.createStatement({ sqlText: query });
+    var resultSet1 = statement1.execute();
+
+    // Loop through the result set and add each row to the array
+    while (resultSet1.next()) {
+        var table_name = resultSet1.getColumnValue(1);
+        var schema_name = resultSet1.getColumnValue(3);
+        var database_name = resultSet1.getColumnValue(4);
+        var state_message = resultSet1.getColumnValue(5);
+
+        // Add the row information to the array
+        failedTables.push({
+            table_name: table_name,
+            schema_name: schema_name,
+            database_name: database_name,
+            state_message: state_message
+        });
+    }
+
+    // Send a single email if there are failed tables
+    if (failedTables.length > 0) {
+        var emailContent = "Dynamic table refresh failed for the following tables:\n\n";
+
+        for (var i = 0; i < failedTables.length; i++) {
+            var tableInfo = failedTables[i];
+            emailContent += "Table: " + tableInfo.database_name + "." + tableInfo.schema_name + "." + tableInfo.table_name + "\n\n Failure Message: " + tableInfo.state_message + "\n\n";
+        }
+        
+
+        // Send an alert using the notification integration
+        var state2 = snowflake.createStatement({
+            sqlText: `CALL SYSTEM$SEND_EMAIL('dynamic_table_email_integration', '${var.dev_qa_alerts_email}', 'QA Dynamic Table Refresh Failures', :1);`,
+            binds: [emailContent]
+        });
+        var alertResult = state2.execute();
+
+        return "Alert: Dynamic Table Refresh Failures found. Check email for details.";
+    } else {
+        return "No QA Dynamic Table Refresh Failures found.";
+    }
+} catch (err) {
+    // Handle any errors that may occur
+    return "Error: " + err;
+}
+EOT
+}
+
+resource "snowflake_procedure" "prod_dynamictablealerts" {
+  name     = "CHECK_DYNAMIC_TABLE_REFRESH"
+  database = var.prod
+  schema   = "PRESENTATION"
+  language = "JAVASCRIPT"
+
+  comment             = "Query information schema to find failed dynamic tables and alert the teams channel"
+  return_type         = "varchar"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOT
+try {
+    var failedTables = []; // Array to store failed tables information
+    // const today = new Date();
+    // const yesterday = new Date(today.getTime() - (24 * 60 * 60 * 1000));
+
+    // SQL query to query dynamic table refresh table
+    // Default timestamp per Snowflake documentation is for the past day
+    var query = `SELECT NAME, MAX(DATA_TIMESTAMP), SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE
+                 FROM TABLE(DEV.INFORMATION_SCHEMA.DYNAMIC_TABLE_REFRESH_HISTORY(ERROR_ONLY=>TRUE, DATA_TIMESTAMP_START=>DATEADD(day, -1, CURRENT_TIMESTAMP()))) 
+                 WHERE DATABASE_NAME = '${var.prod}' AND SCHEMA_NAME IN ('PRESENTATION', 'WAREHOUSE')
+                 GROUP BY NAME, SCHEMA_NAME, DATABASE_NAME, STATE_MESSAGE`;
+
+    // Execute the query
+    var statement1 = snowflake.createStatement({ sqlText: query });
+    var resultSet1 = statement1.execute();
+
+    // Loop through the result set and add each row to the array
+    while (resultSet1.next()) {
+        var table_name = resultSet1.getColumnValue(1);
+        var schema_name = resultSet1.getColumnValue(3);
+        var database_name = resultSet1.getColumnValue(4);
+        var state_message = resultSet1.getColumnValue(5);
+
+        // Add the row information to the array
+        failedTables.push({
+            table_name: table_name,
+            schema_name: schema_name,
+            database_name: database_name,
+            state_message: state_message
+        });
+    }
+
+    // Send a single email if there are failed tables
+    if (failedTables.length > 0) {
+        var emailContent = "Dynamic table refresh failed for the following tables:\n\n";
+
+        for (var i = 0; i < failedTables.length; i++) {
+            var tableInfo = failedTables[i];
+            emailContent += "Table: " + tableInfo.database_name + "." + tableInfo.schema_name + "." + tableInfo.table_name + "\n\n Failure Message: " + tableInfo.state_message + "\n\n";
+        }
+        
+
+        // Send an alert using the notification integration
+        var state2 = snowflake.createStatement({
+            sqlText: `CALL SYSTEM$SEND_EMAIL('dynamic_table_email_integration', '${var.alerts_email}', 'Dynamic Table Refresh Failures', :1);`,
+            binds: [emailContent]
+        });
+        var alertResult = state2.execute();
+
+        return "Alert: Dynamic Table Refresh Failures found. Check email for details.";
+    } else {
+        return "No QA Dynamic Table Refresh Failures found.";
+    }
+} catch (err) {
+    // Handle any errors that may occur
+    return "Error: " + err;
+}
+EOT
+}
