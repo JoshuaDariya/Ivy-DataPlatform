@@ -1994,8 +1994,6 @@ resource "snowflake_procedure" "check_raintree_transformation_status" {
   database = var.landing
   schema   = "RAINTREE"
   language = "PYTHON"
-
-
   return_type         = "VARCHAR(16777216)"
   packages            = ["snowflake-snowpark-python","requests"]
   execute_as          = "CALLER"
@@ -2009,8 +2007,8 @@ resource "snowflake_procedure" "check_raintree_transformation_status" {
   from dateutil.parser import parse
 
   def main(session):
-      api_key = "${var.fivetran_api_key}"
-      api_secret = "${var.fivetran_api_secret}"
+      api_key = ${var.fivetran_api_key}
+      api_secret = ${var.fivetran_api_secret}
       auth = HTTPBasicAuth(api_key, api_secret)
       
       headers = {
