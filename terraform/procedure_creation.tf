@@ -136,6 +136,7 @@ resource "snowflake_procedure" "check_raintree_transformation_status" {
   database = var.landing
   schema   = "RAINTREE"
   language = "PYTHON"
+  runtime_version     = "3.11"
   return_type         = "VARCHAR(16777216)"
   packages            = ["snowflake-snowpark-python","requests"]
   execute_as          = "CALLER"
