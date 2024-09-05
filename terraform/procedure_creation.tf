@@ -131,6 +131,60 @@ try {
 EOT
 }
 
+resource "snowflake_procedure" "check_raintree_transformation_status" {
+  name     = "CHECK_RAINTREE_TRANSFORMATION_STATUS"
+  database = var.landing
+  schema   = "RAINTREE"
+  language = "PYTHON"
+  return_type         = "VARCHAR(16777216)"
+  packages            = ["snowflake-snowpark-python","requests"]
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+
+  import requests
+  import json
+  from requests.auth import HTTPBasicAuth
+  from datetime import datetime
+  from dateutil.parser import parse
+
+  def main(session):
+      api_key = ${var.fivetran_api_key}
+      api_secret = ${var.fivetran_api_secret}
+      auth = HTTPBasicAuth(api_key, api_secret)
+      
+      headers = {
+          "Content-Type": "application/json"
+      }
+      url = "https://api.fivetran.com/v1/dbt/transformations/profile_loft"
+      
+      try:
+          response = requests.get(url=url, auth=auth, headers=headers)
+          response_data = response.json()
+          data = response_data.get("data", {})
+          status = data.get("status")
+          last_run = data.get("last_run")
+          last_run_parse = parse(last_run)
+          last_run_date = last_run_parse.date()
+          last_run_date_str = last_run_date.strftime("%Y-%m-%d")
+
+          if status.lower() == "succeeded" and last_run_date_str == datetime.today().strftime("%Y-%m-%d"):
+              check_table1 = session.sql("SELECT * FROM RAINTREE_TRANSFORMATION_STATUS WHERE status_date = CURRENT_DATE()").collect_nowait()
+              if check_table1.result() == []:
+                  success = session.sql("INSERT INTO RAINTREE_TRANSFORMATION_STATUS SELECT ('SUCCESS'), (CURRENT_DATE())").collect_nowait()
+                  return success.result()
+          elif status.lower() == "failed":
+              check_table2 = session.sql("SELECT * FROM RAINTREE_TRANSFORMATION_STATUS WHERE status_date = CURRENT_DATE()").collect_nowait()
+              if check_table2.result() == []:
+                  fail = session.sql("INSERT INTO RAINTREE_TRANSFORMATION_STATUS SELECT ('FAILED'), (CURRENT_DATE())").collect_nowait()
+                  return fail.result()
+          
+      except Exception as e:
+          return f"An error occurred: {str(e)}"
+
+EOF
+}
+
 resource "snowflake_procedure" "prod_dbttests_alerts" {
   name     = "CHECK_DBT_TESTS_DATA_AND_ALERT"
   database = var.prod
