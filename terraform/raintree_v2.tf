@@ -92,6 +92,19 @@ resource "snowflake_task" "fivetran_run" {
 
 }
 
+resource "snowflake_task" "run_fivetran_transformation_status" {
+
+  comment   = "Task to call CHECK_RAINTREE_TRANSFORMATION_STATUS() procedure to check if raintree transformations have finished successfully each day."
+  database  = var.landing
+  schema    = var.raintree_v2_schema
+  warehouse = "IVY_WH"
+
+  name          = "RUN_FIVETRAN_TRANSFORMATION_STATUS"
+  sql_statement = "CALL CHECK_RAINTREE_TRANSFORMATION_STATUS()"
+  enabled       = true
+
+}
+
 resource "snowflake_email_notification_integration" "raintree_transformation_completion" { 
   name    = "RAINTREE_TRANSFORMATION_COMPLETION"  
   comment = "A notification integration for raintree transformations."
@@ -99,16 +112,30 @@ resource "snowflake_email_notification_integration" "raintree_transformation_com
   allowed_recipients = [var.transformation_alerts_email]
 }
 
-resource "snowflake_alert" "raintree_transformation_alert" {
+resource "snowflake_alert" "raintree_transformation_success_alert" {
   database  = var.landing
   schema    = var.raintree_v2_schema
-  name      = "RAINTREE_TRANSFORMATION_ALERT"
+  name      = "RAINTREE_TRANSFORMATION_SUCCESS_ALERT"
   warehouse = "IVY_WH"
   alert_schedule {
     interval = 5
   }
-  condition = "select * from raintree_transformation_status where TO_DATE(transformation_starttime) = CURRENT_DATE() and status = 'Succeeded'"
+  condition = "SELECT * FROM RAINTREE_TRANSFORMATION_STATUS WHERE status_date = CURRENT_DATE() AND status = 'SUCCESS'"
   action    = "CALL SYSTEM$SEND_EMAIL('RAINTREE_TRANSFORMATION_COMPLETION','6f56fb39.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Email Alert: Raintree transformations have successfully finished.','Raintree transformations have successfully finished.')"
   enabled   = true
-  comment   = "An alert to notify the team of daily, completed raintree transformations."
+  comment   = "A daily alert to notify the team of successfully completed raintree transformations."
+}
+
+resource "snowflake_alert" "raintree_transformation_failure_alert" {
+  database  = var.landing
+  schema    = var.raintree_v2_schema
+  name      = "RAINTREE_TRANSFORMATION_FAILURE_ALERT"
+  warehouse = "IVY_WH"
+  alert_schedule {
+    interval = 5
+  }
+  condition = "SELECT * FROM RAINTREE_TRANSFORMATION_STATUS WHERE status_date = CURRENT_DATE() AND status = 'FAILED'"
+  action    = "CALL SYSTEM$SEND_EMAIL('RAINTREE_TRANSFORMATION_FAILURE','6f56fb39.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Email Alert: Raintree transformations have failed.','Raintree transformations have failed. View failure details in the Fivetran production environment.')"
+  enabled   = true
+  comment   = "A daily alert to notify the team of failed raintree transformations."
 }
