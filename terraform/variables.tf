@@ -247,3 +247,11 @@ variable "dev_qa_alerts_email"{
 variable "transformation_alerts_email"{
   type = string
 }
+
+variable "fivetran_api_key"{
+  type = string
+}
+
+variable "fivetran_api_secret"{
+  type = string
+}
