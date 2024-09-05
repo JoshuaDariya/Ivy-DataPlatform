@@ -6453,12 +6453,13 @@ resource "snowflake_table" "raintree_transformation_status" {
   change_tracking     = true
 
   column {
-    name = "TRANSFORMATION_STARTTIME"
-    type = "TIMESTAMP_NTZ(9)"
-  }
-
-  column {
     name = "STATUS"
     type = "VARCHAR"
   }
+  
+  column {
+    name = "STATUS_DATE"
+    type = "DATE"
+  }
+
 }
