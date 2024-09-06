@@ -98,7 +98,7 @@ resource "snowflake_task" "run_fivetran_transformation_status" {
   database  = var.landing
   schema    = var.raintree_v2_schema
   warehouse = "IVY_WH"
-
+  schedule  = "5 MINUTE"
   name          = "RUN_FIVETRAN_TRANSFORMATION_STATUS"
   sql_statement = "CALL CHECK_RAINTREE_TRANSFORMATION_STATUS()"
   enabled       = true
