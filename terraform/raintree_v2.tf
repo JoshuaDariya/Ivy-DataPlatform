@@ -111,31 +111,3 @@ resource "snowflake_email_notification_integration" "raintree_transformation_com
   enabled = true  
   allowed_recipients = [var.transformation_alerts_email]
 }
-
-resource "snowflake_alert" "raintree_transformation_success_alert" {
-  database  = var.landing
-  schema    = var.raintree_v2_schema
-  name      = "RAINTREE_TRANSFORMATION_SUCCESS_ALERT"
-  warehouse = "IVY_WH"
-  alert_schedule {
-    interval = 5
-  }
-  condition = "SELECT * FROM RAINTREE_TRANSFORMATION_STATUS WHERE status_date = CURRENT_DATE() AND status = 'SUCCESS'"
-  action    = "CALL SYSTEM$SEND_EMAIL('RAINTREE_TRANSFORMATION_COMPLETION','6f56fb39.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Email Alert: Raintree transformations have successfully finished.','Raintree transformations have successfully finished.')"
-  enabled   = true
-  comment   = "A daily alert to notify the team of successfully completed raintree transformations."
-}
-
-resource "snowflake_alert" "raintree_transformation_failure_alert" {
-  database  = var.landing
-  schema    = var.raintree_v2_schema
-  name      = "RAINTREE_TRANSFORMATION_FAILURE_ALERT"
-  warehouse = "IVY_WH"
-  alert_schedule {
-    interval = 5
-  }
-  condition = "SELECT * FROM RAINTREE_TRANSFORMATION_STATUS WHERE status_date = CURRENT_DATE() AND status = 'FAILED'"
-  action    = "CALL SYSTEM$SEND_EMAIL('RAINTREE_TRANSFORMATION_FAILURE','6f56fb39.ivyrehab.onmicrosoft.com@amer.teams.ms', 'Email Alert: Raintree transformations have failed.','Raintree transformations have failed. View failure details in the Fivetran production environment.')"
-  enabled   = true
-  comment   = "A daily alert to notify the team of failed raintree transformations."
-}
