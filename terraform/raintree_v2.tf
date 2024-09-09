@@ -91,3 +91,16 @@ resource "snowflake_task" "fivetran_run" {
   sql_statement = "select fivetran_python()"
 
 }
+
+resource "snowflake_task" "run_fivetran_transformation_status" {
+
+  comment   = "Task to call CHECK_RAINTREE_TRANSFORMATION_STATUS() procedure to check if raintree transformations have finished successfully each day."
+  database  = var.landing
+  schema    = var.raintree_v2_schema
+  warehouse = "IVY_WH"
+  schedule  = "5 MINUTE"
+  name          = "RUN_FIVETRAN_TRANSFORMATION_STATUS"
+  sql_statement = "CALL CHECK_RAINTREE_TRANSFORMATION_STATUS()"
+  enabled       = true
+
+}
