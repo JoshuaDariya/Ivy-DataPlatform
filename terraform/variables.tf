@@ -240,6 +240,14 @@ variable "cost_center_alerts_email"{
   type = string
 }
 
+variable "dynamic_table_refresh_email_devqa"{
+  type = string
+}
+
+variable "dynamic_table_refresh_email_prod"{
+  type = string
+}
+
 variable "dev_qa_alerts_email"{
   type = string
 }
