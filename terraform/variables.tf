@@ -243,3 +243,9 @@ variable "cost_center_alerts_email"{
 variable "dev_qa_alerts_email"{
   type = string
 }
+
+variable "transformation_alerts_email"{
+  type = string
+}
+
+
