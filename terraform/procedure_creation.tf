@@ -2044,7 +2044,7 @@ try {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: `CALL SYSTEM$SEND_EMAIL('dynamic_table_email_integration', '${var.dev_qa_alerts_email}', 'Dev Dynamic Table Refresh Failures', :1);`,
+            sqlText: `CALL SYSTEM$SEND_EMAIL('dynamic_table_refresh_email_devqa', '${var.dev_qa_alerts_email}', 'Dev Dynamic Table Refresh Failures', :1);`,
             binds: [emailContent]
         });
         var alertResult = state2.execute();
@@ -2115,7 +2115,7 @@ try {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: `CALL SYSTEM$SEND_EMAIL('dynamic_table_email_integration', '${var.dev_qa_alerts_email}', 'QA Dynamic Table Refresh Failures', :1);`,
+            sqlText: `CALL SYSTEM$SEND_EMAIL('dynamic_table_refresh_email_devqa', '${var.dev_qa_alerts_email}', 'QA Dynamic Table Refresh Failures', :1);`,
             binds: [emailContent]
         });
         var alertResult = state2.execute();
@@ -2186,7 +2186,7 @@ try {
 
         // Send an alert using the notification integration
         var state2 = snowflake.createStatement({
-            sqlText: `CALL SYSTEM$SEND_EMAIL('dynamic_table_email_integration', '${var.alerts_email}', 'Dynamic Table Refresh Failures', :1);`,
+            sqlText: `CALL SYSTEM$SEND_EMAIL('dynamic_table_refresh_email_prod', '${var.alerts_email}', 'Dynamic Table Refresh Failures', :1);`,
             binds: [emailContent]
         });
         var alertResult = state2.execute();
