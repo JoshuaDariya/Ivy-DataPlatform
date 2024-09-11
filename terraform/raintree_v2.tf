@@ -104,3 +104,10 @@ resource "snowflake_task" "run_fivetran_transformation_status" {
   enabled       = true
 
 }
+
+resource "snowflake_email_notification_integration" "raintree_transformation_completion_channel" { 
+  name    = "raintree_transformation_completion_channel"  
+  comment = "A notification integration for raintree transformation completion."
+  enabled = true  
+  allowed_recipients = [var.transformation_alerts_email]
+}
