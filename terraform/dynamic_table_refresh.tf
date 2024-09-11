@@ -40,17 +40,11 @@ resource "snowflake_task" "prod_dynamic_table_task" {
   enabled = true
 }
 
-resource "snowflake_email_notification_integration" "dynamic_table_email_integration_devqa" { 
+resource "snowflake_email_notification_integration" "dynamic_table_email_integration" { 
   name    = "dynamic_table_refresh_notification_integration"  
   comment = "A notification integration for dynamic table refresh alert."
   enabled = true  
-  allowed_recipients = [var.dynamic_table_refresh_email_devqa]
+  allowed_recipients = [var.dynamic_table_refresh_email_devqa, var.dynamic_table_refresh_email_prod]
 }
 
-resource "snowflake_email_notification_integration" "dynamic_table_email_integration_prod" { 
-  name    = "dynamic_table_refresh_notification_integration"  
-  comment = "A notification integration for dynamic table refresh alert."
-  enabled = true  
-  allowed_recipients = [var.dynamic_table_refresh_email_prod]
-}
 
