@@ -251,3 +251,9 @@ variable "dynamic_table_refresh_email_prod"{
 variable "dev_qa_alerts_email"{
   type = string
 }
+
+variable "transformation_alerts_email"{
+  type = string
+}
+
+
