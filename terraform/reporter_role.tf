@@ -413,7 +413,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_future_dt_prod" {
 }
 
 # Fetch all table names in the schema, excluding the restricted table
-data "snowflake_tables" "all_tables" {
+data "snowflake_tables" "all_tables_workday" {
   database = var.landing
   schema   = "WORKDAY"
 }
@@ -433,15 +433,9 @@ locals {
   ]
 }
 
-locals {
-  excluded_tables_workday_workday = [
-    "WORKDAY__EMPLOYEE_OVERVIEW"
-  ]
-}
-
 # Grant access to certain tables
 resource "snowflake_table_grant" "table_access_to_workday" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if !contains(local.excluded_tables_workday, table.name) }
+  for_each = { for table in data.snowflake_tables.all_tables_workday.tables : table.name => table if !contains(local.excluded_tables_workday, table.name) }
   database_name = var.landing
   schema_name   = "WORKDAY"
   table_name    = each.key
@@ -453,7 +447,7 @@ resource "snowflake_table_grant" "table_access_to_workday" {
 }
 
 resource "snowflake_table_grant" "other_roles_table_access_to_workday" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if contains(local.excluded_tables_workday, table.name) }
+  for_each = { for table in data.snowflake_tables.all_tables_workday.tables : table.name => table if contains(local.excluded_tables_workday, table.name) }
   database_name = var.landing
   schema_name   = "WORKDAY"
   table_name    = each.key
@@ -466,7 +460,7 @@ resource "snowflake_table_grant" "other_roles_table_access_to_workday" {
 
 #Grant loader "OWNERSHIP, DELETE, INSERT, TRUNCATE" privilege
 resource "snowflake_table_grant" "loader_table_access_to_workday_ownership" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  for_each = { for table in data.snowflake_tables.all_tables_workday.tables : table.name => table }
   database_name = var.landing
   schema_name   = "WORKDAY"
   table_name    = each.key
@@ -478,7 +472,7 @@ resource "snowflake_table_grant" "loader_table_access_to_workday_ownership" {
 }
 
 resource "snowflake_table_grant" "loader_table_access_to_workday_delete" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  for_each = { for table in data.snowflake_tables.all_tables_workday.tables : table.name => table }
   database_name = var.landing
   schema_name   = "WORKDAY"
   table_name    = each.key
@@ -490,7 +484,7 @@ resource "snowflake_table_grant" "loader_table_access_to_workday_delete" {
 }
 
 resource "snowflake_table_grant" "loader_table_access_to_workday_insert" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  for_each = { for table in data.snowflake_tables.all_tables_workday.tables : table.name => table }
   database_name = var.landing
   schema_name   = "WORKDAY"
   table_name    = each.key
@@ -502,7 +496,7 @@ resource "snowflake_table_grant" "loader_table_access_to_workday_insert" {
 }
 
 resource "snowflake_table_grant" "loader_table_access_to_workday_truncate" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  for_each = { for table in data.snowflake_tables.all_tables_workday.tables : table.name => table }
   database_name = var.landing
   schema_name   = "WORKDAY"
   table_name    = each.key
@@ -513,9 +507,23 @@ resource "snowflake_table_grant" "loader_table_access_to_workday_truncate" {
   with_grant_option = false
 }
 
+
+
+# Fetch all table names in the schema, excluding the restricted table
+data "snowflake_tables" "all_tables_workday_workday" {
+  database = var.landing
+  schema   = "WORKDAY_WORKDAY"
+}
+
+locals {
+  excluded_tables_workday_workday = [
+    "WORKDAY__EMPLOYEE_OVERVIEW"
+  ]
+}
+
 # Grant access to certain tables
 resource "snowflake_table_grant" "table_access_to_workday_workday" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if !contains(local.excluded_tables_workday_workday, table.name) }
+  for_each = { for table in data.snowflake_tables.all_tables_workday_workday.tables : table.name => table if !contains(local.excluded_tables_workday_workday, table.name) }
   database_name = var.landing
   schema_name   = "WORKDAY_WORKDAY"
   table_name    = each.key
@@ -527,7 +535,7 @@ resource "snowflake_table_grant" "table_access_to_workday_workday" {
 }
 
 resource "snowflake_table_grant" "other_roles_table_access_to_workday_workday" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table if contains(local.excluded_tables_workday_workday, table.name) }
+  for_each = { for table in data.snowflake_tables.all_tables_workday_workday.tables : table.name => table if contains(local.excluded_tables_workday_workday, table.name) }
   database_name = var.landing
   schema_name   = "WORKDAY_WORKDAY"
   table_name    = each.key
@@ -540,7 +548,7 @@ resource "snowflake_table_grant" "other_roles_table_access_to_workday_workday" {
 
 #Grant loader "OWNERSHIP, DELETE, INSERT, TRUNCATE" privilege
 resource "snowflake_table_grant" "loader_table_access_to_workday_workday_ownership" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  for_each = { for table in data.snowflake_tables.all_tables_workday_workday.tables : table.name => table }
   database_name = var.landing
   schema_name   = "WORKDAY_WORKDAY"
   table_name    = each.key
@@ -552,7 +560,7 @@ resource "snowflake_table_grant" "loader_table_access_to_workday_workday_ownersh
 }
 
 resource "snowflake_table_grant" "loader_table_access_to_workday_workday_delete" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  for_each = { for table in data.snowflake_tables.all_tables_workday_workday.tables : table.name => table }
   database_name = var.landing
   schema_name   = "WORKDAY_WORKDAY"
   table_name    = each.key
@@ -564,7 +572,7 @@ resource "snowflake_table_grant" "loader_table_access_to_workday_workday_delete"
 }
 
 resource "snowflake_table_grant" "loader_table_access_to_workday_workday_insert" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  for_each = { for table in data.snowflake_tables.all_tables_workday_workday.tables : table.name => table }
   database_name = var.landing
   schema_name   = "WORKDAY_WORKDAY"
   table_name    = each.key
@@ -576,7 +584,7 @@ resource "snowflake_table_grant" "loader_table_access_to_workday_workday_insert"
 }
 
 resource "snowflake_table_grant" "loader_table_access_to_workday_workday_truncate" {
-  for_each = { for table in data.snowflake_tables.all_tables.tables : table.name => table }
+  for_each = { for table in data.snowflake_tables.all_tables_workday_workday.tables : table.name => table }
   database_name = var.landing
   schema_name   = "WORKDAY_WORKDAY"
   table_name    = each.key
