@@ -6,7 +6,7 @@ resource "snowflake_resource_monitor" "monitor_1" {
 
   end_timestamp   = "2024-08-31T17:00:00-07:00"
 
-  warehouses   = ["PC_FIVETRAN_WH"]
+  warehouses   = ["FIVETRAN_WH"]
 
 }
 
