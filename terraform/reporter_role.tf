@@ -517,7 +517,8 @@ data "snowflake_tables" "all_tables_workday_workday" {
 
 locals {
   excluded_tables_workday_workday = [
-    "WORKDAY__EMPLOYEE_OVERVIEW"
+    "WORKDAY__EMPLOYEE_OVERVIEW",
+    "INT_WORKDAY__WORKER_EMPLOYEE_ENHANCED"
   ]
 }
 
