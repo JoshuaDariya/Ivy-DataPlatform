@@ -6464,7 +6464,7 @@ resource "snowflake_table" "raintree_transformation_status" {
 
 }
 
-resource "snowflake_table" "raintree_transformation_status" {
+resource "snowflake_table" "workday_transformation_status" {
   database            = var.landing
   schema              = "WORKDAY_WORKDAY"
   name                = "WORKDAY_TRANSFORMATION_STATUS"
