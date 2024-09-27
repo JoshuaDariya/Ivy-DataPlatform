@@ -6463,3 +6463,21 @@ resource "snowflake_table" "raintree_transformation_status" {
   }
 
 }
+
+resource "snowflake_table" "raintree_transformation_status" {
+  database            = var.landing
+  schema              = "WORKDAY_WORKDAY"
+  name                = "WORKDAY_TRANSFORMATION_STATUS"
+  change_tracking     = true
+
+  column {
+    name = "STATUS"
+    type = "VARCHAR"
+  }
+  
+  column {
+    name = "STATUS_DATE"
+    type = "DATE"
+  }
+
+}
