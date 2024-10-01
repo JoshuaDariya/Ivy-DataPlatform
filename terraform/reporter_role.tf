@@ -110,21 +110,10 @@ locals {
 }
 
 resource "snowflake_grant_privileges_to_role" "role_access_schema_grant_landing" {
-  for_each = { for schema in data.snowflake_schemas.all_schemas_landing.schemas : schema.name => schema if contains(local.excluded_shcema_workday, schema.name) }
-  
-  privileges = ["USAGE", "MONITOR"]
-  role_name  = [var.developer_role, var.prod_role, var.qa_role, var.loader_role, var.workday_payroll_role]
-
-  on_schema {
-    schema_name = each.key
-  }
-}
-
-resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
   for_each = { for schema in data.snowflake_schemas.all_schemas_landing.schemas : schema.name => schema if !contains(local.excluded_shcema_workday, schema.name) }
   
   privileges = ["USAGE", "MONITOR"]
-  role_name  = [var.powerbi_role,var.developer_role, var.prod_role, var.qa_role, var.loader_role, var.workday_payroll_role]
+  role_name  = var.powerbi_role
 
   on_schema {
     schema_name = each.key
