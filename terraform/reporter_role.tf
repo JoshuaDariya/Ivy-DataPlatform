@@ -109,6 +109,27 @@ locals {
   ]
 }
 
+locals {
+  target_roles = [
+    var.developer_role, 
+    var.prod_role, 
+    var.qa_role, 
+    var.loader_role, 
+    var.workday_payroll_role 
+  ]
+}
+
+resource "snowflake_grant_privileges_to_role" "role_access_schema_grant_landing" {
+   for_each = toset(local.target_roles)
+
+  privileges = ["USAGE", "MONITOR"]
+  role_name  = each.value
+
+  on_schema {
+    all_schemas_in_database = var.landing
+  }
+}
+
 resource "snowflake_grant_privileges_to_role" "role_access_schema_grant_landing" {
   for_each = { for schema in data.snowflake_schemas.all_schemas_landing.schemas : schema.name => schema if !contains(local.excluded_shcema_workday, schema.name) }
   
@@ -127,6 +148,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_dev"
     all_schemas_in_database = var.dev
   }
 }
+
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_qa" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
