@@ -120,7 +120,7 @@ locals {
 }
 
 resource "snowflake_grant_privileges_to_role" "role_access_schema_grant_landing" {
-   for_each = local.target_roles
+   for_each = toset(local.target_roles)
 
   privileges = ["USAGE", "MONITOR"]
   role_name  = each.value
