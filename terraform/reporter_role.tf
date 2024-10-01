@@ -108,8 +108,9 @@ locals {
     "WORKDAY_WORKDAY"
   ]
 }
+
 resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
-  for_each = { for schema in data.snowflake_schemas.all_schemas_landing.schemas : schema.name => schema if !contains(locals.excluded_schema_workday, schema.name) }
+  for_each = { for schema in data.snowflake_schemas.all_schemas_landing.schemas : schema.name => schema if !contains(local.excluded_shcema_workday, schema.name) }
   
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
