@@ -5,7 +5,7 @@ resource "snowflake_task" "fivetran_run_workday" {
   schema    = var.workday_workday_schema
   warehouse = "IVY_WH"
 
-  name          = "FIVETRAN_RUN_WORKDAY"
+  name          = "FIVETRAN_RUN"
   sql_statement = "select fivetran_python()"
 
 }
