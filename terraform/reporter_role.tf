@@ -115,11 +115,11 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_grant_landing" {
 
   dynamic "on_schema" {
     for_each = {
-      schema_name = [each.key]
+      schema_name = each.key
     }
 
     content {
-      schema_name = on_schema.value  
+      schema_name = on_schema.value
     }
   }
 }
