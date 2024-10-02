@@ -119,7 +119,7 @@ resource "snowflake_grant_privileges_to_role" "reporter_access_grant_landing" {
     }
 
     content {
-      schema_name = each.value  
+      schema_name = each.value.name  
     }
   }
 }
