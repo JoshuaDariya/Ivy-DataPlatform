@@ -106,7 +106,7 @@ locals {
   excluded_schemas = ["WORKDAY_WORKDAY"]
 }
 
-resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
+resource "snowflake_grant_privileges_to_role" "reporter_access_grant_landing" {
   privileges = ["USAGE", "MONITOR"]
   role_name  = var.powerbi_role
   
