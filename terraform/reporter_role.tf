@@ -102,27 +102,27 @@ data "snowflake_schemas" "all_schemas_landing" {
 }
 
 # List of schemas to exclude
-# locals {
-#   excluded_schemas = ["WORKDAY_WORKDAY"]
-# }
+locals {
+  excluded_schemas = ["WORKDAY_WORKDAY"]
+}
 
-# resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
-#   privileges = ["USAGE", "MONITOR"]
-#   role_name  = var.powerbi_role
+resource "snowflake_grant_privileges_to_role" "reporter_future_access_grant_landing" {
+  privileges = ["USAGE", "MONITOR"]
+  role_name  = var.powerbi_role
   
-#   # Filter schemas that are not in the excluded list
-#   for_each = { for schema in data.snowflake_schemas.all_schemas_landing.schemas : schema.name => schema if !(contains(local.excluded_schemas, schema.name)) }
+  # Filter schemas that are not in the excluded list
+  for_each = { for schema in data.snowflake_schemas.all_schemas_landing.schemas : schema.name => schema if !(contains(local.excluded_schemas, schema.name)) }
 
-#   dynamic "on_schema" {
-#     for_each = {
-#       schema_name = each.key
-#     }
+  dynamic "on_schema" {
+    for_each = {
+      schema_name = each.key
+    }
 
-#     content {
-#       schema_name = each.value  # Correctly referencing each.value for the dynamic block
-#     }
-#   }
-# }
+    content {
+      schema_name = each.value  # Correctly referencing each.value for the dynamic block
+    }
+  }
+}
 
 # resource "snowflake_grant_privileges_to_role" "reporter_access_schema_grant_landing" {
 #   privileges = ["USAGE", "MONITOR"]
