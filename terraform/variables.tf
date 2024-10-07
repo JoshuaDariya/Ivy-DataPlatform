@@ -142,6 +142,12 @@ variable "raintree_v2_schema"{
   default = "RAINTREE"
 }
 
+variable "workday_workday_schema"{
+  type = string
+
+  default = "WORKDAY_WORKDAY"
+}
+
 variable "raintree_s3_int"{
   type = string
 
