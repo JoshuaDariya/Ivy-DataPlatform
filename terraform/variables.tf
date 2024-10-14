@@ -42,6 +42,14 @@ variable "azure_calltracking_url_storage_allowed_locations_prod"{
   type = string
 }
 
+variable "azure_zingtree_url_storage_allowed_locations"{
+  type = string
+}
+
+variable "azure_zingtree_url_storage_allowed_locations_prod"{
+  type = string
+}
+
 variable "azure_tenant"{
   type = string
 }
@@ -238,6 +246,36 @@ variable "calltracking_azure_int_prod"{
   default = "CALLTRACKING_AZURE_SNOWFLAKE_INT_PROD"
 }
 
+variable "zingtree_stage"{
+  type = string
+
+  default = "ZINGTREE_API_STAGE"
+}
+
+variable "zingtree_stage_prod"{
+  type = string
+
+  default = "ZINGTREE_API_STAGE_PROD"
+}
+
+variable "zingtree_schema"{
+  type = string
+
+  default = "ZINGTREE"
+}
+
+variable "zingtree_azure_int"{
+  type = string
+
+  default = "ZINGTREE_AZURE_SNOWFLAKE"
+}
+
+variable "zingtree_azure_int_prod"{
+  type = string
+
+  default = "ZINGTREE_AZURE_SNOWFLAKE_PROD"
+}
+
 variable "alerts_email"{
   type = string
 }
@@ -261,5 +299,4 @@ variable "dev_qa_alerts_email"{
 variable "transformation_alerts_email"{
   type = string
 }
-
 
