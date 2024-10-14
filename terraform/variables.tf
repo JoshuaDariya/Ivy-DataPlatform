@@ -267,13 +267,13 @@ variable "zingtree_schema"{
 variable "zingtree_azure_int"{
   type = string
 
-  default = "ZINGTREE_AZURE_SNOWFLAKE_INT"
+  default = "ZINGTREE_AZURE_SNOWFLAKE"
 }
 
 variable "zingtree_azure_int_prod"{
   type = string
 
-  default = "ZINGTREE_AZURE_SNOWFLAKE_INT_PROD"
+  default = "ZINGTREE_AZURE_SNOWFLAKE_PROD"
 }
 
 variable "alerts_email"{
