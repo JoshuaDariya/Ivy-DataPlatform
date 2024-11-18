@@ -2201,3 +2201,185 @@ try {
 }
 EOT
 }
+
+resource "snowflake_procedure" "prod_store_comments" {
+  name     = "STORE_COMMENTS"
+  database = var.prod
+  schema   = "DB_TOOLS"
+  language = "JAVASCRIPT"
+
+    arguments {
+    name = "environment"
+    type = "varchar"
+  }
+
+
+
+  return_type         = "VARCHAR(16777216)"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+  var env = environment;
+    // JavaScript code to execute the SQL with a dynamic environment
+    var sql_create_table = `
+        CREATE TABLE IF NOT EXISTS stored_comments (
+            insertion_date DATE,              -- First column for the current date
+            insertion_datetime TIMESTAMP,     -- New column for date and timestamp
+            table_catalog STRING,
+            table_schema STRING,
+            table_name STRING,
+            column_name STRING,
+            comment_type STRING,
+            comment STRING,
+            comment_statement STRING
+        );
+    `;
+
+    // Execute table creation
+    snowflake.execute({sqlText: sql_create_table});
+
+
+    // SQL to get comments and insert them into the table, using the environment parameter
+    var sql_insert = `
+        WITH table_comments AS (
+            SELECT 
+                CURRENT_DATE() AS insertion_date,    -- Add current date
+                CURRENT_TIMESTAMP() AS insertion_datetime,  -- Add current timestamp
+                table_catalog,
+                table_schema,
+                table_name,
+                NULL AS column_name,
+                'TABLE' AS comment_type,
+                comment AS comment,
+                concat(
+                    'COMMENT IF EXISTS ON TABLE ',
+                    table_catalog, '.', 
+                    table_schema, '.', 
+                    table_name, 
+                    ' IS ', 
+                    '''', 
+                    replace(comment, '''', ''''''), 
+                    ''';'
+                ) AS comment_statement
+            FROM $${env}.information_schema.tables
+            WHERE comment IS NOT NULL 
+              AND table_schema != 'INFORMATION_SCHEMA'
+        ),
+        column_comments AS (
+            SELECT 
+                CURRENT_DATE() AS insertion_date,    -- Add current date
+                CURRENT_TIMESTAMP() AS insertion_datetime,  -- Add current timestamp
+                table_catalog,
+                table_schema,
+                table_name,
+                column_name,
+                'COLUMN' AS comment_type,
+                comment AS comment,
+                concat(
+                    'COMMENT IF EXISTS ON COLUMN ',
+                    table_catalog, '.', 
+                    table_schema, '.', 
+                    table_name, '.', 
+                    column_name, 
+                    ' IS ', 
+                    '''', 
+                    replace(comment, '''', ''''''), 
+                    ''';'
+                ) AS comment_statement
+            FROM $${env}.information_schema.columns
+            WHERE comment IS NOT NULL 
+              AND table_schema != 'INFORMATION_SCHEMA'
+        )
+        SELECT * 
+        FROM table_comments
+        UNION ALL
+        SELECT * 
+        FROM column_comments
+    `;
+
+    // Combine the SELECT query into an INSERT command
+    var insert_command = "INSERT INTO stored_comments " + sql_insert;
+    
+    // Execute the insert command
+    snowflake.execute({sqlText: insert_command});
+    
+    return `Data successfully inserted into stored_comments for environment $${env} replacing any existing data for today`;
+    EOF
+}
+
+resource "snowflake_procedure" "prod_apply_comments" {
+  name     = "APPLY_COMMENTS"
+  database = var.prod
+  schema   = "DB_TOOLS"
+  language = "JAVASCRIPT"
+
+
+  return_type         = "VARCHAR(16777216)"
+  execute_as          = "CALLER"
+  return_behavior     = "IMMUTABLE"
+  statement           = <<EOF
+  // Query to get the max insertion_date
+    var get_max_date_sql = `
+        SELECT MAX(insertion_datetime) AS max_insertion_date
+        FROM stored_comments
+    `;
+    
+    // Execute the query to get the max insertion_date
+    var max_date_result = snowflake.execute({sqlText: get_max_date_sql});
+    var max_date = null;
+    
+    if (max_date_result.next()) {
+        max_date = max_date_result.getColumnValue("MAX_INSERTION_DATE");
+    }
+    
+    // If there's no max date, return a message
+    if (!max_date) {
+        return "No comments to apply as there are no records in stored_comments.";
+    }
+
+    // Convert the max_date to a proper format (YYYY-MM-DD)
+    // var formatted_max_date = max_date.toISOString();
+    var formatted_max_date = max_date.getFullYear() + '-' +
+                         String(max_date.getMonth() + 1).padStart(2, '0') + '-' +
+                         String(max_date.getDate()).padStart(2, '0') + ' ' +
+                         String(max_date.getHours()).padStart(2, '0') + ':' +
+                         String(max_date.getMinutes()).padStart(2, '0') + ':' +
+                         String(max_date.getSeconds()).padStart(2, '0') + '.' +
+                         String(max_date.getMilliseconds()).padStart(3, '0'); // Milliseconds
+
+
+    
+    // Query to get all comment statements for the max insertion_date
+    var get_comments_sql = `
+        SELECT comment_statement 
+        FROM stored_comments 
+        WHERE insertion_datetime = TO_TIMESTAMP('$${formatted_max_date}', 'YYYY-MM-DD HH24:MI:SS.FF3')
+    `;
+    
+    // Execute the query to get all the comment statements
+    var comment_statements_result = snowflake.execute({sqlText: get_comments_sql});
+    
+   // Initialize an array to collect any errors
+    var errors = [];
+
+    // Iterate through each comment statement and execute it
+    while (comment_statements_result.next()) {
+        var comment_statement = comment_statements_result.getColumnValue("COMMENT_STATEMENT");
+        
+        try {
+            // Try to execute the comment statement
+            snowflake.execute({sqlText: comment_statement});
+        } catch (err) {
+            // If there's an error, collect it but continue
+            errors.push(`Error executing: $${comment_statement} - $${err.message}`);
+        }
+    }
+    
+    // Return a summary of results
+    if (errors.length > 0) {
+        return `Some comments were applied with errors:\n$${errors.join('\n')}`;
+    } else {
+        return `All comments for insertion date $${formatted_max_date} have been successfully applied.`;
+    }
+    EOF
+}
