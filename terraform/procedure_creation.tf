@@ -2217,7 +2217,7 @@ resource "snowflake_procedure" "prod_store_comments" {
 
   return_type         = "VARCHAR(16777216)"
   execute_as          = "CALLER"
-  return_behavior     = "IMMUTABLE"
+  return_behavior     = "VOLATILE"
   statement           = <<EOF
   var env = environment;
     // JavaScript code to execute the SQL with a dynamic environment
@@ -2316,7 +2316,7 @@ resource "snowflake_procedure" "prod_apply_comments" {
 
   return_type         = "VARCHAR(16777216)"
   execute_as          = "CALLER"
-  return_behavior     = "IMMUTABLE"
+  return_behavior     = "VOLATILE"
   statement           = <<EOF
   // Query to get the max insertion_date
     var get_max_date_sql = `
