@@ -2401,15 +2401,15 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
   // Step 2: Check if we have the acknowledge file checking is done:
   var checkLoadingMessageTable = `SELECT 
                                       CASE 
-                                          WHEN DATE(MAX(MESSAGE_DATETIME)) < CURRENT_DATE THEN ''YES''
-                                          WHEN DATE(MAX(MESSAGE_DATETIME)) >= CURRENT_DATE THEN ''NO''
+                                          WHEN DATE(MAX(MESSAGE_DATETIME)) < CURRENT_DATE THEN 'YES'
+                                          WHEN DATE(MAX(MESSAGE_DATETIME)) >= CURRENT_DATE THEN 'NO'
                                       END AS shouldCheck
                                   FROM raintree_load_tracking`;
   var excuteCheckLoadingMessageTable = snowflake.execute({ sqlText: checkLoadingMessageTable });
 
   if (excuteCheckLoadingMessageTable.next())  {
       var shouldCheck = excuteCheckLoadingMessageTable.getColumnValue(1);
-          if (shouldCheck === ''YES'') {
+          if (shouldCheck === 'YES') {
           // Step 2: List files in the stage and extract batch folder names
           var getStageFilesSQL = `list @SNOWFLAKE_RAINTREE_STAGE`;
           var fileListResultSet = snowflake.execute({ sqlText: getStageFilesSQL });
@@ -2417,7 +2417,7 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
           var batchFolders = []
           while (fileListResultSet.next()) {
               var folderPath = fileListResultSet.getColumnValue(1); // Full folder path
-              var folderName = folderPath.split(''/'').slice(-2, -1)[0]; // Extract folder name (batch number)
+              var folderName = folderPath.split('/').slice(-2, -1)[0]; // Extract folder name (batch number)
           
               // Ensure the folder name is a valid number (to filter out non-batch folders)
               if (!isNaN(folderName)) {
@@ -2427,7 +2427,7 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
           
           // Step 3: Find the max batch folder (latest batch)
               if (batchFolders.length === 0) {
-                  return ''No batch folders found!'';
+                  return 'No batch folders found!';
               }
               var largestStageBatch = Math.max(...batchFolders);
           // Declare an array to store all file names
@@ -2435,7 +2435,7 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
           
           // Step 4 Find largest batch number in audit
               var largestAuditBatch = -1;
-              var setAuditQuery = `SELECT MAX(BATCH_NUMBER) as batch_number FROM EXECUTION_AUDIT WHERE STATUS = ''SUCCESS''`;
+              var setAuditQuery = `SELECT MAX(BATCH_NUMBER) as batch_number FROM EXECUTION_AUDIT WHERE STATUS = 'SUCCESS'`;
               var largestAudit = snowflake.execute({ sqlText: setAuditQuery });
               while (largestAudit.next()) {
                   var batchNum = largestAudit.getColumnValue(1);
@@ -2453,7 +2453,7 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
                   var successFileFound = false;
                   while (fileResultSet.next()) {
                       var filePath = fileResultSet.getColumnValue(1); // Full file path
-                      if (filePath.endsWith(''_SUCCESS'')) {
+                      if (filePath.endsWith('_SUCCESS')) {
                           successFileFound = true;
                           break;
                       }
@@ -2463,12 +2463,12 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
                   if (successFileFound) {
                   var insertRaintreeLoadTrackingTableQuery = `
                               INSERT INTO raintree_load_tracking(message_datetime, status) 
-                              VALUES (CURRENT_TIMESTAMP(), ''NEW'')`;
+                              VALUES (CURRENT_TIMESTAMP(), 'NEW')`;
                       try {
                           snowflake.execute({ sqlText: insertRaintreeLoadTrackingTableQuery });
                       }
                       catch(err){
-                          var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${largestStageBatch}'',''Failure to insert Raintree_Load_Tracking Status'', ''--'',''$${err.message}'')`;
+                          var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${largestStageBatch}','Failure to insert Raintree_Load_Tracking Status', '--','$${err.message}')`;
                           var logFail = snowflake.execute({ sqlText: callFailLogSQL });
                       }
                       return `Stage has a newer batch: $${largestStageBatch} > $${largestAuditBatch}`;
@@ -2476,15 +2476,15 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
               }
           }
           else {
-              return ''No action needed.'';
+              return 'No action needed.';
           }
       }        
     else {
-    return ''No action needed.'';
+    return 'No action needed.';
     }
 }
 catch (err) {
-    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${largestStageBatch}'',''Failure to check Raintree acknowledge file'', ''--'',''$${err.message}'')`;
+    var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG('$${largestStageBatch}','Failure to check Raintree acknowledge file', '--','$${err.message}')`;
              var logFail = snowflake.execute({ sqlText: callFailLogSQL });
 }
     EOF
