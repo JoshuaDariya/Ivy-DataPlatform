@@ -4,7 +4,7 @@ resource "snowflake_resource_monitor" "monitor_1" {
   name         = "FIVETRAN"
   credit_quota = 100
 
-  end_timestamp   = "2025-09-30 17:00"
+  end_timestamp   = "2025-09-30T10:00:00-07:00"
 
   warehouses   = ["FIVETRAN_WH"]
 
