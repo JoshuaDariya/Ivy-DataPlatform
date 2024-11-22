@@ -2469,7 +2469,7 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
                           snowflake.execute({ sqlText: insertRaintreeLoadTrackingTableQuery });
                       }
                       catch(err){
-                          var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${largestStageBatch}'',''Failure to insert Raintree_Load_Tracking Status'', ''--'',''${err}'')`;
+                          var callFailLogSQL = `CALL INSERT_INGESTION_FAIL_LOG(''$${largestStageBatch}'',''Failure to insert Raintree_Load_Tracking Status'', ''--'',''$${err.message}'')`;
                           var logFail = snowflake.execute({ sqlText: callFailLogSQL });
                       }
                       return `Stage has a newer batch: $${largestStageBatch} > $${largestAuditBatch}`;
