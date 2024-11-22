@@ -116,7 +116,7 @@ resource "snowflake_task" "insert_raintree_loading_record" {
   database  = var.landing
   schema    = var.raintree_v2_schema
 
-  name          = "insert_raintree_loading_record"
+  name          = "INSERT_RAINTREE_LOADING_RECORD"
   schedule      = "3 MINUTES"
   sql_statement = "CALL CHECK_RAINTREE_ACKNOWLEDGE_FILE()"
 
