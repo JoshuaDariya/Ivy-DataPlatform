@@ -111,3 +111,16 @@ resource "snowflake_email_notification_integration" "raintree_transformation_com
   enabled = true  
   allowed_recipients = [var.transformation_alerts_email]
 }
+
+resource "snowflake_task" "insert_raintree_loading_record" {
+  database  = var.landing
+  schema    = var.raintree_v2_schema
+
+  name          = "insert_raintree_loading_record"
+  schedule      = "3 MINUTES"
+  sql_statement = "CALL CHECK_RAINTREE_ACKNOWLEDGE_FILE()"
+
+  user_task_timeout_ms                     = 86400000
+  user_task_managed_initial_warehouse_size = "XSMALL"
+  enabled = true
+}
