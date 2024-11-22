@@ -2391,7 +2391,6 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
   language = "JAVASCRIPT"
   return_type         = "VARCHAR(16777216)"
   execute_as          = "CALLER"
-  return_behavior     = "VOLATILE"
   comment = "Check raintree tree Teams channel message."
   statement           = <<EOF
   try {
