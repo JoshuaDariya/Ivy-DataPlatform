@@ -2401,8 +2401,8 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
   // Step 2: Check if we have the acknowledge file checking is done:
   var checkLoadingMessageTable = `SELECT 
                                       CASE 
-                                          WHEN DATE(MAX(MESSAGE_DATETIME)) < CURRENT_DATE THEN 'YES'
-                                          WHEN DATE(MAX(MESSAGE_DATETIME)) >= CURRENT_DATE THEN 'NO'
+                                          WHEN DATE(MAX(MESSAGE_DATETIME)) < DATE(CONVERT_TIMEZONE('UTC', CURRENT_TIMESTAMP)) THEN 'YES'
+                                          ELSE 'NO'
                                       END AS shouldCheck
                                   FROM raintree_load_tracking`;
   var excuteCheckLoadingMessageTable = snowflake.execute({ sqlText: checkLoadingMessageTable });
@@ -2463,7 +2463,7 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
                   if (successFileFound) {
                   var insertRaintreeLoadTrackingTableQuery = `
                               INSERT INTO raintree_load_tracking(message_datetime, status) 
-                              VALUES (CURRENT_TIMESTAMP(), 'NEW')`;
+                              VALUES ((CAST(CONVERT_TIMEZONE('UTC', CURRENT_TIMESTAMP) AS TIMESTAMP_NTZ)), 'NEW')`;
                       try {
                           snowflake.execute({ sqlText: insertRaintreeLoadTrackingTableQuery });
                       }
