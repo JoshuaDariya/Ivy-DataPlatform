@@ -2401,7 +2401,7 @@ resource "snowflake_procedure" "check_raintree_acknowledge_file" {
   // Step 2: Check if we have the acknowledge file checking is done:
   var checkLoadingMessageTable = `SELECT 
                                     CASE 
-                                        WHEN DATE(MAX(MESSAGE_DATETIME)) < DATE(CONVERT_TIMEZONE(''America/Los_Angeles'', ''America/New_York'', CURRENT_TIMESTAMP)) THEN 'YES'
+                                        WHEN DATE(MAX(MESSAGE_DATETIME)) < DATE(CONVERT_TIMEZONE('America/Los_Angeles', 'America/New_York', CURRENT_TIMESTAMP)) THEN 'YES'
                                         ELSE 'NO'
                                     END AS shouldCheck
                                   FROM raintree_load_tracking`;
